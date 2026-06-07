@@ -139,10 +139,10 @@ export function KnowledgeBasePage() {
   };
 
   // ── Upload ──────────────────────────────────────────────────────────
-  const uploadKnowledgeFile = useCallback(
+  const createKnowledgeUploadTask = useCallback(
     async (file: File, contentBase64: string) => {
       if (!workshopId) throw new Error("缺少会议信息，请重新进入知识库管理页面");
-      return knowledgeApi.upload(
+      return knowledgeApi.createUploadTask(
         file.name,
         contentBase64,
         file.type || "application/octet-stream",
@@ -268,7 +268,8 @@ export function KnowledgeBasePage() {
         <h2 className="text-lg font-semibold mb-3">上传文档</h2>
         <KnowledgeUploadPanel
           variant="dropzone"
-          onUpload={uploadKnowledgeFile}
+          onCreateUploadTask={createKnowledgeUploadTask}
+          onPollUploadTask={knowledgeApi.getUploadTask}
           onUploaded={fetchDocuments}
         />
       </div>

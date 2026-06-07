@@ -445,10 +445,10 @@ export function HostDashboard() {
     }
   };
 
-  const uploadKnowledgeFile = async (file: File, contentBase64: string) => {
+  const createKnowledgeUploadTask = async (file: File, contentBase64: string) => {
     if (!workshop) throw new Error("缺少会议信息，请刷新后重试");
     clearLocalError();
-    return knowledgeApi.upload(
+    return knowledgeApi.createUploadTask(
       file.name,
       contentBase64,
       file.type || "application/octet-stream",
@@ -1247,7 +1247,8 @@ export function HostDashboard() {
 
             <TabsContent value="knowledge" className="mt-0 space-y-6">
               <KnowledgeUploadPanel
-                onUpload={uploadKnowledgeFile}
+                onCreateUploadTask={createKnowledgeUploadTask}
+                onPollUploadTask={knowledgeApi.getUploadTask}
                 onUploaded={fetchHost}
                 disabled={!workshop}
               />
