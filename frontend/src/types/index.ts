@@ -127,6 +127,19 @@ export interface KnowledgeDocument {
   uploaded_at: string;
 }
 
+export interface KnowledgeUploadTask {
+  task_id: string;
+  filename: string;
+  status: "pending" | "running" | "success" | "failed";
+  stage: string;
+  progress: number;
+  message: string;
+  error: string | null;
+  document: KnowledgeDocument | null;
+  created_at: string;
+  updated_at: string;
+}
+
 export interface AIQuestion {
   id: number;
   round_id: number | null;

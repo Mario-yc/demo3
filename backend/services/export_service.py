@@ -6,7 +6,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
 from models import (
-    Workshop, Round, Question, Answer,
+    Workshop, Round, Question, Answer, KnowledgeDocument,
 )
 
 logger = logging.getLogger(__name__)
@@ -128,7 +128,7 @@ class ExportService:
 
             lines.append("---\n")
 
-        docs = [doc for doc in workshop.knowledge_docs if not doc.is_deleted]
+        docs = await self._list_knowledge_docs()
         if docs:
             lines.append("## 知识库文件清单")
             for doc in docs:
@@ -141,6 +141,14 @@ class ExportService:
         tz = datetime.now(timezone.utc).astimezone()
         lines.append(f"---\n*导出时间: {tz.strftime('%Y-%m-%d %H:%M:%S')}*")
         return "\n".join(lines)
+
+    async def _list_knowledge_docs(self):
+        result = await self._db.execute(
+            select(KnowledgeDocument)
+            .where(KnowledgeDocument.is_deleted == False)
+            .order_by(KnowledgeDocument.uploaded_at.desc())
+        )
+        return list(result.scalars().all())
 
     async def _load_workshop(self, workshop_id: int):
         result = await self._db.execute(

@@ -2,7 +2,7 @@ import type {
   WorkshopCreateResponse, WorkshopMemberView, WorkshopHostView,
   Participant, ParticipantWithToken, Question, Answer, GroupRoundResult,
   SynthesisResult, HostInput, KnowledgeDocument, AIQuestion,
-  ValidateResponse, ExportResponse,
+  KnowledgeUploadTask, ValidateResponse, ExportResponse,
 } from "@/types";
 
 export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api";
@@ -207,6 +207,15 @@ export const knowledgeApi = {
       method: "POST",
       body: JSON.stringify({ filename, content_base64, content_type, workshop_id, admin_code }),
     }),
+
+  createUploadTask: (filename: string, content_base64: string, content_type: string, workshop_id: number, admin_code: string) =>
+    request<KnowledgeUploadTask>("/knowledge/upload-tasks", {
+      method: "POST",
+      body: JSON.stringify({ filename, content_base64, content_type, workshop_id, admin_code }),
+    }),
+
+  getUploadTask: (taskId: string) =>
+    request<KnowledgeUploadTask>(`/knowledge/upload-tasks/${taskId}`),
 
   list: (workshop_id: number, admin_code: string) =>
     request<KnowledgeDocument[]>(`/knowledge/documents?workshop_id=${workshop_id}&admin_code=${encodeURIComponent(admin_code)}`),

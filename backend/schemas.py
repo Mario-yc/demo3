@@ -274,7 +274,7 @@ class ValidateAdminRequest(APIModel):
 
 class KnowledgeDocumentOut(APIModel):
     id: int
-    workshop_id: int
+    workshop_id: Optional[int] = None
     original_filename: str
     file_size: int
     content_type: str
@@ -285,6 +285,19 @@ class KnowledgeDocumentOut(APIModel):
     uploaded_at: datetime
 
     model_config = {"from_attributes": True}
+
+
+class KnowledgeUploadTaskOut(APIModel):
+    task_id: str
+    filename: str
+    status: str
+    stage: str
+    progress: int
+    message: str
+    error: Optional[str] = None
+    document: Optional[KnowledgeDocumentOut] = None
+    created_at: datetime
+    updated_at: datetime
 
 
 # ---------- AI QA ----------

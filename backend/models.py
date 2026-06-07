@@ -56,7 +56,7 @@ class Workshop(Base):
     rounds = relationship("Round", back_populates="workshop", cascade="all, delete-orphan", order_by="Round.round_number")
     host_inputs = relationship("HostInput", back_populates="workshop", cascade="all, delete-orphan")
     synthesis_results = relationship("SynthesisResult", back_populates="workshop", cascade="all, delete-orphan")
-    knowledge_docs = relationship("KnowledgeDocument", back_populates="workshop", cascade="all, delete-orphan")
+    knowledge_docs = relationship("KnowledgeDocument", back_populates="workshop")
     ai_questions = relationship("AIQuestionLog", back_populates="workshop", cascade="all, delete-orphan")
 
 
@@ -64,7 +64,7 @@ class Participant(Base):
     __tablename__ = "participants"
 
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
-    workshop_id = Column(Integer, ForeignKey("workshops.id"), nullable=False)
+    workshop_id = Column(Integer, ForeignKey("workshops.id"), nullable=True)
     name = Column(String(100), nullable=False)
     group_id = Column(Integer, nullable=False)
     is_group_leader = Column(Boolean, default=False)
@@ -178,7 +178,7 @@ class KnowledgeDocument(Base):
     original_filename = Column(String(500), nullable=False)
     stored_filename = Column(String(500), nullable=False)
     file_size = Column(Integer, nullable=False)
-    content_type = Column(String(50), nullable=False)
+    content_type = Column(String(120), nullable=False)
     chunk_count = Column(Integer, default=0)
     embedding_model = Column(String(100), nullable=False, default="text-embedding-3-small")
     upload_params = Column(Text, nullable=True)

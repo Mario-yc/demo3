@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { knowledgeApi } from "@/services/api";
 import { Button } from "@/components/ui/button";
@@ -8,8 +8,8 @@ import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { LoadingSpinner } from "@/components/Shared/LoadingSpinner";
 import { Separator } from "@/components/ui/separator";
+import { KnowledgeUploadPanel } from "@/components/Knowledge/KnowledgeUploadPanel";
 import {
-  Upload,
   FileText,
   Trash2,
   AlertCircle,
@@ -56,18 +56,12 @@ export function KnowledgeBasePage() {
   const [loading, setLoading] = useState(false);
   const [docError, setDocError] = useState<string | null>(null);
 
-  // ── Upload state ────────────────────────────────────────────────────
-  const [uploading, setUploading] = useState(false);
-  const [uploadError, setUploadError] = useState<string | null>(null);
-  const [dragOver, setDragOver] = useState(false);
-  const fileInputRef = useRef<HTMLInputElement>(null);
-
   // ── Delete state ────────────────────────────────────────────────────
   const [deletingId, setDeletingId] = useState<number | null>(null);
 
   // ── Validate on mount ───────────────────────────────────────────────
   useEffect(() => {
-    if (adminFromUrl && workshopId) {
+    if (adminFromUrl) {
       setValidating(true);
       setAuthError(null);
       knowledgeApi
@@ -76,6 +70,12 @@ export function KnowledgeBasePage() {
           if (res.valid) {
             setValidated(true);
             setWorkshopTitle(res.workshop_title ?? null);
+            if (res.workshop_id && !workshopId) {
+              const params = new URLSearchParams(searchParams);
+              params.set("admin", adminFromUrl);
+              params.set("workshop", String(res.workshop_id));
+              navigate(`/knowledge?${params.toString()}`, { replace: true });
+            }
           } else {
             setAuthError("管理码无效");
           }
@@ -85,7 +85,7 @@ export function KnowledgeBasePage() {
         })
         .finally(() => setValidating(false));
     }
-  }, [adminFromUrl, workshopId]);
+  }, [adminFromUrl, navigate, searchParams, workshopId]);
 
   // ── Fetch documents ─────────────────────────────────────────────────
   const fetchDocuments = useCallback(async () => {
@@ -122,7 +122,11 @@ export function KnowledgeBasePage() {
         // Update URL
         const params = new URLSearchParams(searchParams);
         params.set("admin", code);
-        if (workshopId) params.set("workshop", String(workshopId));
+        if (res.workshop_id) {
+          params.set("workshop", String(res.workshop_id));
+        } else if (workshopId) {
+          params.set("workshop", String(workshopId));
+        }
         navigate(`/knowledge?${params.toString()}`, { replace: true });
       } else {
         setAuthError("管理码无效，请重试");
@@ -135,70 +139,19 @@ export function KnowledgeBasePage() {
   };
 
   // ── Upload ──────────────────────────────────────────────────────────
-  const handleFile = useCallback(
-    async (file: File) => {
-      if (!workshopId) return;
-      const allowedTypes = ["text/plain", "text/markdown", "text/x-markdown", ".md", ".txt"];
-      const ext = file.name.split(".").pop()?.toLowerCase();
-      if (
-        !allowedTypes.includes(file.type) &&
-        ext !== "txt" &&
-        ext !== "md"
-      ) {
-        setUploadError("仅支持 .txt 和 .md 文件");
-        return;
-      }
-      setUploading(true);
-      setUploadError(null);
-      try {
-        const contentBase64 = await new Promise<string>((resolve, reject) => {
-          const reader = new FileReader();
-          reader.onload = () => {
-            const result = reader.result as string;
-            const base64 = result.split(",")[1] ?? result;
-            resolve(base64);
-          };
-          reader.onerror = () => reject(new Error("文件读取失败"));
-          reader.readAsDataURL(file);
-        });
-        const doc = await knowledgeApi.upload(
-          file.name,
-          contentBase64,
-          file.type || "text/plain",
-          workshopId,
-          adminCode,
-        );
-        setDocuments((prev) => [...prev, doc]);
-      } catch (err) {
-        setUploadError(err instanceof Error ? err.message : "上传失败");
-      } finally {
-        setUploading(false);
-      }
+  const uploadKnowledgeFile = useCallback(
+    async (file: File, contentBase64: string) => {
+      if (!workshopId) throw new Error("缺少会议信息，请重新进入知识库管理页面");
+      return knowledgeApi.upload(
+        file.name,
+        contentBase64,
+        file.type || "application/octet-stream",
+        workshopId,
+        adminCode,
+      );
     },
     [workshopId, adminCode],
   );
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) handleFile(file);
-    e.target.value = "";
-  };
-
-  const handleDrop = useCallback(
-    (e: React.DragEvent) => {
-      e.preventDefault();
-      setDragOver(false);
-      const file = e.dataTransfer.files?.[0];
-      if (file) handleFile(file);
-    },
-    [handleFile],
-  );
-
-  const handleDragOver = (e: React.DragEvent) => {
-    e.preventDefault();
-    setDragOver(true);
-  };
-  const handleDragLeave = () => setDragOver(false);
 
   // ── Delete ──────────────────────────────────────────────────────────
   const handleDelete = async (docId: number) => {
@@ -313,48 +266,11 @@ export function KnowledgeBasePage() {
       {/* Upload area */}
       <div>
         <h2 className="text-lg font-semibold mb-3">上传文档</h2>
-        <div
-          className={`
-            relative flex flex-col items-center justify-center rounded-lg border-2 border-dashed p-8 transition-colors
-            ${dragOver ? "border-primary bg-primary/5" : "border-muted-foreground/25 hover:border-muted-foreground/50"}
-            ${uploading ? "pointer-events-none opacity-60" : "cursor-pointer"}
-          `}
-          onDrop={handleDrop}
-          onDragOver={handleDragOver}
-          onDragLeave={handleDragLeave}
-          onClick={() => fileInputRef.current?.click()}
-        >
-          <input
-            ref={fileInputRef}
-            type="file"
-            accept=".txt,.md,text/plain,text/markdown"
-            className="hidden"
-            onChange={handleInputChange}
-          />
-          {uploading ? (
-            <>
-              <Loader2 className="h-10 w-10 text-primary animate-spin mb-3" />
-              <p className="text-sm font-medium">上传中...</p>
-              <p className="text-xs text-muted-foreground mt-1">请稍后</p>
-            </>
-          ) : (
-            <>
-              <Upload className="h-10 w-10 text-muted-foreground mb-3" />
-              <p className="text-sm font-medium">
-                拖拽文件到此处，或点击选择文件
-              </p>
-              <p className="text-xs text-muted-foreground mt-1">
-                支持 .txt 和 .md 格式
-              </p>
-            </>
-          )}
-        </div>
-        {uploadError && (
-          <div className="flex items-center gap-2 mt-2 text-sm text-destructive">
-            <AlertCircle className="h-4 w-4" />
-            {uploadError}
-          </div>
-        )}
+        <KnowledgeUploadPanel
+          variant="dropzone"
+          onUpload={uploadKnowledgeFile}
+          onUploaded={fetchDocuments}
+        />
       </div>
 
       <Separator />

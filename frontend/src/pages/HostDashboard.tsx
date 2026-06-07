@@ -13,7 +13,6 @@ import {
   Download,
   Edit3,
   FileText,
-  FileUp,
   Play,
   RefreshCw,
   Save,
@@ -46,6 +45,7 @@ import {
 } from "@/components/ui/dialog";
 import { LoadingSpinner } from "@/components/Shared/LoadingSpinner";
 import { MarkdownContent } from "@/components/Shared/MarkdownContent";
+import { KnowledgeUploadPanel } from "@/components/Knowledge/KnowledgeUploadPanel";
 import { copyText } from "@/lib/clipboard";
 import { cn } from "@/lib/utils";
 import type { Answer, GroupRoundResult, RoundInfo, WSMessage } from "@/types";
@@ -139,7 +139,6 @@ export function HostDashboard() {
   const [hostInputContent, setHostInputContent] = useState("");
   const [savingHostInput, setSavingHostInput] = useState(false);
 
-  const [uploading, setUploading] = useState(false);
   const [deletingDocId, setDeletingDocId] = useState<number | null>(null);
 
   const [exporting, setExporting] = useState(false);
@@ -446,40 +445,16 @@ export function HostDashboard() {
     }
   };
 
-  const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (!file || !workshop) return;
-    setUploading(true);
+  const uploadKnowledgeFile = async (file: File, contentBase64: string) => {
+    if (!workshop) throw new Error("缺少会议信息，请刷新后重试");
     clearLocalError();
-    try {
-      const reader = new FileReader();
-      reader.onloadend = async () => {
-        const base64 = (reader.result as string).split(",")[1];
-        if (!base64) {
-          setLocalError("文件读取失败");
-          setUploading(false);
-          return;
-        }
-        await knowledgeApi.upload(
-          file.name,
-          base64,
-          file.type || "application/octet-stream",
-          workshop.id,
-          workshop.kb_admin_code,
-        );
-        await fetchHost();
-        setUploading(false);
-      };
-      reader.onerror = () => {
-        setLocalError("文件读取失败");
-        setUploading(false);
-      };
-      reader.readAsDataURL(file);
-    } catch (err) {
-      setLocalError(getErrorMessage(err, "上传失败"));
-      setUploading(false);
-    }
-    event.target.value = "";
+    return knowledgeApi.upload(
+      file.name,
+      contentBase64,
+      file.type || "application/octet-stream",
+      workshop.id,
+      workshop.kb_admin_code,
+    );
   };
 
   const handleDeleteDoc = async (docId: number) => {
@@ -1271,27 +1246,11 @@ export function HostDashboard() {
             </TabsContent>
 
             <TabsContent value="knowledge" className="mt-0 space-y-6">
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-lg">上传文档</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="flex items-center gap-3">
-                    <Button variant="outline" disabled={uploading} className="relative gap-2">
-                      {uploading ? <LoadingSpinner size="sm" /> : <FileUp className="h-4 w-4" />}
-                      {uploading ? "上传中..." : "选择文件"}
-                      <input
-                        type="file"
-                        className="absolute inset-0 opacity-0 cursor-pointer"
-                        onChange={handleFileUpload}
-                        disabled={uploading}
-                        accept=".pdf,.docx,.doc,.txt,.md"
-                      />
-                    </Button>
-                    <span className="text-xs text-muted-foreground">支持 PDF, DOCX, TXT, MD</span>
-                  </div>
-                </CardContent>
-              </Card>
+              <KnowledgeUploadPanel
+                onUpload={uploadKnowledgeFile}
+                onUploaded={fetchHost}
+                disabled={!workshop}
+              />
 
               <Card>
                 <CardHeader>

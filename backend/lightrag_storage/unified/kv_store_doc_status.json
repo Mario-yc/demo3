@@ -1,0 +1,40 @@
+{
+  "9df847493a90dc0fe18019acd116c02e": {
+    "status": "processed",
+    "content_summary": "文件：臧总访谈稿.docx\n\n【智见2024丨第六期】臧伟仲：国外游让位，2024国内游和周边游成新热点\n\n原创 专注垂直产业的 四为高管教育\n\n 2024年2月6日 17:00 河南 1人\n\n经历2022年的挑战后，旅游业坚韧地“挺立”，为旅游企业揭开新篇章。2023年，行业恢复增长，稳健实现“企稳”。展望2024年，旅游业重点将转向“崛起”，强调长期主义，推动持续发展。为深入探讨行业未来，【智见·2024】未来趋势系列访谈第六期邀请到了四为“解码新医学-产业学者项目”首期班同学、驴迹科技集团...",
+    "content_length": 5459,
+    "created_at": "2026-06-07T07:30:51.841521+00:00",
+    "updated_at": "2026-06-07T07:31:22.685333+00:00",
+    "file_path": "20260607073005_a209a1ea.docx",
+    "track_id": "insert_20260607_153051_bf3ffa19",
+    "content_hash": "8b50d44e5b54d1d0fe021baa1cfd4202",
+    "metadata": {
+      "parse_start_time": 1780817451,
+      "parse_stage_skipped": true,
+      "parse_format": "raw",
+      "parse_engine": "legacy",
+      "analyzing_start_time": 1780817451,
+      "analyzing_stage_skipped": true,
+      "process_start_time": 1780817451,
+      "process_end_time": 1780817482,
+      "chunk_method": "legacy_chunking_func",
+      "chunk_opts": "size=1000, split_only=False, overlap=200",
+      "hard_fallback_split": "5 -> 12"
+    },
+    "chunks_count": 12,
+    "chunks_list": [
+      "9df847493a90dc0fe18019acd116c02e-chunk-000",
+      "9df847493a90dc0fe18019acd116c02e-chunk-001",
+      "9df847493a90dc0fe18019acd116c02e-chunk-002",
+      "9df847493a90dc0fe18019acd116c02e-chunk-003",
+      "9df847493a90dc0fe18019acd116c02e-chunk-004",
+      "9df847493a90dc0fe18019acd116c02e-chunk-005",
+      "9df847493a90dc0fe18019acd116c02e-chunk-006",
+      "9df847493a90dc0fe18019acd116c02e-chunk-007",
+      "9df847493a90dc0fe18019acd116c02e-chunk-008",
+      "9df847493a90dc0fe18019acd116c02e-chunk-009",
+      "9df847493a90dc0fe18019acd116c02e-chunk-010",
+      "9df847493a90dc0fe18019acd116c02e-chunk-011"
+    ]
+  }
+}

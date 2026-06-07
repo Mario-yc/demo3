@@ -2,6 +2,7 @@
 
 import base64
 import sys
+import asyncio
 from pathlib import Path
 
 import pytest
@@ -148,12 +149,97 @@ class TestKnowledgeBaseService:
     async def test_list_docs(self, db_session):
         from services.knowledge_base_service import KnowledgeBaseService
         w = await self._make_workshop(db_session)
+        other = await self._make_workshop(db_session)
         kb = KnowledgeBaseService(db_session)
         await kb.upload("a.txt", b"content A", "text/plain", w.id)
-        await kb.upload("b.txt", b"content B", "text/plain", w.id)
+        await kb.upload("b.txt", b"content B", "text/plain", other.id)
         docs = await kb.list_docs(w.id)
         assert len(docs) == 2
         assert {d.original_filename for d in docs} == {"a.txt", "b.txt"}
+
+    @pytest.mark.asyncio
+    async def test_uses_unified_lightrag_directory(self, db_session):
+        from services.knowledge_base_service import KnowledgeBaseService
+        w = await self._make_workshop(db_session)
+        other = await self._make_workshop(db_session)
+        kb = KnowledgeBaseService(db_session)
+
+        assert kb._get_rag_adapter(w.id).working_dir == kb._get_rag_adapter(other.id).working_dir
+        assert kb._get_rag_adapter(w.id).working_dir.endswith("unified")
+
+    @pytest.mark.asyncio
+    async def test_upload_failure_removes_saved_file(self, db_session, monkeypatch):
+        from services.knowledge_base_service import KnowledgeBaseService
+        w = await self._make_workshop(db_session)
+        kb = KnowledgeBaseService(db_session)
+        saved_paths = []
+        original_extract = kb._extract_text
+
+        def fail_extract(file_path, ext, filename=None):
+            saved_paths.append(file_path)
+            return ""
+
+        monkeypatch.setattr(kb, "_extract_text", fail_extract)
+        with pytest.raises(ValueError, match="文件内容为空或无法解析"):
+            await kb.upload("empty.txt", b"   ", "text/plain", w.id)
+
+        assert saved_paths
+        assert not Path(saved_paths[0]).exists()
+        monkeypatch.setattr(kb, "_extract_text", original_extract)
+
+    def test_pptx_extract_keeps_slide_boundaries(self, db_session, tmp_path):
+        from services.knowledge_base_service import KnowledgeBaseService
+        import zipfile
+
+        pptx = tmp_path / "slides.pptx"
+        slide_xml = """<?xml version="1.0" encoding="UTF-8"?>
+<p:sld xmlns:p="http://schemas.openxmlformats.org/presentationml/2006/main"
+       xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main">
+  <p:cSld><p:spTree><p:sp><p:txBody><a:p><a:r><a:t>第一页标题</a:t></a:r></a:p></p:txBody></p:sp></p:spTree></p:cSld>
+</p:sld>"""
+        with zipfile.ZipFile(pptx, "w") as archive:
+            archive.writestr("ppt/slides/slide1.xml", slide_xml)
+
+        kb = KnowledgeBaseService(db_session)
+        text = kb._extract_text(str(pptx), "pptx", "slides.pptx")
+
+        assert "文件：slides.pptx" in text
+        assert "幻灯片 1" in text
+        assert "第一页标题" in text
+
+    def test_xlsx_extract_keeps_sheet_name_and_table(self, db_session, tmp_path):
+        from services.knowledge_base_service import KnowledgeBaseService
+        import zipfile
+
+        xlsx = tmp_path / "table.xlsx"
+        workbook_xml = """<?xml version="1.0" encoding="UTF-8"?>
+<workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"
+          xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">
+  <sheets><sheet name="人员表" sheetId="1" r:id="rId1"/></sheets>
+</workbook>"""
+        rels_xml = """<?xml version="1.0" encoding="UTF-8"?>
+<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">
+  <Relationship Id="rId1" Type="worksheet" Target="worksheets/sheet1.xml"/>
+</Relationships>"""
+        sheet_xml = """<?xml version="1.0" encoding="UTF-8"?>
+<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">
+  <sheetData>
+    <row r="1"><c r="A1" t="inlineStr"><is><t>姓名</t></is></c><c r="B1" t="inlineStr"><is><t>角色</t></is></c></row>
+    <row r="2"><c r="A2" t="inlineStr"><is><t>张三</t></is></c><c r="B2" t="inlineStr"><is><t>主持人</t></is></c></row>
+  </sheetData>
+</worksheet>"""
+        with zipfile.ZipFile(xlsx, "w") as archive:
+            archive.writestr("xl/workbook.xml", workbook_xml)
+            archive.writestr("xl/_rels/workbook.xml.rels", rels_xml)
+            archive.writestr("xl/worksheets/sheet1.xml", sheet_xml)
+
+        kb = KnowledgeBaseService(db_session)
+        text = kb._extract_text(str(xlsx), "xlsx", "table.xlsx")
+
+        assert "文件：table.xlsx" in text
+        assert "工作表：人员表" in text
+        assert "| 姓名 | 角色 |" in text
+        assert "| 张三 | 主持人 |" in text
 
     @pytest.mark.asyncio
     async def test_delete_soft(self, db_session):
@@ -172,9 +258,10 @@ class TestKnowledgeBaseService:
     async def test_search(self, db_session):
         from services.knowledge_base_service import KnowledgeBaseService
         w = await self._make_workshop(db_session)
+        other = await self._make_workshop(db_session)
         kb = KnowledgeBaseService(db_session)
         await kb.upload("test.txt", "驴迹科技核心价值观".encode(), "text/plain", w.id)
-        results = await kb.search("核心价值观", w.id)
+        results = await kb.search("核心价值观", other.id)
         assert len(results) == 1
         assert "驴迹" in results[0]
 
@@ -234,3 +321,61 @@ class TestKnowledgeBaseAPI:
             params={"workshop_id": w["id"], "admin_code": w["kb_admin_code"]},
         )
         assert resp.status_code == 404
+
+    @pytest.mark.asyncio
+    async def test_upload_task_reports_progress_and_success(self, async_client: AsyncClient):
+        w = await self._create_workshop(async_client)
+        payload = {
+            "filename": "task.txt",
+            "content_base64": base64.b64encode("任务进度测试内容".encode()).decode(),
+            "content_type": "text/plain",
+            "workshop_id": w["id"],
+            "admin_code": w["kb_admin_code"],
+        }
+        resp = await async_client.post("/api/knowledge/upload-tasks", json=payload)
+        assert resp.status_code == 202
+        task = resp.json()
+        assert task["task_id"]
+        assert task["filename"] == "task.txt"
+        assert task["status"] in {"pending", "running", "success"}
+        assert "progress" in task
+
+        final = task
+        for _ in range(20):
+            poll = await async_client.get(f"/api/knowledge/upload-tasks/{task['task_id']}")
+            assert poll.status_code == 200
+            final = poll.json()
+            if final["status"] in {"success", "failed"}:
+                break
+            await asyncio.sleep(0.01)
+
+        assert final["status"] == "success"
+        assert final["progress"] == 100
+        assert final["document"]["original_filename"] == "task.txt"
+
+    @pytest.mark.asyncio
+    async def test_upload_task_reports_chinese_failure(self, async_client: AsyncClient):
+        w = await self._create_workshop(async_client)
+        payload = {
+            "filename": "bad.exe",
+            "content_base64": base64.b64encode(b"x").decode(),
+            "content_type": "application/octet-stream",
+            "workshop_id": w["id"],
+            "admin_code": w["kb_admin_code"],
+        }
+        resp = await async_client.post("/api/knowledge/upload-tasks", json=payload)
+        assert resp.status_code == 202
+        task_id = resp.json()["task_id"]
+
+        final = None
+        for _ in range(20):
+            poll = await async_client.get(f"/api/knowledge/upload-tasks/{task_id}")
+            assert poll.status_code == 200
+            final = poll.json()
+            if final["status"] == "failed":
+                break
+            await asyncio.sleep(0.01)
+
+        assert final is not None
+        assert final["status"] == "failed"
+        assert "文件格式不支持" in final["error"] or "不支持" in final["error"]

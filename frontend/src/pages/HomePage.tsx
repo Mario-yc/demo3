@@ -292,17 +292,62 @@ export function HomePage() {
             </CardContent>
           </Card>
         ) : (
-          <Tabs defaultValue="host" className="w-full max-w-lg">
+          <Tabs defaultValue="member" className="w-full max-w-lg">
             <TabsList className="grid w-full grid-cols-2">
-              <TabsTrigger value="host">
-                <UserCog className="h-4 w-4 mr-2" />
-                主持人入口
-              </TabsTrigger>
               <TabsTrigger value="member">
                 <Users className="h-4 w-4 mr-2" />
                 成员入口
               </TabsTrigger>
+              <TabsTrigger value="host">
+                <UserCog className="h-4 w-4 mr-2" />
+                主持人入口
+              </TabsTrigger>
             </TabsList>
+
+            <TabsContent value="member">
+              <Card>
+                <CardContent className="p-6 space-y-4">
+                  {lastMember && (
+                    <Button variant="secondary" className="w-full gap-2" onClick={handleContinueMember} disabled={loading}>
+                      <RefreshCw className="h-4 w-4" />
+                      继续上次研讨：{lastMember.name}（第 {lastMember.group_id} 组）
+                    </Button>
+                  )}
+                  <div className="space-y-2">
+                    <Label htmlFor="memberName">您的姓名</Label>
+                    <Input
+                      id="memberName"
+                      value={memberName}
+                      onChange={(event) => setMemberName(event.target.value)}
+                      placeholder="请输入您的姓名"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="inviteCode">邀请码</Label>
+                    <Input
+                      id="inviteCode"
+                      value={inviteCode}
+                      onChange={(event) => setInviteCode(event.target.value.toUpperCase())}
+                      onKeyDown={(event) => {
+                        if (event.key === "Enter") handleJoin();
+                      }}
+                      placeholder="请输入6位邀请码"
+                      maxLength={6}
+                      className="font-mono text-lg tracking-widest"
+                    />
+                  </div>
+                  {error && <p className="text-sm text-destructive">{error}</p>}
+                  <Button
+                    className="w-full"
+                    size="lg"
+                    onClick={handleJoin}
+                    disabled={loading || !memberName.trim() || inviteCode.length < 6}
+                  >
+                    {loading ? <LoadingSpinner size="sm" /> : <>加入研讨会<ArrowRight className="h-4 w-4 ml-2" /></>}
+                  </Button>
+                </CardContent>
+              </Card>
+            </TabsContent>
 
             <TabsContent value="host">
               <Card>
@@ -372,51 +417,6 @@ export function HomePage() {
                   {error && <p className="text-sm text-destructive">{error}</p>}
                   <Button className="w-full" size="lg" onClick={handleCreate} disabled={loading || !hostName.trim()}>
                     {loading ? <LoadingSpinner size="sm" /> : <>创建研讨会<ArrowRight className="h-4 w-4 ml-2" /></>}
-                  </Button>
-                </CardContent>
-              </Card>
-            </TabsContent>
-
-            <TabsContent value="member">
-              <Card>
-                <CardContent className="p-6 space-y-4">
-                  {lastMember && (
-                    <Button variant="secondary" className="w-full gap-2" onClick={handleContinueMember} disabled={loading}>
-                      <RefreshCw className="h-4 w-4" />
-                      继续上次研讨：{lastMember.name}（第 {lastMember.group_id} 组）
-                    </Button>
-                  )}
-                  <div className="space-y-2">
-                    <Label htmlFor="memberName">您的姓名</Label>
-                    <Input
-                      id="memberName"
-                      value={memberName}
-                      onChange={(event) => setMemberName(event.target.value)}
-                      placeholder="请输入您的姓名"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="inviteCode">邀请码</Label>
-                    <Input
-                      id="inviteCode"
-                      value={inviteCode}
-                      onChange={(event) => setInviteCode(event.target.value.toUpperCase())}
-                      onKeyDown={(event) => {
-                        if (event.key === "Enter") handleJoin();
-                      }}
-                      placeholder="请输入6位邀请码"
-                      maxLength={6}
-                      className="font-mono text-lg tracking-widest"
-                    />
-                  </div>
-                  {error && <p className="text-sm text-destructive">{error}</p>}
-                  <Button
-                    className="w-full"
-                    size="lg"
-                    onClick={handleJoin}
-                    disabled={loading || !memberName.trim() || inviteCode.length < 6}
-                  >
-                    {loading ? <LoadingSpinner size="sm" /> : <>加入研讨会<ArrowRight className="h-4 w-4 ml-2" /></>}
                   </Button>
                 </CardContent>
               </Card>

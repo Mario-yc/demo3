@@ -1,0 +1,1965 @@
+<?xml version='1.0' encoding='utf-8'?>
+<graphml xmlns="http://graphml.graphdrawing.org/xmlns" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">
+  <key id="d13" for="edge" attr.name="truncate" attr.type="string" />
+  <key id="d12" for="edge" attr.name="created_at" attr.type="long" />
+  <key id="d11" for="edge" attr.name="file_path" attr.type="string" />
+  <key id="d10" for="edge" attr.name="source_id" attr.type="string" />
+  <key id="d9" for="edge" attr.name="keywords" attr.type="string" />
+  <key id="d8" for="edge" attr.name="description" attr.type="string" />
+  <key id="d7" for="edge" attr.name="weight" attr.type="double" />
+  <key id="d6" for="node" attr.name="truncate" attr.type="string" />
+  <key id="d5" for="node" attr.name="created_at" attr.type="long" />
+  <key id="d4" for="node" attr.name="file_path" attr.type="string" />
+  <key id="d3" for="node" attr.name="source_id" attr.type="string" />
+  <key id="d2" for="node" attr.name="description" attr.type="string" />
+  <key id="d1" for="node" attr.name="entity_type" attr.type="string" />
+  <key id="d0" for="node" attr.name="entity_id" attr.type="string" />
+  <graph edgedefault="undirected">
+    <node id="迅猛而认真的工作态度">
+      <data key="d0">迅猛而认真的工作态度</data>
+      <data key="d1">concept</data>
+      <data key="d2">一种倡导迅速响应、全力以赴、认真细致的工作态度。</data>
+      <data key="d3">9df847493a90dc0fe18019acd116c02e-chunk-003</data>
+      <data key="d4">20260607073005_a209a1ea.docx</data>
+      <data key="d5">1780817480</data>
+      <data key="d6" />
+    </node>
+    <node id="跟我上">
+      <data key="d0">跟我上</data>
+      <data key="d1">concept</data>
+      <data key="d2">“跟我上”是企业文化价值观之一，体现领导力和团队协作精神。&lt;SEP&gt;强调领导者以身作则、通过专注和全情投入引领团队的核心价值观。</data>
+      <data key="d3">9df847493a90dc0fe18019acd116c02e-chunk-003&lt;SEP&gt;9df847493a90dc0fe18019acd116c02e-chunk-002</data>
+      <data key="d4">20260607073005_a209a1ea.docx</data>
+      <data key="d5">1780817480</data>
+      <data key="d6" />
+    </node>
+    <node id="搞得定">
+      <data key="d0">搞得定</data>
+      <data key="d1">concept</data>
+      <data key="d2">“搞得定”是企业文化价值观之一，强调员工在解决问题能力上的卓越追求，鼓励积极解决问题者获得晋升。&lt;SEP&gt;企业文化的核心要素之一，代表员工有能力完成任务。</data>
+      <data key="d3">9df847493a90dc0fe18019acd116c02e-chunk-003&lt;SEP&gt;9df847493a90dc0fe18019acd116c02e-chunk-002</data>
+      <data key="d4">20260607073005_a209a1ea.docx</data>
+      <data key="d5">1780817480</data>
+      <data key="d6" />
+    </node>
+    <node id="顶得住">
+      <data key="d0">顶得住</data>
+      <data key="d1">concept</data>
+      <data key="d2">“顶得住”是企业文化价值观之一，揭示面对压力时的坚定态度，鼓励灵活调整策略应对挑战。&lt;SEP&gt;企业文化的核心要素之一，代表员工能承受压力和挑战。</data>
+      <data key="d3">9df847493a90dc0fe18019acd116c02e-chunk-003&lt;SEP&gt;9df847493a90dc0fe18019acd116c02e-chunk-002</data>
+      <data key="d4">20260607073005_a209a1ea.docx</data>
+      <data key="d5">1780817480</data>
+      <data key="d6" />
+    </node>
+    <node id="忠诚于组织">
+      <data key="d0">忠诚于组织</data>
+      <data key="d1">concept</data>
+      <data key="d2">员工的基本素养，要求以组织利益为重并消除隐患。</data>
+      <data key="d3">9df847493a90dc0fe18019acd116c02e-chunk-003</data>
+      <data key="d4">20260607073005_a209a1ea.docx</data>
+      <data key="d5">1780817480</data>
+      <data key="d6" />
+    </node>
+    <node id="领导者">
+      <data key="d0">领导者</data>
+      <data key="d1">person</data>
+      <data key="d2">企业中作为楷模，通过以身作则和正向影响力引领团队的人物。</data>
+      <data key="d3">9df847493a90dc0fe18019acd116c02e-chunk-003</data>
+      <data key="d4">20260607073005_a209a1ea.docx</data>
+      <data key="d5">1780817480</data>
+      <data key="d6" />
+    </node>
+    <node id="员工">
+      <data key="d0">员工</data>
+      <data key="d1">person</data>
+      <data key="d2">企业成员，需保持最佳状态、忠诚于组织并秉持价值观。</data>
+      <data key="d3">9df847493a90dc0fe18019acd116c02e-chunk-003</data>
+      <data key="d4">20260607073005_a209a1ea.docx</data>
+      <data key="d5">1780817480</data>
+      <data key="d6" />
+    </node>
+    <node id="企业">
+      <data key="d0">企业</data>
+      <data key="d1">organization</data>
+      <data key="d2">倡导价值观并追求可持续发展的组织。</data>
+      <data key="d3">9df847493a90dc0fe18019acd116c02e-chunk-003</data>
+      <data key="d4">20260607073005_a209a1ea.docx</data>
+      <data key="d5">1780817480</data>
+      <data key="d6" />
+    </node>
+    <node id="淄博赶烤热潮">
+      <data key="d0">淄博赶烤热潮</data>
+      <data key="d1">event</data>
+      <data key="d2">2024年旅游热潮，代表国内旅游新风尚。</data>
+      <data key="d3">9df847493a90dc0fe18019acd116c02e-chunk-003</data>
+      <data key="d4">20260607073005_a209a1ea.docx</data>
+      <data key="d5">1780817480</data>
+      <data key="d6" />
+    </node>
+    <node id="哈尔滨赏雪之旅">
+      <data key="d0">哈尔滨赏雪之旅</data>
+      <data key="d1">event</data>
+      <data key="d2">2024年旅游热潮，代表国内旅游新风尚。</data>
+      <data key="d3">9df847493a90dc0fe18019acd116c02e-chunk-003</data>
+      <data key="d4">20260607073005_a209a1ea.docx</data>
+      <data key="d5">1780817480</data>
+      <data key="d6" />
+    </node>
+    <node id="河南璀璨之旅">
+      <data key="d0">河南璀璨之旅</data>
+      <data key="d1">event</data>
+      <data key="d2">2024年旅游热潮，代表国内旅游新风尚。</data>
+      <data key="d3">9df847493a90dc0fe18019acd116c02e-chunk-003</data>
+      <data key="d4">20260607073005_a209a1ea.docx</data>
+      <data key="d5">1780817480</data>
+      <data key="d6" />
+    </node>
+    <node id="国外游">
+      <data key="d0">国外游</data>
+      <data key="d1">concept</data>
+      <data key="d2">指中国公民出境旅游，因安全问题呈现遇冷趋势。</data>
+      <data key="d3">9df847493a90dc0fe18019acd116c02e-chunk-003</data>
+      <data key="d4">20260607073005_a209a1ea.docx</data>
+      <data key="d5">1780817480</data>
+      <data key="d6" />
+    </node>
+    <node id="国内游">
+      <data key="d0">国内游</data>
+      <data key="d1">concept</data>
+      <data key="d2">指国内旅游，因国外游遇冷而崛起并成为新趋势。</data>
+      <data key="d3">9df847493a90dc0fe18019acd116c02e-chunk-003</data>
+      <data key="d4">20260607073005_a209a1ea.docx</data>
+      <data key="d5">1780817480</data>
+      <data key="d6" />
+    </node>
+    <node id="泰国">
+      <data key="d0">泰国</data>
+      <data key="d1">location</data>
+      <data key="d2">传统热门出境游目的地，因治安事件频发导致游客减少。&lt;SEP&gt;Thailand is a traditional international tourism destination that has experienced a decline in Chinese visitors due to safety incidents.</data>
+      <data key="d3">9df847493a90dc0fe18019acd116c02e-chunk-003&lt;SEP&gt;9df847493a90dc0fe18019acd116c02e-chunk-005</data>
+      <data key="d4">20260607073005_a209a1ea.docx</data>
+      <data key="d5">1780817480</data>
+      <data key="d6" />
+    </node>
+    <node id="周边游">
+      <data key="d0">周边游</data>
+      <data key="d1">concept</data>
+      <data key="d2">国内游的新热门选择，源于国外游向国内游的转变。&lt;SEP&gt;周边游refers to short-distance travel around one's home area, which has become a popular new trend in domestic tourism.</data>
+      <data key="d3">9df847493a90dc0fe18019acd116c02e-chunk-003&lt;SEP&gt;9df847493a90dc0fe18019acd116c02e-chunk-005</data>
+      <data key="d4">20260607073005_a209a1ea.docx</data>
+      <data key="d5">1780817480</data>
+      <data key="d6" />
+    </node>
+    <node id="旅游+">
+      <data key="d0">旅游+</data>
+      <data key="d1">method</data>
+      <data key="d2">2024年旅游发展新趋势，结合其他产业推动旅游。&lt;SEP&gt;旅游+是一种发展概念，指将旅游与康养、文化、体育等多种元素结合，以提供更深层次的旅游体验。</data>
+      <data key="d3">9df847493a90dc0fe18019acd116c02e-chunk-003&lt;SEP&gt;9df847493a90dc0fe18019acd116c02e-chunk-006</data>
+      <data key="d4">20260607073005_a209a1ea.docx</data>
+      <data key="d5">1780817480</data>
+      <data key="d6" />
+    </node>
+    <node id="流量密码">
+      <data key="d0">流量密码</data>
+      <data key="d1">concept</data>
+      <data key="d2">2024年旅游发展新趋势，指通过社交媒体吸引游客的策略。</data>
+      <data key="d3">9df847493a90dc0fe18019acd116c02e-chunk-003</data>
+      <data key="d4">20260607073005_a209a1ea.docx</data>
+      <data key="d5">1780817480</data>
+      <data key="d6" />
+    </node>
+    <node id="2024年旅游发展新趋势">
+      <data key="d0">2024年旅游发展新趋势</data>
+      <data key="d1">concept</data>
+      <data key="d2">涵盖“旅游+”和流量密码的旅游行业整体趋势。</data>
+      <data key="d3">9df847493a90dc0fe18019acd116c02e-chunk-003</data>
+      <data key="d4">20260607073005_a209a1ea.docx</data>
+      <data key="d5">1780817480</data>
+      <data key="d6" />
+    </node>
+    <node id="这一变化">
+      <data key="d0">这一变化</data>
+      <data key="d1">concept</data>
+      <data key="d2">这一变化refers to a change that is clearly reflected in the provided data.</data>
+      <data key="d3">9df847493a90dc0fe18019acd116c02e-chunk-004</data>
+      <data key="d4">20260607073005_a209a1ea.docx</data>
+      <data key="d5">1780817480</data>
+      <data key="d6" />
+    </node>
+    <node id="我们的数据">
+      <data key="d0">我们的数据</data>
+      <data key="d1">data</data>
+      <data key="d2">我们的数据refers to the data that demonstrates the change.</data>
+      <data key="d3">9df847493a90dc0fe18019acd116c02e-chunk-004</data>
+      <data key="d4">20260607073005_a209a1ea.docx</data>
+      <data key="d5">1780817480</data>
+      <data key="d6" />
+    </node>
+    <node id="国内许多地方">
+      <data key="d0">国内许多地方</data>
+      <data key="d1">location</data>
+      <data key="d2">国内许多地方refers to many regions within the country.</data>
+      <data key="d3">9df847493a90dc0fe18019acd116c02e-chunk-004</data>
+      <data key="d4">20260607073005_a209a1ea.docx</data>
+      <data key="d5">1780817480</data>
+      <data key="d6" />
+    </node>
+    <node id="旅游资源">
+      <data key="d0">旅游资源</data>
+      <data key="d1">content</data>
+      <data key="d2">旅游资源refers to tourism resources available in many regions.</data>
+      <data key="d3">9df847493a90dc0fe18019acd116c02e-chunk-004</data>
+      <data key="d4">20260607073005_a209a1ea.docx</data>
+      <data key="d5">1780817480</data>
+      <data key="d6" />
+    </node>
+    <node id="驴迹科技集团有限公司">
+      <data key="d0">驴迹科技集团有限公司</data>
+      <data key="d1">organization</data>
+      <data key="d2">驴迹科技集团有限公司是一家旅游科技公司，由臧伟仲创立。&lt;SEP&gt;驴迹科技集团有限公司is a company founded by臧伟仲, focusing on technology and services.</data>
+      <data key="d3">9df847493a90dc0fe18019acd116c02e-chunk-010&lt;SEP&gt;9df847493a90dc0fe18019acd116c02e-chunk-000</data>
+      <data key="d4">20260607073005_a209a1ea.docx</data>
+      <data key="d5">1780817480</data>
+      <data key="d6" />
+    </node>
+    <node id="解码新医学">
+      <data key="d0">解码新医学</data>
+      <data key="d1">content</data>
+      <data key="d2">解码新医学is a course selected by臧伟仲to explore opportunities in the biomedical field.&lt;SEP&gt;解码新医学是臧伟仲选择学习的一门课程，旨在探索新的商业方向。</data>
+      <data key="d3">9df847493a90dc0fe18019acd116c02e-chunk-010&lt;SEP&gt;9df847493a90dc0fe18019acd116c02e-chunk-009</data>
+      <data key="d4">20260607073005_a209a1ea.docx</data>
+      <data key="d5">1780817480</data>
+      <data key="d6" />
+    </node>
+    <node id="人工智能">
+      <data key="d0">人工智能</data>
+      <data key="d1">concept</data>
+      <data key="d2">人工智能是一种技术概念，能够通过大数据分析用户的兴趣和需求，提供精准、个性化的旅游信息。&lt;SEP&gt;人工智能是一种技术，被应用于旅游行业以提升内容输出、交互和指导等功能。&lt;SEP&gt;人工智能是一种技术，被应用于旅游行业以提升内容输出、交互和指导功能。&lt;SEP&gt;人工智能is a field with broad prospects that臧伟仲considers for business growth, while maintaining caution due to its complexity.&lt;SEP&gt;人工智能是受到关注的前沿技术发展趋势，被认为是具有广泛前景的未来方向之一。</data>
+      <data key="d3">9df847493a90dc0fe18019acd116c02e-chunk-010&lt;SEP&gt;9df847493a90dc0fe18019acd116c02e-chunk-008&lt;SEP&gt;9df847493a90dc0fe18019acd116c02e-chunk-006&lt;SEP&gt;9df847493a90dc0fe18019acd116c02e-chunk-009&lt;SEP&gt;9df847493a90dc0fe18019acd116c02e-chunk-007</data>
+      <data key="d4">20260607073005_a209a1ea.docx</data>
+      <data key="d5">1780817480</data>
+      <data key="d6" />
+    </node>
+    <node id="生物医学">
+      <data key="d0">生物医学</data>
+      <data key="d1">concept</data>
+      <data key="d2">生物医学is a field expected to extend human lifespan and improve life quality, identified by臧伟仲as a key direction for business exploration.</data>
+      <data key="d3">9df847493a90dc0fe18019acd116c02e-chunk-010</data>
+      <data key="d4">20260607073005_a209a1ea.docx</data>
+      <data key="d5">1780817480</data>
+      <data key="d6" />
+    </node>
+    <node id="广东省景区行业协会">
+      <data key="d0">广东省景区行业协会</data>
+      <data key="d1">organization</data>
+      <data key="d2">广东省景区行业协会is an industry association where臧伟仲serves as vice president.</data>
+      <data key="d3">9df847493a90dc0fe18019acd116c02e-chunk-010</data>
+      <data key="d4">20260607073005_a209a1ea.docx</data>
+      <data key="d5">1780817480</data>
+      <data key="d6" />
+    </node>
+    <node id="广州市驴迹科技有限责任公司">
+      <data key="d0">广州市驴迹科技有限责任公司</data>
+      <data key="d1">organization</data>
+      <data key="d2">广州市驴迹科技有限责任公司was established by臧伟仲in 2013.</data>
+      <data key="d3">9df847493a90dc0fe18019acd116c02e-chunk-010</data>
+      <data key="d4">20260607073005_a209a1ea.docx</data>
+      <data key="d5">1780817480</data>
+      <data key="d6" />
+    </node>
+    <node id="广州市天河区软件和信息产业协会">
+      <data key="d0">广州市天河区软件和信息产业协会</data>
+      <data key="d1">organization</data>
+      <data key="d2">广州市天河区软件和信息产业协会elected臧伟仲as an expert committee member in 2019.</data>
+      <data key="d3">9df847493a90dc0fe18019acd116c02e-chunk-010</data>
+      <data key="d4">20260607073005_a209a1ea.docx</data>
+      <data key="d5">1780817480</data>
+      <data key="d6" />
+    </node>
+    <node id="2024">
+      <data key="d0">2024</data>
+      <data key="d1">event</data>
+      <data key="d2">2024 is the year for which臧伟仲expressed hopes and expectations using three words: uncertainty, change, and hope.</data>
+      <data key="d3">9df847493a90dc0fe18019acd116c02e-chunk-010</data>
+      <data key="d4">20260607073005_a209a1ea.docx</data>
+      <data key="d5">1780817480</data>
+      <data key="d6" />
+    </node>
+    <node id="中国移动">
+      <data key="d0">中国移动</data>
+      <data key="d1">organization</data>
+      <data key="d2">中国移动是作者退役后工作十余年的单位，提供了职业训练和跨部门轮岗机会。&lt;SEP&gt;中国移动is the company where臧伟仲had a senior management career spanning over ten years.</data>
+      <data key="d3">9df847493a90dc0fe18019acd116c02e-chunk-010&lt;SEP&gt;9df847493a90dc0fe18019acd116c02e-chunk-001</data>
+      <data key="d4">20260607073005_a209a1ea.docx</data>
+      <data key="d5">1780817480</data>
+      <data key="d6" />
+    </node>
+    <node id="广州市公安局">
+      <data key="d0">广州市公安局</data>
+      <data key="d1">organization</data>
+      <data key="d2">广州市公安局is the public security bureau that awarded臧伟仲a commendation in 2009 for internal security work.</data>
+      <data key="d3">9df847493a90dc0fe18019acd116c02e-chunk-010</data>
+      <data key="d4">20260607073005_a209a1ea.docx</data>
+      <data key="d5">1780817480</data>
+      <data key="d6" />
+    </node>
+    <node id="中共广州市天河区委组织部">
+      <data key="d0">中共广州市天河区委组织部</data>
+      <data key="d1">organization</data>
+      <data key="d2">中共广州市天河区委组织部is the organization that recognized臧伟仲as an outstanding talent in Guangzhou's Tianhe District in 2017.</data>
+      <data key="d3">9df847493a90dc0fe18019acd116c02e-chunk-010</data>
+      <data key="d4">20260607073005_a209a1ea.docx</data>
+      <data key="d5">1780817480</data>
+      <data key="d6" />
+    </node>
+    <node id="作者">
+      <data key="d0">作者</data>
+      <data key="d1">person</data>
+      <data key="d2">作者是一位退役后在中国移动工作十余年，并于2013年12月注册公司开始创业的个人。</data>
+      <data key="d3">9df847493a90dc0fe18019acd116c02e-chunk-001</data>
+      <data key="d4">20260607073005_a209a1ea.docx</data>
+      <data key="d5">1780817480</data>
+      <data key="d6" />
+    </node>
+    <node id="国家">
+      <data key="d0">国家</data>
+      <data key="d1">organization</data>
+      <data key="d2">国家推动了“大众创业、万众创新”政策，并完善了基础设施，为创业提供了支持。</data>
+      <data key="d3">9df847493a90dc0fe18019acd116c02e-chunk-001</data>
+      <data key="d4">20260607073005_a209a1ea.docx</data>
+      <data key="d5">1780817480</data>
+      <data key="d6" />
+    </node>
+    <node id="作者的单位">
+      <data key="d0">作者的单位</data>
+      <data key="d1">organization</data>
+      <data key="d2">作者的单位在创业方面提供了政策支持，允许创业失败后两年内回归原职。</data>
+      <data key="d3">9df847493a90dc0fe18019acd116c02e-chunk-001</data>
+      <data key="d4">20260607073005_a209a1ea.docx</data>
+      <data key="d5">1780817480</data>
+      <data key="d6" />
+    </node>
+    <node id="公司">
+      <data key="d0">公司</data>
+      <data key="d1">organization</data>
+      <data key="d2">公司是臧伟仲所在的创业企业，拥有企业文化价值观，并致力于解决公共租赁设备问题。&lt;SEP&gt;作者于2013年12月注册的公司，是创业的实体。</data>
+      <data key="d3">9df847493a90dc0fe18019acd116c02e-chunk-001&lt;SEP&gt;9df847493a90dc0fe18019acd116c02e-chunk-002</data>
+      <data key="d4">20260607073005_a209a1ea.docx</data>
+      <data key="d5">1780817480</data>
+      <data key="d6" />
+    </node>
+    <node id="创始合伙人">
+      <data key="d0">创始合伙人</data>
+      <data key="d1">person</data>
+      <data key="d2">创始合伙人是作者创业路上的重要伙伴，共同探讨人生意义和价值。</data>
+      <data key="d3">9df847493a90dc0fe18019acd116c02e-chunk-001</data>
+      <data key="d4">20260607073005_a209a1ea.docx</data>
+      <data key="d5">1780817480</data>
+      <data key="d6" />
+    </node>
+    <node id="移动互联网">
+      <data key="d0">移动互联网</data>
+      <data key="d1">concept</data>
+      <data key="d2">移动互联网是市场发展的趋势，被视为通过智能手机应用解决问题的方向。&lt;SEP&gt;移动互联网是作者创业中依赖的发展趋势和技术背景。</data>
+      <data key="d3">9df847493a90dc0fe18019acd116c02e-chunk-001&lt;SEP&gt;9df847493a90dc0fe18019acd116c02e-chunk-002</data>
+      <data key="d4">20260607073005_a209a1ea.docx</data>
+      <data key="d5">1780817480</data>
+      <data key="d6" />
+    </node>
+    <node id="移动支付">
+      <data key="d0">移动支付</data>
+      <data key="d1">method</data>
+      <data key="d2">移动支付是一种快速发展的支付方式，其普及使得C端用户可以直接付费使用服务，解决了收费难题。&lt;SEP&gt;移动支付的快速发展解决了创业项目中C端用户的收费难题。</data>
+      <data key="d3">9df847493a90dc0fe18019acd116c02e-chunk-001&lt;SEP&gt;9df847493a90dc0fe18019acd116c02e-chunk-002</data>
+      <data key="d4">20260607073005_a209a1ea.docx</data>
+      <data key="d5">1780817480</data>
+      <data key="d6" />
+    </node>
+    <node id="景区排队问题">
+      <data key="d0">景区排队问题</data>
+      <data key="d1">concept</data>
+      <data key="d2">景区排队等候时间过长是作者在旅游中发现的一个市场需求空白。</data>
+      <data key="d3">9df847493a90dc0fe18019acd116c02e-chunk-001</data>
+      <data key="d4">20260607073005_a209a1ea.docx</data>
+      <data key="d5">1780817480</data>
+      <data key="d6" />
+    </node>
+    <node id="公共租赁设备问题">
+      <data key="d0">公共租赁设备问题</data>
+      <data key="d1">concept</data>
+      <data key="d2">公共租赁设备卫生状况不佳且电力供应不稳定是作者发现的市场问题。</data>
+      <data key="d3">9df847493a90dc0fe18019acd116c02e-chunk-001</data>
+      <data key="d4">20260607073005_a209a1ea.docx</data>
+      <data key="d5">1780817480</data>
+      <data key="d6" />
+    </node>
+    <node id="智能手机应用">
+      <data key="d0">智能手机应用</data>
+      <data key="d1">artifact</data>
+      <data key="d2">智能手机应用是解决公共租赁设备问题的潜在工具，基于移动互联网洞察。&lt;SEP&gt;智能手机应用是作者计划用来解决景区排队和公共租赁设备问题的工具，基于对移动互联网发展趋势的洞察。</data>
+      <data key="d3">9df847493a90dc0fe18019acd116c02e-chunk-001&lt;SEP&gt;9df847493a90dc0fe18019acd116c02e-chunk-002</data>
+      <data key="d4">20260607073005_a209a1ea.docx</data>
+      <data key="d5">1780817480</data>
+      <data key="d6" />
+    </node>
+    <node id="人生意义和价值">
+      <data key="d0">人生意义和价值</data>
+      <data key="d1">concept</data>
+      <data key="d2">人生意义和价值是作者与创始合伙人共同探讨的主题，他们得出要做一个受人尊敬的人必须有所作为的结论。</data>
+      <data key="d3">9df847493a90dc0fe18019acd116c02e-chunk-001</data>
+      <data key="d4">20260607073005_a209a1ea.docx</data>
+      <data key="d5">1780817480</data>
+      <data key="d6" />
+    </node>
+    <node id="创业项目">
+      <data key="d0">创业项目</data>
+      <data key="d1">concept</data>
+      <data key="d2">创业项目是作者基于发现的市场需求和理念而开始的具体事业方向。&lt;SEP&gt;创业项目是公司创始人的创业尝试，基于市场空白和移动互联网洞察，面临商业模式不成熟的挑战。</data>
+      <data key="d3">9df847493a90dc0fe18019acd116c02e-chunk-001&lt;SEP&gt;9df847493a90dc0fe18019acd116c02e-chunk-002</data>
+      <data key="d4">20260607073005_a209a1ea.docx</data>
+      <data key="d5">1780817480</data>
+      <data key="d6" />
+    </node>
+    <node id="智慧旅游">
+      <data key="d0">智慧旅游</data>
+      <data key="d1">concept</data>
+      <data key="d2">智慧旅游是旅游业的新兴热点，通过数字化技术引领行业创新与发展。&lt;SEP&gt;智慧旅游是当今旅游业的新兴热点，引领行业创新与发展的新潮流。&lt;SEP&gt;智慧旅游是驴迹科技所处的行业领域，公司在该领域取得了显著成就。</data>
+      <data key="d3">9df847493a90dc0fe18019acd116c02e-chunk-008&lt;SEP&gt;9df847493a90dc0fe18019acd116c02e-chunk-006&lt;SEP&gt;9df847493a90dc0fe18019acd116c02e-chunk-009</data>
+      <data key="d4">20260607073005_a209a1ea.docx</data>
+      <data key="d5">1780817480</data>
+      <data key="d6" />
+    </node>
+    <node id="驴迹科技">
+      <data key="d0">驴迹科技</data>
+      <data key="d1">organization</data>
+      <data key="d2">驴迹科技是一家走在行业前列的公司，专注于将数字化技术与旅游业相结合，为游客提供便捷、个性化的旅游体验。&lt;SEP&gt;驴迹科技是一家走在行业前列的公司，巧妙地将数字化技术与旅游业相结合。&lt;SEP&gt;驴迹科技是一家在智慧旅游领域取得显著成就的行业领军企业，业务模式直观稳健，收入与旅游人数紧密相关。</data>
+      <data key="d3">9df847493a90dc0fe18019acd116c02e-chunk-008&lt;SEP&gt;9df847493a90dc0fe18019acd116c02e-chunk-006&lt;SEP&gt;9df847493a90dc0fe18019acd116c02e-chunk-009</data>
+      <data key="d4">20260607073005_a209a1ea.docx</data>
+      <data key="d5">1780817480</data>
+      <data key="d6" />
+    </node>
+    <node id="大数据">
+      <data key="d0">大数据</data>
+      <data key="d1">data</data>
+      <data key="d2">大数据被人工智能用于分析用户兴趣和需求，提供个性化旅游信息。&lt;SEP&gt;大数据是驴迹科技在业务中充分利用的技术手段，用于数据分析以支持决策。</data>
+      <data key="d3">9df847493a90dc0fe18019acd116c02e-chunk-008&lt;SEP&gt;9df847493a90dc0fe18019acd116c02e-chunk-009</data>
+      <data key="d4">20260607073005_a209a1ea.docx</data>
+      <data key="d5">1780817480</data>
+      <data key="d6" />
+    </node>
+    <node id="语音识别">
+      <data key="d0">语音识别</data>
+      <data key="d1">method</data>
+      <data key="d2">语音识别是人工智能技术之一，用于提升用户与旅游服务的交互体验。</data>
+      <data key="d3">9df847493a90dc0fe18019acd116c02e-chunk-008</data>
+      <data key="d4">20260607073005_a209a1ea.docx</data>
+      <data key="d5">1780817480</data>
+      <data key="d6" />
+    </node>
+    <node id="自然语言处理">
+      <data key="d0">自然语言处理</data>
+      <data key="d1">method</data>
+      <data key="d2">自然语言处理是人工智能技术之一，用于实现自然流畅的交互。</data>
+      <data key="d3">9df847493a90dc0fe18019acd116c02e-chunk-008</data>
+      <data key="d4">20260607073005_a209a1ea.docx</data>
+      <data key="d5">1780817480</data>
+      <data key="d6" />
+    </node>
+    <node id="景区设计">
+      <data key="d0">景区设计</data>
+      <data key="d1">concept</data>
+      <data key="d2">景区设计是通过人工智能技术优化景区环境，提升游客体验的领域。</data>
+      <data key="d3">9df847493a90dc0fe18019acd116c02e-chunk-008</data>
+      <data key="d4">20260607073005_a209a1ea.docx</data>
+      <data key="d5">1780817480</data>
+      <data key="d6" />
+    </node>
+    <node id="旅游产品和服务">
+      <data key="d0">旅游产品和服务</data>
+      <data key="d1">concept</data>
+      <data key="d2">旅游产品和服务是基于智慧旅游推出，以满足游客的多元化需求。</data>
+      <data key="d3">9df847493a90dc0fe18019acd116c02e-chunk-008</data>
+      <data key="d4">20260607073005_a209a1ea.docx</data>
+      <data key="d5">1780817480</data>
+      <data key="d6" />
+    </node>
+    <node id="游客">
+      <data key="d0">游客</data>
+      <data key="d1">person</data>
+      <data key="d2">游客是旅游活动的参与者，其需求和审美在不断变化，寻求更深层次和更真实的旅游体验。&lt;SEP&gt;游客是旅游服务的受众，其多元化需求被满足。</data>
+      <data key="d3">9df847493a90dc0fe18019acd116c02e-chunk-008&lt;SEP&gt;9df847493a90dc0fe18019acd116c02e-chunk-006</data>
+      <data key="d4">20260607073005_a209a1ea.docx</data>
+      <data key="d5">1780817480</data>
+      <data key="d6" />
+    </node>
+    <node id="公共租赁设备">
+      <data key="d0">公共租赁设备</data>
+      <data key="d1">artifact</data>
+      <data key="d2">公共租赁设备是市场上存在的公共租赁设备，其卫生状况不佳且电力供应不稳定，反映了市场需求空白。</data>
+      <data key="d3">9df847493a90dc0fe18019acd116c02e-chunk-002</data>
+      <data key="d4">20260607073005_a209a1ea.docx</data>
+      <data key="d5">1780817480</data>
+      <data key="d6" />
+    </node>
+    <node id="C端用户">
+      <data key="d0">C端用户</data>
+      <data key="d1">person</data>
+      <data key="d2">C端用户是服务的最终消费者，通过移动支付直接付费使用服务。</data>
+      <data key="d3">9df847493a90dc0fe18019acd116c02e-chunk-002</data>
+      <data key="d4">20260607073005_a209a1ea.docx</data>
+      <data key="d5">1780817480</data>
+      <data key="d6" />
+    </node>
+    <node id="国家基础设施">
+      <data key="d0">国家基础设施</data>
+      <data key="d1">concept</data>
+      <data key="d2">国家基础设施的完善为创业提供了有力的支持。</data>
+      <data key="d3">9df847493a90dc0fe18019acd116c02e-chunk-002</data>
+      <data key="d4">20260607073005_a209a1ea.docx</data>
+      <data key="d5">1780817480</data>
+      <data key="d6" />
+    </node>
+    <node id="前工作单位">
+      <data key="d0">前工作单位</data>
+      <data key="d1">organization</data>
+      <data key="d2">前工作单位是臧伟仲之前的工作机构，为其创业提供了经验和资源。</data>
+      <data key="d3">9df847493a90dc0fe18019acd116c02e-chunk-002</data>
+      <data key="d4">20260607073005_a209a1ea.docx</data>
+      <data key="d5">1780817480</data>
+      <data key="d6" />
+    </node>
+    <node id="收费难题">
+      <data key="d0">收费难题</data>
+      <data key="d1">concept</data>
+      <data key="d2">收费难题是公司创业初期面临的问题，因移动支付的普及而得到解决。</data>
+      <data key="d3">9df847493a90dc0fe18019acd116c02e-chunk-002</data>
+      <data key="d4">20260607073005_a209a1ea.docx</data>
+      <data key="d5">1780817480</data>
+      <data key="d6" />
+    </node>
+    <node id="失败">
+      <data key="d0">失败</data>
+      <data key="d1">concept</data>
+      <data key="d2">失败是公司文化中不鼓励的行为，团队成员被鼓励探索成功之路而非为失败找借口。</data>
+      <data key="d3">9df847493a90dc0fe18019acd116c02e-chunk-002</data>
+      <data key="d4">20260607073005_a209a1ea.docx</data>
+      <data key="d5">1780817480</data>
+      <data key="d6" />
+    </node>
+    <node id="旅游+康养">
+      <data key="d0">旅游+康养</data>
+      <data key="d1">concept</data>
+      <data key="d2">旅游+康养是旅游+概念下的具体模式，通过提供瑜伽、呼吸法、心经等康养活动，让游客在旅行中放松身心。</data>
+      <data key="d3">9df847493a90dc0fe18019acd116c02e-chunk-006</data>
+      <data key="d4">20260607073005_a209a1ea.docx</data>
+      <data key="d5">1780817480</data>
+      <data key="d6" />
+    </node>
+    <node id="传统旅游资源">
+      <data key="d0">传统旅游资源</data>
+      <data key="d1">concept</data>
+      <data key="d2">传统旅游资源是指过去吸引游客的旅游景点和项目，其吸引力因游客需求多元化而逐渐减弱。</data>
+      <data key="d3">9df847493a90dc0fe18019acd116c02e-chunk-006</data>
+      <data key="d4">20260607073005_a209a1ea.docx</data>
+      <data key="d5">1780817480</data>
+      <data key="d6" />
+    </node>
+    <node id="当地文化">
+      <data key="d0">当地文化</data>
+      <data key="d1">concept</data>
+      <data key="d2">当地文化是旅游深度体验的核心，包括民俗、民风、民情和美食等方面。</data>
+      <data key="d3">9df847493a90dc0fe18019acd116c02e-chunk-006</data>
+      <data key="d4">20260607073005_a209a1ea.docx</data>
+      <data key="d5">1780817480</data>
+      <data key="d6" />
+    </node>
+    <node id="自媒体">
+      <data key="d0">自媒体</data>
+      <data key="d1">concept</data>
+      <data key="d2">自媒体是一种媒体形式，其发展影响了游客的审美和兴趣点变化。</data>
+      <data key="d3">9df847493a90dc0fe18019acd116c02e-chunk-006</data>
+      <data key="d4">20260607073005_a209a1ea.docx</data>
+      <data key="d5">1780817480</data>
+      <data key="d6" />
+    </node>
+    <node id="康养活动">
+      <data key="d0">康养活动</data>
+      <data key="d1">concept</data>
+      <data key="d2">康养活动包括瑜伽、呼吸法、心经等，是旅游+康养模式中提供的具体内容，旨在让游客放松身心。</data>
+      <data key="d3">9df847493a90dc0fe18019acd116c02e-chunk-006</data>
+      <data key="d4">20260607073005_a209a1ea.docx</data>
+      <data key="d5">1780817480</data>
+      <data key="d6" />
+    </node>
+    <node id="旅游热点">
+      <data key="d0">旅游热点</data>
+      <data key="d1">concept</data>
+      <data key="d2">旅游热点是每年变化的趋势，需要旅游行业密切关注市场动态以调整产品和服务。</data>
+      <data key="d3">9df847493a90dc0fe18019acd116c02e-chunk-006</data>
+      <data key="d4">20260607073005_a209a1ea.docx</data>
+      <data key="d5">1780817480</data>
+      <data key="d6" />
+    </node>
+    <node id="数字化技术">
+      <data key="d0">数字化技术</data>
+      <data key="d1">method</data>
+      <data key="d2">数字化技术是驴迹科技用来与旅游业结合的工具，旨在提供便捷、个性化的旅游体验。</data>
+      <data key="d3">9df847493a90dc0fe18019acd116c02e-chunk-006</data>
+      <data key="d4">20260607073005_a209a1ea.docx</data>
+      <data key="d5">1780817480</data>
+      <data key="d6" />
+    </node>
+    <node id="内容输出">
+      <data key="d0">内容输出</data>
+      <data key="d1">concept</data>
+      <data key="d2">内容输出是旅游行业过去的主要功能之一，现在正通过人工智能技术得到提升。</data>
+      <data key="d3">9df847493a90dc0fe18019acd116c02e-chunk-006</data>
+      <data key="d4">20260607073005_a209a1ea.docx</data>
+      <data key="d5">1780817480</data>
+      <data key="d6" />
+    </node>
+    <node id="交互">
+      <data key="d0">交互</data>
+      <data key="d1">concept</data>
+      <data key="d2">交互是旅游行业过去的主要功能之一，现在正通过人工智能技术得到提升。</data>
+      <data key="d3">9df847493a90dc0fe18019acd116c02e-chunk-006</data>
+      <data key="d4">20260607073005_a209a1ea.docx</data>
+      <data key="d5">1780817480</data>
+      <data key="d6" />
+    </node>
+    <node id="指导">
+      <data key="d0">指导</data>
+      <data key="d1">concept</data>
+      <data key="d2">指导是旅游行业过去的主要功能之一，现在正通过人工智能技术得到提升。</data>
+      <data key="d3">9df847493a90dc0fe18019acd116c02e-chunk-006</data>
+      <data key="d4">20260607073005_a209a1ea.docx</data>
+      <data key="d5">1780817480</data>
+      <data key="d6" />
+    </node>
+    <node id="Guangzhou Tianhe District">
+      <data key="d0">Guangzhou Tianhe District</data>
+      <data key="d1">location</data>
+      <data key="d2">Guangzhou Tianhe District is a district in Guangzhou, China, where the subject was elected as an entrepreneurial leading talent and holds memberships in local organizations.</data>
+      <data key="d3">9df847493a90dc0fe18019acd116c02e-chunk-011</data>
+      <data key="d4">20260607073005_a209a1ea.docx</data>
+      <data key="d5">1780817480</data>
+      <data key="d6" />
+    </node>
+    <node id="Entrepreneurial Leading Talent Of Guangzhou Tianhe District">
+      <data key="d0">Entrepreneurial Leading Talent Of Guangzhou Tianhe District</data>
+      <data key="d1">concept</data>
+      <data key="d2">An honorary title recognizing entrepreneurial leadership in Guangzhou Tianhe District, awarded to the subject in 2019.</data>
+      <data key="d3">9df847493a90dc0fe18019acd116c02e-chunk-011</data>
+      <data key="d4">20260607073005_a209a1ea.docx</data>
+      <data key="d5">1780817480</data>
+      <data key="d6" />
+    </node>
+    <node id="Yiyue Top Ten New Entrepreneurial Figures">
+      <data key="d0">Yiyue Top Ten New Entrepreneurial Figures</data>
+      <data key="d1">concept</data>
+      <data key="d2">An award or recognition for emerging entrepreneurs, where the subject was elected in 2019.</data>
+      <data key="d3">9df847493a90dc0fe18019acd116c02e-chunk-011</data>
+      <data key="d4">20260607073005_a209a1ea.docx</data>
+      <data key="d5">1780817480</data>
+      <data key="d6" />
+    </node>
+    <node id="All-China Federation Of Tourism And Commerce Chamber Of Commerce">
+      <data key="d0">All-China Federation Of Tourism And Commerce Chamber Of Commerce</data>
+      <data key="d1">organization</data>
+      <data key="d2">A national tourism and commerce chamber of commerce in China, where the subject was elected as a council member in 2019.</data>
+      <data key="d3">9df847493a90dc0fe18019acd116c02e-chunk-011</data>
+      <data key="d4">20260607073005_a209a1ea.docx</data>
+      <data key="d5">1780817480</data>
+      <data key="d6" />
+    </node>
+    <node id="Guangzhou Tianhe District Federation Of Industry And Commerce">
+      <data key="d0">Guangzhou Tianhe District Federation Of Industry And Commerce</data>
+      <data key="d1">organization</data>
+      <data key="d2">A local federation of industry and commerce in Guangzhou Tianhe District, where the subject is a member.</data>
+      <data key="d3">9df847493a90dc0fe18019acd116c02e-chunk-011</data>
+      <data key="d4">20260607073005_a209a1ea.docx</data>
+      <data key="d5">1780817480</data>
+      <data key="d6" />
+    </node>
+    <node id="2019 China Cultural Tourism Trend List">
+      <data key="d0">2019 China Cultural Tourism Trend List</data>
+      <data key="d1">content</data>
+      <data key="d2">A list or award event in China's cultural tourism industry, where the subject was shortlisted for the Top Ten New Figures of 2019 China Cultural Tourism.</data>
+      <data key="d3">9df847493a90dc0fe18019acd116c02e-chunk-011</data>
+      <data key="d4">20260607073005_a209a1ea.docx</data>
+      <data key="d5">1780817480</data>
+      <data key="d6" />
+    </node>
+    <node id="2019 China Cultural Tourism Top Ten New Figures">
+      <data key="d0">2019 China Cultural Tourism Top Ten New Figures</data>
+      <data key="d1">concept</data>
+      <data key="d2">An award category for emerging leaders in China's cultural tourism industry, for which the subject was shortlisted.</data>
+      <data key="d3">9df847493a90dc0fe18019acd116c02e-chunk-011</data>
+      <data key="d4">20260607073005_a209a1ea.docx</data>
+      <data key="d5">1780817480</data>
+      <data key="d6" />
+    </node>
+    <node id="Guangzhou Tianhe District Federation Of Industry And Commerce (General Chamber Of Commerce)">
+      <data key="d0">Guangzhou Tianhe District Federation Of Industry And Commerce (General Chamber Of Commerce)</data>
+      <data key="d1">organization</data>
+      <data key="d2">The general chamber of commerce branch of the Guangzhou Tianhe District Federation of Industry and Commerce, where the subject was elected as vice president in 2021.</data>
+      <data key="d3">9df847493a90dc0fe18019acd116c02e-chunk-011</data>
+      <data key="d4">20260607073005_a209a1ea.docx</data>
+      <data key="d5">1780817480</data>
+      <data key="d6" />
+    </node>
+    <node id="Guangzhou Bay Area Postdoctoral Research Station">
+      <data key="d0">Guangzhou Bay Area Postdoctoral Research Station</data>
+      <data key="d1">organization</data>
+      <data key="d2">A postdoctoral research station in the Guangzhou Bay Area, where the subject was appointed as a doctoral supervisor in 2023.</data>
+      <data key="d3">9df847493a90dc0fe18019acd116c02e-chunk-011</data>
+      <data key="d4">20260607073005_a209a1ea.docx</data>
+      <data key="d5">1780817480</data>
+      <data key="d6" />
+    </node>
+    <node id="Doctoral Supervisor">
+      <data key="d0">Doctoral Supervisor</data>
+      <data key="d1">concept</data>
+      <data key="d2">An academic title for supervising doctoral candidates, which the subject was appointed as at the Guangzhou Bay Area Postdoctoral Research Station.</data>
+      <data key="d3">9df847493a90dc0fe18019acd116c02e-chunk-011</data>
+      <data key="d4">20260607073005_a209a1ea.docx</data>
+      <data key="d5">1780817480</data>
+      <data key="d6" />
+    </node>
+    <node id="Subject">
+      <data key="d0">Subject</data>
+      <data key="d1">person</data>
+      <data key="d2">The unnamed individual who received the awards, memberships, and appointments described in the input text.</data>
+      <data key="d3">9df847493a90dc0fe18019acd116c02e-chunk-011</data>
+      <data key="d4">20260607073005_a209a1ea.docx</data>
+      <data key="d5">1780817480</data>
+      <data key="d6" />
+    </node>
+    <node id="哈尔滨赏雪">
+      <data key="d0">哈尔滨赏雪</data>
+      <data key="d1">content</data>
+      <data key="d2">哈尔滨赏雪is a romantic tourism theme highlighting snow-viewing experiences in Harbin.</data>
+      <data key="d3">9df847493a90dc0fe18019acd116c02e-chunk-005</data>
+      <data key="d4">20260607073005_a209a1ea.docx</data>
+      <data key="d5">1780817480</data>
+      <data key="d6" />
+    </node>
+    <node id="河南璀璨之旅赠送的钻石与珍珠">
+      <data key="d0">河南璀璨之旅赠送的钻石与珍珠</data>
+      <data key="d1">content</data>
+      <data key="d2">河南璀璨之旅赠送的钻石与珍珠is a tourism package or promotion involving diamonds and pearls in Henan.</data>
+      <data key="d3">9df847493a90dc0fe18019acd116c02e-chunk-005</data>
+      <data key="d4">20260607073005_a209a1ea.docx</data>
+      <data key="d5">1780817480</data>
+      <data key="d6" />
+    </node>
+    <node id="哈尔滨文旅局长">
+      <data key="d0">哈尔滨文旅局长</data>
+      <data key="d1">person</data>
+      <data key="d2">The Harbin Cultural and Tourism Bureau Director is a local official who danced to promote tourism, exemplifying innovative promotion methods.</data>
+      <data key="d3">9df847493a90dc0fe18019acd116c02e-chunk-005</data>
+      <data key="d4">20260607073005_a209a1ea.docx</data>
+      <data key="d5">1780817480</data>
+      <data key="d6" />
+    </node>
+    <node id="国外游向国内游的转变">
+      <data key="d0">国外游向国内游的转变</data>
+      <data key="d1">concept</data>
+      <data key="d2">国外游向国内游的转变is a shift from international to domestic tourism, driven by safety concerns abroad and improved domestic infrastructure.</data>
+      <data key="d3">9df847493a90dc0fe18019acd116c02e-chunk-005</data>
+      <data key="d4">20260607073005_a209a1ea.docx</data>
+      <data key="d5">1780817480</data>
+      <data key="d6" />
+    </node>
+    <node id="国内旅游市场">
+      <data key="d0">国内旅游市场</data>
+      <data key="d1">concept</data>
+      <data key="d2">国内旅游市场is the domestic tourism market in China that is experiencing structural adjustments and new development opportunities due to the shift from outbound travel.</data>
+      <data key="d3">9df847493a90dc0fe18019acd116c02e-chunk-005</data>
+      <data key="d4">20260607073005_a209a1ea.docx</data>
+      <data key="d5">1780817480</data>
+      <data key="d6" />
+    </node>
+    <node id="四为高管教育">
+      <data key="d0">四为高管教育</data>
+      <data key="d1">organization</data>
+      <data key="d2">四为高管教育是一家专注于垂直产业的高管教育机构，主办了【智见·2024】访谈系列。</data>
+      <data key="d3">9df847493a90dc0fe18019acd116c02e-chunk-000</data>
+      <data key="d4">20260607073005_a209a1ea.docx</data>
+      <data key="d5">1780817480</data>
+      <data key="d6" />
+    </node>
+    <node id="智见·2024">
+      <data key="d0">智见·2024</data>
+      <data key="d1">content</data>
+      <data key="d2">智见·2024是四为高管教育推出的未来趋势系列访谈，第六期邀请了臧伟仲。</data>
+      <data key="d3">9df847493a90dc0fe18019acd116c02e-chunk-000</data>
+      <data key="d4">20260607073005_a209a1ea.docx</data>
+      <data key="d5">1780817480</data>
+      <data key="d6" />
+    </node>
+    <node id="解码新医学-产业学者项目">
+      <data key="d0">解码新医学-产业学者项目</data>
+      <data key="d1">content</data>
+      <data key="d2">解码新医学-产业学者项目是四为高管教育的一个项目，臧伟仲是其首期班同学。</data>
+      <data key="d3">9df847493a90dc0fe18019acd116c02e-chunk-000</data>
+      <data key="d4">20260607073005_a209a1ea.docx</data>
+      <data key="d5">1780817480</data>
+      <data key="d6" />
+    </node>
+    <node id="Ella">
+      <data key="d0">Ella</data>
+      <data key="d1">person</data>
+      <data key="d2">Ella是【智见·2024】访谈稿的编辑。</data>
+      <data key="d3">9df847493a90dc0fe18019acd116c02e-chunk-000</data>
+      <data key="d4">20260607073005_a209a1ea.docx</data>
+      <data key="d5">1780817480</data>
+      <data key="d6" />
+    </node>
+    <node id="旅游业">
+      <data key="d0">旅游业</data>
+      <data key="d1">concept</data>
+      <data key="d2">旅游业是访谈讨论的核心行业，经历了挑战后恢复增长，并展望2024年将转向崛起。&lt;SEP&gt;旅游业是一个以超过百分之十的年增长率高速发展的行业，为驴迹科技提供了广阔的市场空间。</data>
+      <data key="d3">9df847493a90dc0fe18019acd116c02e-chunk-000&lt;SEP&gt;9df847493a90dc0fe18019acd116c02e-chunk-009</data>
+      <data key="d4">20260607073005_a209a1ea.docx</data>
+      <data key="d5">1780817480</data>
+      <data key="d6" />
+    </node>
+    <node id="军旅生涯">
+      <data key="d0">军旅生涯</data>
+      <data key="d1">concept</data>
+      <data key="d2">军旅生涯是臧伟仲的人生经历，培养了其坚韧不拔的毅力和面对困难的态度。</data>
+      <data key="d3">9df847493a90dc0fe18019acd116c02e-chunk-000</data>
+      <data key="d4">20260607073005_a209a1ea.docx</data>
+      <data key="d5">1780817480</data>
+      <data key="d6" />
+    </node>
+    <node id="河南">
+      <data key="d0">河南</data>
+      <data key="d1">location</data>
+      <data key="d2">河南是四为高管教育发布访谈稿的所在地，也是2024年2月6日访谈发布时的标注地点。</data>
+      <data key="d3">9df847493a90dc0fe18019acd116c02e-chunk-000</data>
+      <data key="d4">20260607073005_a209a1ea.docx</data>
+      <data key="d5">1780817480</data>
+      <data key="d6" />
+    </node>
+    <node id="2024年2月6日">
+      <data key="d0">2024年2月6日</data>
+      <data key="d1">event</data>
+      <data key="d2">2024年2月6日是【智见·2024】第六期访谈稿的发布日期。</data>
+      <data key="d3">9df847493a90dc0fe18019acd116c02e-chunk-000</data>
+      <data key="d4">20260607073005_a209a1ea.docx</data>
+      <data key="d5">1780817480</data>
+      <data key="d6" />
+    </node>
+    <node id="亲民定价">
+      <data key="d0">亲民定价</data>
+      <data key="d1">concept</data>
+      <data key="d2">亲民定价是驴迹科技采取的价格策略，以几元钱的服务费用吸引用户，降低购买负担。</data>
+      <data key="d3">9df847493a90dc0fe18019acd116c02e-chunk-009</data>
+      <data key="d4">20260607073005_a209a1ea.docx</data>
+      <data key="d5">1780817480</data>
+      <data key="d6" />
+    </node>
+    <node id="海外市场">
+      <data key="d0">海外市场</data>
+      <data key="d1">concept</data>
+      <data key="d2">海外市场是驴迹科技积极拓展的业务领域，为外国游客提供景区服务，以提升全球竞争力。</data>
+      <data key="d3">9df847493a90dc0fe18019acd116c02e-chunk-009</data>
+      <data key="d4">20260607073005_a209a1ea.docx</data>
+      <data key="d5">1780817480</data>
+      <data key="d6" />
+    </node>
+    <node id="第二条增长曲线">
+      <data key="d0">第二条增长曲线</data>
+      <data key="d1">concept</data>
+      <data key="d2">第二条增长曲线是驴迹科技致力于打造的新的业务增长点，以探索更持久、更具盈利潜力的商业模式。</data>
+      <data key="d3">9df847493a90dc0fe18019acd116c02e-chunk-009</data>
+      <data key="d4">20260607073005_a209a1ea.docx</data>
+      <data key="d5">1780817480</data>
+      <data key="d6" />
+    </node>
+    <node id="2024年">
+      <data key="d0">2024年</data>
+      <data key="d1">event</data>
+      <data key="d2">2024年是臧伟仲表达深切希望与期待的年份，他用“不确定、变化、希望”三个词汇来寄托情感。</data>
+      <data key="d3">9df847493a90dc0fe18019acd116c02e-chunk-009</data>
+      <data key="d4">20260607073005_a209a1ea.docx</data>
+      <data key="d5">1780817480</data>
+      <data key="d6" />
+    </node>
+    <node id="中国公民">
+      <data key="d0">中国公民</data>
+      <data key="d1">person</data>
+      <data key="d2">中国公民是出国旅游人数有所减少的群体，这一变化影响了驴迹科技的海外市场策略。</data>
+      <data key="d3">9df847493a90dc0fe18019acd116c02e-chunk-009</data>
+      <data key="d4">20260607073005_a209a1ea.docx</data>
+      <data key="d5">1780817480</data>
+      <data key="d6" />
+    </node>
+    <node id="景区">
+      <data key="d0">景区</data>
+      <data key="d1">location</data>
+      <data key="d2">景区是驴迹科技提供服务的具体场所，包括国内和国外多个景区。</data>
+      <data key="d3">9df847493a90dc0fe18019acd116c02e-chunk-009</data>
+      <data key="d4">20260607073005_a209a1ea.docx</data>
+      <data key="d5">1780817480</data>
+      <data key="d6" />
+    </node>
+    <node id="大数据分析">
+      <data key="d0">大数据分析</data>
+      <data key="d1">method</data>
+      <data key="d2">大数据分析是一种方法，用于分析用户的兴趣和需求，以支持人工智能生成个性化内容。</data>
+      <data key="d3">9df847493a90dc0fe18019acd116c02e-chunk-007</data>
+      <data key="d4">20260607073005_a209a1ea.docx</data>
+      <data key="d5">1780817480</data>
+      <data key="d6" />
+    </node>
+    <node id="用户">
+      <data key="d0">用户</data>
+      <data key="d1">person</data>
+      <data key="d2">用户是旅游信息的接收者，其兴趣和需求被人工智能通过大数据分析来理解和满足。</data>
+      <data key="d3">9df847493a90dc0fe18019acd116c02e-chunk-007</data>
+      <data key="d4">20260607073005_a209a1ea.docx</data>
+      <data key="d5">1780817480</data>
+      <data key="d6" />
+    </node>
+    <node id="旅游信息">
+      <data key="d0">旅游信息</data>
+      <data key="d1">content</data>
+      <data key="d2">旅游信息是由人工智能提供的内容，具有精准和个性化的特点，旨在提高用户满意度。</data>
+      <data key="d3">9df847493a90dc0fe18019acd116c02e-chunk-007</data>
+      <data key="d4">20260607073005_a209a1ea.docx</data>
+      <data key="d5">1780817480</data>
+      <data key="d6" />
+    </node>
+    <node id="旅游行业">
+      <data key="d0">旅游行业</data>
+      <data key="d1">organization</data>
+      <data key="d2">旅游行业是受益于人工智能提供精准旅游信息的领域，能够提升整体服务水平和用户满意度。</data>
+      <data key="d3">9df847493a90dc0fe18019acd116c02e-chunk-007&lt;SEP&gt;9df847493a90dc0fe18019acd116c02e-chunk-008</data>
+      <data key="d4">20260607073005_a209a1ea.docx</data>
+      <data key="d5">1780817480</data>
+      <data key="d6" />
+    </node>
+    <node id="臧伟仲">
+      <data key="d0">臧伟仲</data>
+      <data key="d1">person</data>
+      <data key="d2">臧伟仲是驴迹科技集团有限公司（Lvji Technology Group Co., Ltd.）的创始人、董事长及执行董事。他拥有军人背景，并曾在中国移动担任管理职务，积累了深厚的行业积淀与实战经验。作为公司的核心代表，臧伟仲不仅负责解读企业文化价值观“搞得定”、“顶得住”、“跟我上”，还积极参与关于公司战略和行业趋势的讨论，并对驴迹科技的未来有着明确的展望与愿景。
+
+臧伟仲也是一位对旅游趋势进行评论和分析的行业人士。他作为受访者，经常引用相关数据与观察，对国内外旅游出行变化进行分析，并分享关于旅游行业发展的见解。此外，他还代表驴迹科技就人工智能在旅游行业中的应用发表了观点，讨论了人工智能技术在该领域的实际应用与潜力。</data>
+      <data key="d3">9df847493a90dc0fe18019acd116c02e-chunk-003&lt;SEP&gt;9df847493a90dc0fe18019acd116c02e-chunk-010&lt;SEP&gt;9df847493a90dc0fe18019acd116c02e-chunk-008&lt;SEP&gt;9df847493a90dc0fe18019acd116c02e-chunk-002&lt;SEP&gt;9df847493a90dc0fe18019acd116c02e-chunk-006&lt;SEP&gt;9df847493a90dc0fe18019acd116c02e-chunk-005&lt;SEP&gt;9df847493a90dc0fe18019acd116c02e-chunk-000&lt;SEP&gt;9df847493a90dc0fe18019acd116c02e-chunk-009</data>
+      <data key="d4">20260607073005_a209a1ea.docx</data>
+      <data key="d5">1780817482</data>
+      <data key="d6" />
+    </node>
+    <node id="不确定性">
+      <data key="d0">不确定性</data>
+      <data key="d3">9df847493a90dc0fe18019acd116c02e-chunk-009</data>
+      <data key="d2">臧伟仲用“不确定”一词来描述对2024年的深切希望与期待。</data>
+      <data key="d1">UNKNOWN</data>
+      <data key="d4">20260607073005_a209a1ea.docx</data>
+      <data key="d5">1780817482</data>
+      <data key="d6" />
+    </node>
+    <node id="变化">
+      <data key="d0">变化</data>
+      <data key="d3">9df847493a90dc0fe18019acd116c02e-chunk-009</data>
+      <data key="d2">臧伟仲用“变化”一词来描述对2024年的深切希望与期待。</data>
+      <data key="d1">UNKNOWN</data>
+      <data key="d4">20260607073005_a209a1ea.docx</data>
+      <data key="d5">1780817482</data>
+      <data key="d6" />
+    </node>
+    <node id="希望">
+      <data key="d0">希望</data>
+      <data key="d3">9df847493a90dc0fe18019acd116c02e-chunk-009</data>
+      <data key="d2">臧伟仲用“希望”一词来描述对2024年的深切希望与期待。</data>
+      <data key="d1">UNKNOWN</data>
+      <data key="d4">20260607073005_a209a1ea.docx</data>
+      <data key="d5">1780817482</data>
+      <data key="d6" />
+    </node>
+    <edge source="跟我上" target="领导者">
+      <data key="d7">1.0</data>
+      <data key="d8">领导者通过以身作则践行“跟我上”价值观。</data>
+      <data key="d9">倡导,践行</data>
+      <data key="d10">9df847493a90dc0fe18019acd116c02e-chunk-003</data>
+      <data key="d11">20260607073005_a209a1ea.docx</data>
+      <data key="d12">1780817482</data>
+      <data key="d13" />
+    </edge>
+    <edge source="跟我上" target="企业">
+      <data key="d7">1.0</data>
+      <data key="d8">“跟我上”是企业文化的核心要素之一。</data>
+      <data key="d9">核心要素,组成部分</data>
+      <data key="d10">9df847493a90dc0fe18019acd116c02e-chunk-003</data>
+      <data key="d11">20260607073005_a209a1ea.docx</data>
+      <data key="d12">1780817482</data>
+      <data key="d13" />
+    </edge>
+    <edge source="跟我上" target="臧伟仲">
+      <data key="d7">1.0</data>
+      <data key="d8">臧伟仲解读了“跟我上”作为企业文化价值观的含义。</data>
+      <data key="d9">企业文化解读</data>
+      <data key="d10">9df847493a90dc0fe18019acd116c02e-chunk-002</data>
+      <data key="d11">20260607073005_a209a1ea.docx</data>
+      <data key="d12">1780817482</data>
+      <data key="d13" />
+    </edge>
+    <edge source="跟我上" target="公司">
+      <data key="d7">1.0</data>
+      <data key="d8">公司倡导“跟我上”作为企业文化价值观，体现领导力。</data>
+      <data key="d9">企业文化</data>
+      <data key="d10">9df847493a90dc0fe18019acd116c02e-chunk-002</data>
+      <data key="d11">20260607073005_a209a1ea.docx</data>
+      <data key="d12">1780817482</data>
+      <data key="d13" />
+    </edge>
+    <edge source="搞得定" target="企业">
+      <data key="d7">1.0</data>
+      <data key="d8">“搞得定”是企业文化的核心要素之一。</data>
+      <data key="d9">核心要素,组成部分</data>
+      <data key="d10">9df847493a90dc0fe18019acd116c02e-chunk-003</data>
+      <data key="d11">20260607073005_a209a1ea.docx</data>
+      <data key="d12">1780817482</data>
+      <data key="d13" />
+    </edge>
+    <edge source="搞得定" target="臧伟仲">
+      <data key="d7">1.0</data>
+      <data key="d8">臧伟仲解读了“搞得定”作为企业文化价值观的含义。</data>
+      <data key="d9">企业文化解读</data>
+      <data key="d10">9df847493a90dc0fe18019acd116c02e-chunk-002</data>
+      <data key="d11">20260607073005_a209a1ea.docx</data>
+      <data key="d12">1780817482</data>
+      <data key="d13" />
+    </edge>
+    <edge source="搞得定" target="公司">
+      <data key="d7">1.0</data>
+      <data key="d8">公司倡导“搞得定”作为企业文化价值观，强调解决问题能力。</data>
+      <data key="d9">企业文化</data>
+      <data key="d10">9df847493a90dc0fe18019acd116c02e-chunk-002</data>
+      <data key="d11">20260607073005_a209a1ea.docx</data>
+      <data key="d12">1780817482</data>
+      <data key="d13" />
+    </edge>
+    <edge source="顶得住" target="企业">
+      <data key="d7">1.0</data>
+      <data key="d8">“顶得住”是企业文化的核心要素之一。</data>
+      <data key="d9">核心要素,组成部分</data>
+      <data key="d10">9df847493a90dc0fe18019acd116c02e-chunk-003</data>
+      <data key="d11">20260607073005_a209a1ea.docx</data>
+      <data key="d12">1780817482</data>
+      <data key="d13" />
+    </edge>
+    <edge source="顶得住" target="臧伟仲">
+      <data key="d7">1.0</data>
+      <data key="d8">臧伟仲解读了“顶得住”作为企业文化价值观的含义。</data>
+      <data key="d9">企业文化解读</data>
+      <data key="d10">9df847493a90dc0fe18019acd116c02e-chunk-002</data>
+      <data key="d11">20260607073005_a209a1ea.docx</data>
+      <data key="d12">1780817482</data>
+      <data key="d13" />
+    </edge>
+    <edge source="顶得住" target="公司">
+      <data key="d7">1.0</data>
+      <data key="d8">公司倡导“顶得住”作为企业文化价值观，强调面对压力的态度。</data>
+      <data key="d9">企业文化</data>
+      <data key="d10">9df847493a90dc0fe18019acd116c02e-chunk-002</data>
+      <data key="d11">20260607073005_a209a1ea.docx</data>
+      <data key="d12">1780817482</data>
+      <data key="d13" />
+    </edge>
+    <edge source="忠诚于组织" target="员工">
+      <data key="d7">1.0</data>
+      <data key="d8">员工需忠诚于组织，以组织利益为重。</data>
+      <data key="d9">体现,遵循</data>
+      <data key="d10">9df847493a90dc0fe18019acd116c02e-chunk-003</data>
+      <data key="d11">20260607073005_a209a1ea.docx</data>
+      <data key="d12">1780817482</data>
+      <data key="d13" />
+    </edge>
+    <edge source="淄博赶烤热潮" target="国内游">
+      <data key="d7">1.0</data>
+      <data key="d8">淄博赶烤热潮代表国内游新风尚。</data>
+      <data key="d9">代表,示范</data>
+      <data key="d10">9df847493a90dc0fe18019acd116c02e-chunk-003</data>
+      <data key="d11">20260607073005_a209a1ea.docx</data>
+      <data key="d12">1780817482</data>
+      <data key="d13" />
+    </edge>
+    <edge source="哈尔滨赏雪之旅" target="国内游">
+      <data key="d7">1.0</data>
+      <data key="d8">哈尔滨赏雪之旅代表国内游新风尚。</data>
+      <data key="d9">代表,示范</data>
+      <data key="d10">9df847493a90dc0fe18019acd116c02e-chunk-003</data>
+      <data key="d11">20260607073005_a209a1ea.docx</data>
+      <data key="d12">1780817482</data>
+      <data key="d13" />
+    </edge>
+    <edge source="河南璀璨之旅" target="国内游">
+      <data key="d7">1.0</data>
+      <data key="d8">河南璀璨之旅代表国内游新风尚。</data>
+      <data key="d9">代表,示范</data>
+      <data key="d10">9df847493a90dc0fe18019acd116c02e-chunk-003</data>
+      <data key="d11">20260607073005_a209a1ea.docx</data>
+      <data key="d12">1780817482</data>
+      <data key="d13" />
+    </edge>
+    <edge source="国外游" target="臧伟仲">
+      <data key="d7">1.0</data>
+      <data key="d8">臧伟仲指出国外游因安全问题而遇冷。</data>
+      <data key="d9">分析,评论</data>
+      <data key="d10">9df847493a90dc0fe18019acd116c02e-chunk-003</data>
+      <data key="d11">20260607073005_a209a1ea.docx</data>
+      <data key="d12">1780817482</data>
+      <data key="d13" />
+    </edge>
+    <edge source="国外游" target="泰国">
+      <data key="d7">1.0</data>
+      <data key="d8">泰国频发治安事件导致国外游客减少。</data>
+      <data key="d9">导致减少,影响</data>
+      <data key="d10">9df847493a90dc0fe18019acd116c02e-chunk-003</data>
+      <data key="d11">20260607073005_a209a1ea.docx</data>
+      <data key="d12">1780817482</data>
+      <data key="d13" />
+    </edge>
+    <edge source="国外游" target="国内游">
+      <data key="d7">1.0</data>
+      <data key="d8">国外游向国内游转变，国内游崛起。</data>
+      <data key="d9">替代,转变</data>
+      <data key="d10">9df847493a90dc0fe18019acd116c02e-chunk-003</data>
+      <data key="d11">20260607073005_a209a1ea.docx</data>
+      <data key="d12">1780817482</data>
+      <data key="d13" />
+    </edge>
+    <edge source="国内游" target="臧伟仲">
+      <data key="d7">1.0</data>
+      <data key="d8">臧伟仲分析国内游崛起成为新趋势。</data>
+      <data key="d9">分析,评论</data>
+      <data key="d10">9df847493a90dc0fe18019acd116c02e-chunk-003</data>
+      <data key="d11">20260607073005_a209a1ea.docx</data>
+      <data key="d12">1780817482</data>
+      <data key="d13" />
+    </edge>
+    <edge source="国内游" target="周边游">
+      <data key="d7">1.0</data>
+      <data key="d8">国内游的崛起推动周边游成为热门选择。</data>
+      <data key="d9">包含,推动</data>
+      <data key="d10">9df847493a90dc0fe18019acd116c02e-chunk-003</data>
+      <data key="d11">20260607073005_a209a1ea.docx</data>
+      <data key="d12">1780817482</data>
+      <data key="d13" />
+    </edge>
+    <edge source="泰国" target="臧伟仲">
+      <data key="d7">1.0</data>
+      <data key="d8">臧伟仲mentions Thailand as a traditional destination where safety incidents have reduced Chinese tourist visits.</data>
+      <data key="d9">cites as affected destination</data>
+      <data key="d10">9df847493a90dc0fe18019acd116c02e-chunk-005</data>
+      <data key="d11">20260607073005_a209a1ea.docx</data>
+      <data key="d12">1780817482</data>
+      <data key="d13" />
+    </edge>
+    <edge source="周边游" target="国外游向国内游的转变">
+      <data key="d7">1.0</data>
+      <data key="d8">The shift from international to domestic tourism has led to the rise of周边游as a popular new choice.</data>
+      <data key="d9">drives trend</data>
+      <data key="d10">9df847493a90dc0fe18019acd116c02e-chunk-005</data>
+      <data key="d11">20260607073005_a209a1ea.docx</data>
+      <data key="d12">1780817482</data>
+      <data key="d13" />
+    </edge>
+    <edge source="旅游+" target="2024年旅游发展新趋势">
+      <data key="d7">1.0</data>
+      <data key="d8">“旅游+”是2024年旅游发展新趋势之一。</data>
+      <data key="d9">组成部分</data>
+      <data key="d10">9df847493a90dc0fe18019acd116c02e-chunk-003</data>
+      <data key="d11">20260607073005_a209a1ea.docx</data>
+      <data key="d12">1780817482</data>
+      <data key="d13" />
+    </edge>
+    <edge source="旅游+" target="旅游+康养">
+      <data key="d7">1.0</data>
+      <data key="d8">旅游+康养是旅游+概念下的一个具体发展方向。</data>
+      <data key="d9">包含,子概念</data>
+      <data key="d10">9df847493a90dc0fe18019acd116c02e-chunk-006</data>
+      <data key="d11">20260607073005_a209a1ea.docx</data>
+      <data key="d12">1780817482</data>
+      <data key="d13" />
+    </edge>
+    <edge source="流量密码" target="2024年旅游发展新趋势">
+      <data key="d7">1.0</data>
+      <data key="d8">流量密码是2024年旅游发展新趋势之一。</data>
+      <data key="d9">组成部分</data>
+      <data key="d10">9df847493a90dc0fe18019acd116c02e-chunk-003</data>
+      <data key="d11">20260607073005_a209a1ea.docx</data>
+      <data key="d12">1780817482</data>
+      <data key="d13" />
+    </edge>
+    <edge source="这一变化" target="我们的数据">
+      <data key="d7">1.0</data>
+      <data key="d8">The change is clearly reflected in the data.</data>
+      <data key="d9">reflected in</data>
+      <data key="d10">9df847493a90dc0fe18019acd116c02e-chunk-004</data>
+      <data key="d11">20260607073005_a209a1ea.docx</data>
+      <data key="d12">1780817482</data>
+      <data key="d13" />
+    </edge>
+    <edge source="国内许多地方" target="旅游资源">
+      <data key="d7">1.0</data>
+      <data key="d8">Many regions within the country possess tourism resources.</data>
+      <data key="d9">possesses</data>
+      <data key="d10">9df847493a90dc0fe18019acd116c02e-chunk-004</data>
+      <data key="d11">20260607073005_a209a1ea.docx</data>
+      <data key="d12">1780817482</data>
+      <data key="d13" />
+    </edge>
+    <edge source="驴迹科技集团有限公司" target="臧伟仲">
+      <data key="d7">2.0</data>
+      <data key="d8">臧伟仲是驴迹科技集团有限公司的创始人。&lt;SEP&gt;臧伟仲founded and leads驴迹科技集团有限公司as its chairman and executive director.</data>
+      <data key="d9">founded,founder,leadership</data>
+      <data key="d10">9df847493a90dc0fe18019acd116c02e-chunk-010&lt;SEP&gt;9df847493a90dc0fe18019acd116c02e-chunk-000</data>
+      <data key="d11">20260607073005_a209a1ea.docx</data>
+      <data key="d12">1780817482</data>
+      <data key="d13" />
+    </edge>
+    <edge source="解码新医学" target="臧伟仲">
+      <data key="d7">2.0</data>
+      <data key="d8">臧伟仲selected the解码新医学course to align with his company's exploration of biomedical opportunities.&lt;SEP&gt;臧伟仲选择了“解码新医学”课程，以探索新的商业方向。</data>
+      <data key="d9">business alignment,course enrollment,course selection,learning</data>
+      <data key="d10">9df847493a90dc0fe18019acd116c02e-chunk-010&lt;SEP&gt;9df847493a90dc0fe18019acd116c02e-chunk-009</data>
+      <data key="d11">20260607073005_a209a1ea.docx</data>
+      <data key="d12">1780817482</data>
+      <data key="d13" />
+    </edge>
+    <edge source="人工智能" target="臧伟仲">
+      <data key="d7">1.0</data>
+      <data key="d8">臧伟仲views人工智能as a promising area but approaches it with caution due to its complexity.</data>
+      <data key="d9">caution,strategic interest</data>
+      <data key="d10">9df847493a90dc0fe18019acd116c02e-chunk-010</data>
+      <data key="d11">20260607073005_a209a1ea.docx</data>
+      <data key="d12">1780817482</data>
+      <data key="d13" />
+    </edge>
+    <edge source="人工智能" target="大数据">
+      <data key="d7">1.0</data>
+      <data key="d8">人工智能通过大数据分析用户兴趣和需求。</data>
+      <data key="d9">分析,应用</data>
+      <data key="d10">9df847493a90dc0fe18019acd116c02e-chunk-008</data>
+      <data key="d11">20260607073005_a209a1ea.docx</data>
+      <data key="d12">1780817482</data>
+      <data key="d13" />
+    </edge>
+    <edge source="人工智能" target="语音识别">
+      <data key="d7">1.0</data>
+      <data key="d8">人工智能包含语音识别技术，用于提升交互体验。</data>
+      <data key="d9">包含,技术</data>
+      <data key="d10">9df847493a90dc0fe18019acd116c02e-chunk-008</data>
+      <data key="d11">20260607073005_a209a1ea.docx</data>
+      <data key="d12">1780817482</data>
+      <data key="d13" />
+    </edge>
+    <edge source="人工智能" target="自然语言处理">
+      <data key="d7">1.0</data>
+      <data key="d8">人工智能包含自然语言处理技术，用于实现自然交互。</data>
+      <data key="d9">包含,技术</data>
+      <data key="d10">9df847493a90dc0fe18019acd116c02e-chunk-008</data>
+      <data key="d11">20260607073005_a209a1ea.docx</data>
+      <data key="d12">1780817482</data>
+      <data key="d13" />
+    </edge>
+    <edge source="人工智能" target="景区设计">
+      <data key="d7">1.0</data>
+      <data key="d8">人工智能被应用于景区设计，以优化景区环境。</data>
+      <data key="d9">优化,应用</data>
+      <data key="d10">9df847493a90dc0fe18019acd116c02e-chunk-008</data>
+      <data key="d11">20260607073005_a209a1ea.docx</data>
+      <data key="d12">1780817482</data>
+      <data key="d13" />
+    </edge>
+    <edge source="人工智能" target="游客">
+      <data key="d7">1.0</data>
+      <data key="d8">人工智能为游客提供更加便捷、个性化的旅游体验。</data>
+      <data key="d9">提升体验,服务</data>
+      <data key="d10">9df847493a90dc0fe18019acd116c02e-chunk-008</data>
+      <data key="d11">20260607073005_a209a1ea.docx</data>
+      <data key="d12">1780817482</data>
+      <data key="d13" />
+    </edge>
+    <edge source="人工智能" target="旅游行业">
+      <data key="d7">2.0</data>
+      <data key="d8">人工智能通过提供个性化旅游信息，为旅游行业带来积极影响。&lt;SEP&gt;人工智能强烈影响旅游行业，并将成为指导现实世界的重要力量。</data>
+      <data key="d9">benefits,impact,影响,指导</data>
+      <data key="d10">9df847493a90dc0fe18019acd116c02e-chunk-008&lt;SEP&gt;9df847493a90dc0fe18019acd116c02e-chunk-007</data>
+      <data key="d11">20260607073005_a209a1ea.docx</data>
+      <data key="d12">1780817482</data>
+      <data key="d13" />
+    </edge>
+    <edge source="人工智能" target="驴迹科技">
+      <data key="d7">2.0</data>
+      <data key="d8">驴迹科技将人工智能技术应用于旅游业，以提升游客体验。&lt;SEP&gt;驴迹科技关注人工智能的发展趋势，认为这是具有前景的未来方向。</data>
+      <data key="d9">future focus,应用,结合</data>
+      <data key="d10">9df847493a90dc0fe18019acd116c02e-chunk-006&lt;SEP&gt;9df847493a90dc0fe18019acd116c02e-chunk-009</data>
+      <data key="d11">20260607073005_a209a1ea.docx</data>
+      <data key="d12">1780817482</data>
+      <data key="d13" />
+    </edge>
+    <edge source="人工智能" target="内容输出">
+      <data key="d7">1.0</data>
+      <data key="d8">人工智能技术正在极大地提升和拓展旅游行业中的内容输出功能。</data>
+      <data key="d9">拓展,提升</data>
+      <data key="d10">9df847493a90dc0fe18019acd116c02e-chunk-006</data>
+      <data key="d11">20260607073005_a209a1ea.docx</data>
+      <data key="d12">1780817482</data>
+      <data key="d13" />
+    </edge>
+    <edge source="人工智能" target="交互">
+      <data key="d7">1.0</data>
+      <data key="d8">人工智能技术正在极大地提升和拓展旅游行业中的交互功能。</data>
+      <data key="d9">拓展,提升</data>
+      <data key="d10">9df847493a90dc0fe18019acd116c02e-chunk-006</data>
+      <data key="d11">20260607073005_a209a1ea.docx</data>
+      <data key="d12">1780817482</data>
+      <data key="d13" />
+    </edge>
+    <edge source="人工智能" target="指导">
+      <data key="d7">1.0</data>
+      <data key="d8">人工智能技术正在极大地提升和拓展旅游行业中的指导功能。</data>
+      <data key="d9">拓展,提升</data>
+      <data key="d10">9df847493a90dc0fe18019acd116c02e-chunk-006</data>
+      <data key="d11">20260607073005_a209a1ea.docx</data>
+      <data key="d12">1780817482</data>
+      <data key="d13" />
+    </edge>
+    <edge source="人工智能" target="大数据分析">
+      <data key="d7">1.0</data>
+      <data key="d8">人工智能使用大数据分析方法来理解用户的兴趣和需求。</data>
+      <data key="d9">methodology,uses</data>
+      <data key="d10">9df847493a90dc0fe18019acd116c02e-chunk-007</data>
+      <data key="d11">20260607073005_a209a1ea.docx</data>
+      <data key="d12">1780817482</data>
+      <data key="d13" />
+    </edge>
+    <edge source="人工智能" target="用户">
+      <data key="d7">1.0</data>
+      <data key="d8">人工智能通过分析用户数据来提供个性化的旅游信息。</data>
+      <data key="d9">personalization,targets</data>
+      <data key="d10">9df847493a90dc0fe18019acd116c02e-chunk-007</data>
+      <data key="d11">20260607073005_a209a1ea.docx</data>
+      <data key="d12">1780817482</data>
+      <data key="d13" />
+    </edge>
+    <edge source="人工智能" target="旅游信息">
+      <data key="d7">1.0</data>
+      <data key="d8">人工智能生成精准和个性化的旅游信息。</data>
+      <data key="d9">content,generates</data>
+      <data key="d10">9df847493a90dc0fe18019acd116c02e-chunk-007</data>
+      <data key="d11">20260607073005_a209a1ea.docx</data>
+      <data key="d12">1780817482</data>
+      <data key="d13" />
+    </edge>
+    <edge source="生物医学" target="臧伟仲">
+      <data key="d7">1.0</data>
+      <data key="d8">臧伟仲has high hopes for生物医学as a direction for long-term business growth.</data>
+      <data key="d9">high hope,strategic interest</data>
+      <data key="d10">9df847493a90dc0fe18019acd116c02e-chunk-010</data>
+      <data key="d11">20260607073005_a209a1ea.docx</data>
+      <data key="d12">1780817482</data>
+      <data key="d13" />
+    </edge>
+    <edge source="广东省景区行业协会" target="臧伟仲">
+      <data key="d7">1.0</data>
+      <data key="d8">臧伟仲serves as vice president of广东省景区行业协会.</data>
+      <data key="d9">vice president role</data>
+      <data key="d10">9df847493a90dc0fe18019acd116c02e-chunk-010</data>
+      <data key="d11">20260607073005_a209a1ea.docx</data>
+      <data key="d12">1780817482</data>
+      <data key="d13" />
+    </edge>
+    <edge source="广州市驴迹科技有限责任公司" target="臧伟仲">
+      <data key="d7">1.0</data>
+      <data key="d8">臧伟仲founded广州市驴迹科技有限责任公司in 2013.</data>
+      <data key="d9">founder</data>
+      <data key="d10">9df847493a90dc0fe18019acd116c02e-chunk-010</data>
+      <data key="d11">20260607073005_a209a1ea.docx</data>
+      <data key="d12">1780817482</data>
+      <data key="d13" />
+    </edge>
+    <edge source="广州市天河区软件和信息产业协会" target="臧伟仲">
+      <data key="d7">1.0</data>
+      <data key="d8">臧伟仲was elected as an expert committee member of广州市天河区软件和信息产业协会in 2019.</data>
+      <data key="d9">expert committee membership</data>
+      <data key="d10">9df847493a90dc0fe18019acd116c02e-chunk-010</data>
+      <data key="d11">20260607073005_a209a1ea.docx</data>
+      <data key="d12">1780817482</data>
+      <data key="d13" />
+    </edge>
+    <edge source="2024" target="臧伟仲">
+      <data key="d7">1.0</data>
+      <data key="d8">臧伟仲used the words "uncertainty, change, hope" to express his expectations for the year 2024.</data>
+      <data key="d9">expression of hope</data>
+      <data key="d10">9df847493a90dc0fe18019acd116c02e-chunk-010</data>
+      <data key="d11">20260607073005_a209a1ea.docx</data>
+      <data key="d12">1780817482</data>
+      <data key="d13" />
+    </edge>
+    <edge source="中国移动" target="臧伟仲">
+      <data key="d7">1.0</data>
+      <data key="d8">臧伟仲had a senior management career at中国移动for over ten years.</data>
+      <data key="d9">employment,management</data>
+      <data key="d10">9df847493a90dc0fe18019acd116c02e-chunk-010</data>
+      <data key="d11">20260607073005_a209a1ea.docx</data>
+      <data key="d12">1780817482</data>
+      <data key="d13" />
+    </edge>
+    <edge source="中国移动" target="作者">
+      <data key="d7">1.0</data>
+      <data key="d8">作者在中国移动工作十余年，获得了职业训练和经验。</data>
+      <data key="d9">雇佣关系</data>
+      <data key="d10">9df847493a90dc0fe18019acd116c02e-chunk-001</data>
+      <data key="d11">20260607073005_a209a1ea.docx</data>
+      <data key="d12">1780817482</data>
+      <data key="d13" />
+    </edge>
+    <edge source="广州市公安局" target="臧伟仲">
+      <data key="d7">1.0</data>
+      <data key="d8">臧伟仲received a commendation from广州市公安局in 2009 for internal security work.</data>
+      <data key="d9">award,recognition</data>
+      <data key="d10">9df847493a90dc0fe18019acd116c02e-chunk-010</data>
+      <data key="d11">20260607073005_a209a1ea.docx</data>
+      <data key="d12">1780817482</data>
+      <data key="d13" />
+    </edge>
+    <edge source="中共广州市天河区委组织部" target="臧伟仲">
+      <data key="d7">1.0</data>
+      <data key="d8">臧伟仲was recognized as an outstanding talent in Guangzhou's Tianhe District by中共广州市天河区委组织部in 2017.</data>
+      <data key="d9">talent recognition</data>
+      <data key="d10">9df847493a90dc0fe18019acd116c02e-chunk-010</data>
+      <data key="d11">20260607073005_a209a1ea.docx</data>
+      <data key="d12">1780817482</data>
+      <data key="d13" />
+    </edge>
+    <edge source="作者" target="作者的单位">
+      <data key="d7">1.0</data>
+      <data key="d8">作者的单位提供了创业失败后两年内回归原职的政策支持。</data>
+      <data key="d9">政策支持</data>
+      <data key="d10">9df847493a90dc0fe18019acd116c02e-chunk-001</data>
+      <data key="d11">20260607073005_a209a1ea.docx</data>
+      <data key="d12">1780817482</data>
+      <data key="d13" />
+    </edge>
+    <edge source="作者" target="公司">
+      <data key="d7">1.0</data>
+      <data key="d8">作者于2013年12月注册了公司，开始创业。</data>
+      <data key="d9">创立</data>
+      <data key="d10">9df847493a90dc0fe18019acd116c02e-chunk-001</data>
+      <data key="d11">20260607073005_a209a1ea.docx</data>
+      <data key="d12">1780817482</data>
+      <data key="d13" />
+    </edge>
+    <edge source="作者" target="创始合伙人">
+      <data key="d7">1.0</data>
+      <data key="d8">创始合伙人是作者创业路上的重要伙伴，共同探讨理念。</data>
+      <data key="d9">合作</data>
+      <data key="d10">9df847493a90dc0fe18019acd116c02e-chunk-001</data>
+      <data key="d11">20260607073005_a209a1ea.docx</data>
+      <data key="d12">1780817482</data>
+      <data key="d13" />
+    </edge>
+    <edge source="作者" target="国家">
+      <data key="d7">1.0</data>
+      <data key="d8">国家推动“大众创业、万众创新”政策，激励了作者的创业行为。</data>
+      <data key="d9">政策激励</data>
+      <data key="d10">9df847493a90dc0fe18019acd116c02e-chunk-001</data>
+      <data key="d11">20260607073005_a209a1ea.docx</data>
+      <data key="d12">1780817482</data>
+      <data key="d13" />
+    </edge>
+    <edge source="作者" target="智能手机应用">
+      <data key="d7">1.0</data>
+      <data key="d8">作者计划通过开发智能手机应用来解决景区排队和公共租赁设备问题。</data>
+      <data key="d9">开发计划</data>
+      <data key="d10">9df847493a90dc0fe18019acd116c02e-chunk-001</data>
+      <data key="d11">20260607073005_a209a1ea.docx</data>
+      <data key="d12">1780817482</data>
+      <data key="d13" />
+    </edge>
+    <edge source="作者" target="人生意义和价值">
+      <data key="d7">1.0</data>
+      <data key="d8">作者与创始合伙人共同探讨了人生意义和价值，形成了创业理念。</data>
+      <data key="d9">探讨</data>
+      <data key="d10">9df847493a90dc0fe18019acd116c02e-chunk-001</data>
+      <data key="d11">20260607073005_a209a1ea.docx</data>
+      <data key="d12">1780817482</data>
+      <data key="d13" />
+    </edge>
+    <edge source="作者" target="创业项目">
+      <data key="d7">1.0</data>
+      <data key="d8">作者基于理念和市场发现，开始投身于具体的创业项目。</data>
+      <data key="d9">启动</data>
+      <data key="d10">9df847493a90dc0fe18019acd116c02e-chunk-001</data>
+      <data key="d11">20260607073005_a209a1ea.docx</data>
+      <data key="d12">1780817482</data>
+      <data key="d13" />
+    </edge>
+    <edge source="国家" target="公司">
+      <data key="d7">1.0</data>
+      <data key="d8">国家完善的基础设施为作者的创业提供了有力支持。</data>
+      <data key="d9">基础设施支持</data>
+      <data key="d10">9df847493a90dc0fe18019acd116c02e-chunk-001</data>
+      <data key="d11">20260607073005_a209a1ea.docx</data>
+      <data key="d12">1780817482</data>
+      <data key="d13" />
+    </edge>
+    <edge source="公司" target="移动支付">
+      <data key="d7">1.0</data>
+      <data key="d8">移动支付的普及使C端用户可直接付费，解决了公司的收费问题。</data>
+      <data key="d9">解决收费难题</data>
+      <data key="d10">9df847493a90dc0fe18019acd116c02e-chunk-001</data>
+      <data key="d11">20260607073005_a209a1ea.docx</data>
+      <data key="d12">1780817482</data>
+      <data key="d13" />
+    </edge>
+    <edge source="公司" target="景区排队问题">
+      <data key="d7">1.0</data>
+      <data key="d8">景区排队问题被作者视为市场空白，成为创业项目的一个方向。</data>
+      <data key="d9">市场机会</data>
+      <data key="d10">9df847493a90dc0fe18019acd116c02e-chunk-001</data>
+      <data key="d11">20260607073005_a209a1ea.docx</data>
+      <data key="d12">1780817482</data>
+      <data key="d13" />
+    </edge>
+    <edge source="公司" target="公共租赁设备问题">
+      <data key="d7">1.0</data>
+      <data key="d8">公共租赁设备问题被作者视为市场空白，成为创业项目的一个方向。</data>
+      <data key="d9">市场机会</data>
+      <data key="d10">9df847493a90dc0fe18019acd116c02e-chunk-001</data>
+      <data key="d11">20260607073005_a209a1ea.docx</data>
+      <data key="d12">1780817482</data>
+      <data key="d13" />
+    </edge>
+    <edge source="公司" target="国家基础设施">
+      <data key="d7">1.0</data>
+      <data key="d8">国家基础设施的完善为公司的创业提供了支持。</data>
+      <data key="d9">支持</data>
+      <data key="d10">9df847493a90dc0fe18019acd116c02e-chunk-002</data>
+      <data key="d11">20260607073005_a209a1ea.docx</data>
+      <data key="d12">1780817482</data>
+      <data key="d13" />
+    </edge>
+    <edge source="公司" target="收费难题">
+      <data key="d7">1.0</data>
+      <data key="d8">公司在创业初期面临收费难题。</data>
+      <data key="d9">面临</data>
+      <data key="d10">9df847493a90dc0fe18019acd116c02e-chunk-002</data>
+      <data key="d11">20260607073005_a209a1ea.docx</data>
+      <data key="d12">1780817482</data>
+      <data key="d13" />
+    </edge>
+    <edge source="创始合伙人" target="创业项目">
+      <data key="d7">1.0</data>
+      <data key="d8">创始合伙人与作者共同参与并推进创业项目。</data>
+      <data key="d9">参与</data>
+      <data key="d10">9df847493a90dc0fe18019acd116c02e-chunk-001</data>
+      <data key="d11">20260607073005_a209a1ea.docx</data>
+      <data key="d12">1780817482</data>
+      <data key="d13" />
+    </edge>
+    <edge source="创始合伙人" target="人生意义和价值">
+      <data key="d7">1.0</data>
+      <data key="d8">创始合伙人与作者共同探讨了人生意义和价值，形成了创业理念。</data>
+      <data key="d9">探讨</data>
+      <data key="d10">9df847493a90dc0fe18019acd116c02e-chunk-001</data>
+      <data key="d11">20260607073005_a209a1ea.docx</data>
+      <data key="d12">1780817482</data>
+      <data key="d13" />
+    </edge>
+    <edge source="移动互联网" target="智能手机应用">
+      <data key="d7">1.0</data>
+      <data key="d8">移动互联网的发展趋势推动了通过智能手机应用解决问题的方向。</data>
+      <data key="d9">趋势驱动</data>
+      <data key="d10">9df847493a90dc0fe18019acd116c02e-chunk-002</data>
+      <data key="d11">20260607073005_a209a1ea.docx</data>
+      <data key="d12">1780817482</data>
+      <data key="d13" />
+    </edge>
+    <edge source="移动支付" target="C端用户">
+      <data key="d7">1.0</data>
+      <data key="d8">移动支付的普及使得C端用户可以直接付费使用服务。</data>
+      <data key="d9">支付方式</data>
+      <data key="d10">9df847493a90dc0fe18019acd116c02e-chunk-002</data>
+      <data key="d11">20260607073005_a209a1ea.docx</data>
+      <data key="d12">1780817482</data>
+      <data key="d13" />
+    </edge>
+    <edge source="移动支付" target="收费难题">
+      <data key="d7">1.0</data>
+      <data key="d8">移动支付的普及解决了公司之前的收费难题。</data>
+      <data key="d9">解决</data>
+      <data key="d10">9df847493a90dc0fe18019acd116c02e-chunk-002</data>
+      <data key="d11">20260607073005_a209a1ea.docx</data>
+      <data key="d12">1780817482</data>
+      <data key="d13" />
+    </edge>
+    <edge source="景区排队问题" target="智能手机应用">
+      <data key="d7">1.0</data>
+      <data key="d8">智能手机应用被设计用来解决景区排队等候时间过长的问题。</data>
+      <data key="d9">解决方案</data>
+      <data key="d10">9df847493a90dc0fe18019acd116c02e-chunk-001</data>
+      <data key="d11">20260607073005_a209a1ea.docx</data>
+      <data key="d12">1780817482</data>
+      <data key="d13" />
+    </edge>
+    <edge source="公共租赁设备问题" target="智能手机应用">
+      <data key="d7">1.0</data>
+      <data key="d8">智能手机应用被设计用来解决公共租赁设备卫生状况不佳和电力供应不稳定的问题。</data>
+      <data key="d9">解决方案</data>
+      <data key="d10">9df847493a90dc0fe18019acd116c02e-chunk-001</data>
+      <data key="d11">20260607073005_a209a1ea.docx</data>
+      <data key="d12">1780817482</data>
+      <data key="d13" />
+    </edge>
+    <edge source="智能手机应用" target="公共租赁设备">
+      <data key="d7">1.0</data>
+      <data key="d8">智能手机应用被提出作为解决公共租赁设备卫生和电力问题的工具。</data>
+      <data key="d9">问题解决</data>
+      <data key="d10">9df847493a90dc0fe18019acd116c02e-chunk-002</data>
+      <data key="d11">20260607073005_a209a1ea.docx</data>
+      <data key="d12">1780817482</data>
+      <data key="d13" />
+    </edge>
+    <edge source="创业项目" target="臧伟仲">
+      <data key="d7">1.0</data>
+      <data key="d8">臧伟仲亲身投入到创业项目中。</data>
+      <data key="d9">投入</data>
+      <data key="d10">9df847493a90dc0fe18019acd116c02e-chunk-002</data>
+      <data key="d11">20260607073005_a209a1ea.docx</data>
+      <data key="d12">1780817482</data>
+      <data key="d13" />
+    </edge>
+    <edge source="智慧旅游" target="驴迹科技">
+      <data key="d7">2.0</data>
+      <data key="d8">驴迹科技在智慧旅游领域走在前列，引领行业创新与发展。&lt;SEP&gt;驴迹科技走在行业前列，将数字化技术与旅游业结合，推动智慧旅游发展。</data>
+      <data key="d9">创新,引领,结合</data>
+      <data key="d10">9df847493a90dc0fe18019acd116c02e-chunk-008&lt;SEP&gt;9df847493a90dc0fe18019acd116c02e-chunk-006</data>
+      <data key="d11">20260607073005_a209a1ea.docx</data>
+      <data key="d12">1780817482</data>
+      <data key="d13" />
+    </edge>
+    <edge source="智慧旅游" target="旅游产品和服务">
+      <data key="d7">1.0</data>
+      <data key="d8">智慧旅游推动推出相应的旅游产品和服务。</data>
+      <data key="d9">产出,推动</data>
+      <data key="d10">9df847493a90dc0fe18019acd116c02e-chunk-008</data>
+      <data key="d11">20260607073005_a209a1ea.docx</data>
+      <data key="d12">1780817482</data>
+      <data key="d13" />
+    </edge>
+    <edge source="驴迹科技" target="臧伟仲">
+      <data key="d7">3.0</data>
+      <data key="d8">臧伟仲代表驴迹科技就人工智能在旅游中的应用发表了观点。&lt;SEP&gt;臧伟仲作为驴迹科技的代表，讨论了人工智能在旅游行业的应用。&lt;SEP&gt;臧伟仲作为负责人，阐述了对驴迹科技未来的展望和愿景。</data>
+      <data key="d9">leadership,vision,代表,发言,讨论</data>
+      <data key="d10">9df847493a90dc0fe18019acd116c02e-chunk-008&lt;SEP&gt;9df847493a90dc0fe18019acd116c02e-chunk-006&lt;SEP&gt;9df847493a90dc0fe18019acd116c02e-chunk-009</data>
+      <data key="d11">20260607073005_a209a1ea.docx</data>
+      <data key="d12">1780817482</data>
+      <data key="d13" />
+    </edge>
+    <edge source="驴迹科技" target="游客">
+      <data key="d7">1.0</data>
+      <data key="d8">驴迹科技为游客提供便捷、个性化的旅游体验。</data>
+      <data key="d9">提供体验,服务</data>
+      <data key="d10">9df847493a90dc0fe18019acd116c02e-chunk-008</data>
+      <data key="d11">20260607073005_a209a1ea.docx</data>
+      <data key="d12">1780817482</data>
+      <data key="d13" />
+    </edge>
+    <edge source="驴迹科技" target="数字化技术">
+      <data key="d7">1.0</data>
+      <data key="d8">驴迹科技将数字化技术与旅游业巧妙结合，为游客提供便捷、个性化的体验。</data>
+      <data key="d9">应用,结合</data>
+      <data key="d10">9df847493a90dc0fe18019acd116c02e-chunk-006</data>
+      <data key="d11">20260607073005_a209a1ea.docx</data>
+      <data key="d12">1780817482</data>
+      <data key="d13" />
+    </edge>
+    <edge source="驴迹科技" target="旅游业">
+      <data key="d7">1.0</data>
+      <data key="d8">驴迹科技的收入与旅游业的繁荣紧密相关，旅游业的高速增长为公司提供了市场空间。</data>
+      <data key="d9">market dependence,revenue growth</data>
+      <data key="d10">9df847493a90dc0fe18019acd116c02e-chunk-009</data>
+      <data key="d11">20260607073005_a209a1ea.docx</data>
+      <data key="d12">1780817482</data>
+      <data key="d13" />
+    </edge>
+    <edge source="驴迹科技" target="亲民定价">
+      <data key="d7">1.0</data>
+      <data key="d8">驴迹科技采用亲民定价策略，以几元钱的服务费用吸引用户。</data>
+      <data key="d9">pricing strategy</data>
+      <data key="d10">9df847493a90dc0fe18019acd116c02e-chunk-009</data>
+      <data key="d11">20260607073005_a209a1ea.docx</data>
+      <data key="d12">1780817482</data>
+      <data key="d13" />
+    </edge>
+    <edge source="驴迹科技" target="大数据">
+      <data key="d7">1.0</data>
+      <data key="d8">驴迹科技充分利用大数据技术进行数据分析以支持业务发展。</data>
+      <data key="d9">technology utilization</data>
+      <data key="d10">9df847493a90dc0fe18019acd116c02e-chunk-009</data>
+      <data key="d11">20260607073005_a209a1ea.docx</data>
+      <data key="d12">1780817482</data>
+      <data key="d13" />
+    </edge>
+    <edge source="驴迹科技" target="海外市场">
+      <data key="d7">1.0</data>
+      <data key="d8">驴迹科技积极拓展海外市场，为外国游客提供景区服务。</data>
+      <data key="d9">expansion strategy</data>
+      <data key="d10">9df847493a90dc0fe18019acd116c02e-chunk-009</data>
+      <data key="d11">20260607073005_a209a1ea.docx</data>
+      <data key="d12">1780817482</data>
+      <data key="d13" />
+    </edge>
+    <edge source="驴迹科技" target="第二条增长曲线">
+      <data key="d7">1.0</data>
+      <data key="d8">驴迹科技致力于打造第二条增长曲线，以探索更持久的商业模式。</data>
+      <data key="d9">business development</data>
+      <data key="d10">9df847493a90dc0fe18019acd116c02e-chunk-009</data>
+      <data key="d11">20260607073005_a209a1ea.docx</data>
+      <data key="d12">1780817482</data>
+      <data key="d13" />
+    </edge>
+    <edge source="驴迹科技" target="景区">
+      <data key="d7">1.0</data>
+      <data key="d8">驴迹科技在国内外多个景区为游客提供精心制作的服务。</data>
+      <data key="d9">service provision</data>
+      <data key="d10">9df847493a90dc0fe18019acd116c02e-chunk-009</data>
+      <data key="d11">20260607073005_a209a1ea.docx</data>
+      <data key="d12">1780817482</data>
+      <data key="d13" />
+    </edge>
+    <edge source="游客" target="当地文化">
+      <data key="d7">1.0</data>
+      <data key="d8">游客渴望在旅行中体验更加真实、生动的当地文化。</data>
+      <data key="d9">体验,追求</data>
+      <data key="d10">9df847493a90dc0fe18019acd116c02e-chunk-006</data>
+      <data key="d11">20260607073005_a209a1ea.docx</data>
+      <data key="d12">1780817482</data>
+      <data key="d13" />
+    </edge>
+    <edge source="游客" target="传统旅游资源">
+      <data key="d7">1.0</data>
+      <data key="d8">游客需求的多元化导致传统旅游资源的吸引力减弱。</data>
+      <data key="d9">需求变化</data>
+      <data key="d10">9df847493a90dc0fe18019acd116c02e-chunk-006</data>
+      <data key="d11">20260607073005_a209a1ea.docx</data>
+      <data key="d12">1780817482</data>
+      <data key="d13" />
+    </edge>
+    <edge source="游客" target="自媒体">
+      <data key="d7">1.0</data>
+      <data key="d8">自媒体的发展影响了游客的审美和兴趣点变化。</data>
+      <data key="d9">审美变化,影响</data>
+      <data key="d10">9df847493a90dc0fe18019acd116c02e-chunk-006</data>
+      <data key="d11">20260607073005_a209a1ea.docx</data>
+      <data key="d12">1780817482</data>
+      <data key="d13" />
+    </edge>
+    <edge source="前工作单位" target="臧伟仲">
+      <data key="d7">1.0</data>
+      <data key="d8">臧伟仲在前工作单位积累了经验和资源，用于创业项目。</data>
+      <data key="d9">经验积累</data>
+      <data key="d10">9df847493a90dc0fe18019acd116c02e-chunk-002</data>
+      <data key="d11">20260607073005_a209a1ea.docx</data>
+      <data key="d12">1780817482</data>
+      <data key="d13" />
+    </edge>
+    <edge source="旅游+康养" target="康养活动">
+      <data key="d7">1.0</data>
+      <data key="d8">旅游+康养模式通过提供瑜伽、呼吸法、心经等康养活动来让游客放松身心。</data>
+      <data key="d9">包含,提供</data>
+      <data key="d10">9df847493a90dc0fe18019acd116c02e-chunk-006</data>
+      <data key="d11">20260607073005_a209a1ea.docx</data>
+      <data key="d12">1780817482</data>
+      <data key="d13" />
+    </edge>
+    <edge source="Guangzhou Tianhe District" target="Entrepreneurial Leading Talent Of Guangzhou Tianhe District">
+      <data key="d7">1.0</data>
+      <data key="d8">Guangzhou Tianhe District awarded the subject the title of Entrepreneurial Leading Talent in 2019.</data>
+      <data key="d9">awarded,recognition</data>
+      <data key="d10">9df847493a90dc0fe18019acd116c02e-chunk-011</data>
+      <data key="d11">20260607073005_a209a1ea.docx</data>
+      <data key="d12">1780817482</data>
+      <data key="d13" />
+    </edge>
+    <edge source="Entrepreneurial Leading Talent Of Guangzhou Tianhe District" target="Subject">
+      <data key="d7">1.0</data>
+      <data key="d8">The subject was elected as the Entrepreneurial Leading Talent of Guangzhou Tianhe District in 2019.</data>
+      <data key="d9">elected,recognition</data>
+      <data key="d10">9df847493a90dc0fe18019acd116c02e-chunk-011</data>
+      <data key="d11">20260607073005_a209a1ea.docx</data>
+      <data key="d12">1780817482</data>
+      <data key="d13" />
+    </edge>
+    <edge source="Yiyue Top Ten New Entrepreneurial Figures" target="Subject">
+      <data key="d7">1.0</data>
+      <data key="d8">The subject was elected as one of the Yiyue Top Ten New Entrepreneurial Figures in 2019.</data>
+      <data key="d9">elected,recognition</data>
+      <data key="d10">9df847493a90dc0fe18019acd116c02e-chunk-011</data>
+      <data key="d11">20260607073005_a209a1ea.docx</data>
+      <data key="d12">1780817482</data>
+      <data key="d13" />
+    </edge>
+    <edge source="All-China Federation Of Tourism And Commerce Chamber Of Commerce" target="Subject">
+      <data key="d7">1.0</data>
+      <data key="d8">The subject was elected as a council member of the All-China Federation of Tourism and Commerce Chamber of Commerce in 2019.</data>
+      <data key="d9">elected,membership</data>
+      <data key="d10">9df847493a90dc0fe18019acd116c02e-chunk-011</data>
+      <data key="d11">20260607073005_a209a1ea.docx</data>
+      <data key="d12">1780817482</data>
+      <data key="d13" />
+    </edge>
+    <edge source="Guangzhou Tianhe District Federation Of Industry And Commerce" target="Subject">
+      <data key="d7">1.0</data>
+      <data key="d8">The subject is a member of the Guangzhou Tianhe District Federation of Industry and Commerce.</data>
+      <data key="d9">membership</data>
+      <data key="d10">9df847493a90dc0fe18019acd116c02e-chunk-011</data>
+      <data key="d11">20260607073005_a209a1ea.docx</data>
+      <data key="d12">1780817482</data>
+      <data key="d13" />
+    </edge>
+    <edge source="2019 China Cultural Tourism Top Ten New Figures" target="Subject">
+      <data key="d7">1.0</data>
+      <data key="d8">The subject was shortlisted for the 2019 China Cultural Tourism Top Ten New Figures award.</data>
+      <data key="d9">nomination,shortlisted</data>
+      <data key="d10">9df847493a90dc0fe18019acd116c02e-chunk-011</data>
+      <data key="d11">20260607073005_a209a1ea.docx</data>
+      <data key="d12">1780817482</data>
+      <data key="d13" />
+    </edge>
+    <edge source="Guangzhou Tianhe District Federation Of Industry And Commerce (General Chamber Of Commerce)" target="Subject">
+      <data key="d7">1.0</data>
+      <data key="d8">The subject was elected as vice president of the Guangzhou Tianhe District Federation of Industry and Commerce (General Chamber of Commerce) in 2021.</data>
+      <data key="d9">elected,vice president</data>
+      <data key="d10">9df847493a90dc0fe18019acd116c02e-chunk-011</data>
+      <data key="d11">20260607073005_a209a1ea.docx</data>
+      <data key="d12">1780817482</data>
+      <data key="d13" />
+    </edge>
+    <edge source="Guangzhou Bay Area Postdoctoral Research Station" target="Subject">
+      <data key="d7">1.0</data>
+      <data key="d8">The subject was appointed as a doctoral supervisor at the Guangzhou Bay Area Postdoctoral Research Station in 2023.</data>
+      <data key="d9">appointed,doctoral supervisor</data>
+      <data key="d10">9df847493a90dc0fe18019acd116c02e-chunk-011</data>
+      <data key="d11">20260607073005_a209a1ea.docx</data>
+      <data key="d12">1780817482</data>
+      <data key="d13" />
+    </edge>
+    <edge source="哈尔滨赏雪" target="哈尔滨文旅局长">
+      <data key="d7">1.0</data>
+      <data key="d8">The Harbin Cultural and Tourism Bureau Director promotes Harbin's snow-themed tourism through innovative actions like dancing.</data>
+      <data key="d9">promotes tourism theme</data>
+      <data key="d10">9df847493a90dc0fe18019acd116c02e-chunk-005</data>
+      <data key="d11">20260607073005_a209a1ea.docx</data>
+      <data key="d12">1780817482</data>
+      <data key="d13" />
+    </edge>
+    <edge source="国外游向国内游的转变" target="国内旅游市场">
+      <data key="d7">1.0</data>
+      <data key="d8">The shift from international to domestic tourism brings new development opportunities to the domestic tourism market.</data>
+      <data key="d9">creates opportunities</data>
+      <data key="d10">9df847493a90dc0fe18019acd116c02e-chunk-005</data>
+      <data key="d11">20260607073005_a209a1ea.docx</data>
+      <data key="d12">1780817482</data>
+      <data key="d13" />
+    </edge>
+    <edge source="四为高管教育" target="智见·2024">
+      <data key="d7">1.0</data>
+      <data key="d8">四为高管教育主办了【智见·2024】访谈系列。</data>
+      <data key="d9">hosting,production</data>
+      <data key="d10">9df847493a90dc0fe18019acd116c02e-chunk-000</data>
+      <data key="d11">20260607073005_a209a1ea.docx</data>
+      <data key="d12">1780817482</data>
+      <data key="d13" />
+    </edge>
+    <edge source="四为高管教育" target="河南">
+      <data key="d7">1.0</data>
+      <data key="d8">四为高管教育发布的访谈稿标注地点为河南。</data>
+      <data key="d9">location association</data>
+      <data key="d10">9df847493a90dc0fe18019acd116c02e-chunk-000</data>
+      <data key="d11">20260607073005_a209a1ea.docx</data>
+      <data key="d12">1780817482</data>
+      <data key="d13" />
+    </edge>
+    <edge source="智见·2024" target="臧伟仲">
+      <data key="d7">1.0</data>
+      <data key="d8">臧伟仲作为嘉宾参与了【智见·2024】第六期访谈。</data>
+      <data key="d9">interview participation</data>
+      <data key="d10">9df847493a90dc0fe18019acd116c02e-chunk-000</data>
+      <data key="d11">20260607073005_a209a1ea.docx</data>
+      <data key="d12">1780817482</data>
+      <data key="d13" />
+    </edge>
+    <edge source="智见·2024" target="2024年2月6日">
+      <data key="d7">1.0</data>
+      <data key="d8">【智见·2024】第六期访谈稿于2024年2月6日发布。</data>
+      <data key="d9">publication date</data>
+      <data key="d10">9df847493a90dc0fe18019acd116c02e-chunk-000</data>
+      <data key="d11">20260607073005_a209a1ea.docx</data>
+      <data key="d12">1780817482</data>
+      <data key="d13" />
+    </edge>
+    <edge source="解码新医学-产业学者项目" target="臧伟仲">
+      <data key="d7">1.0</data>
+      <data key="d8">臧伟仲是四为“解码新医学-产业学者项目”首期班同学。</data>
+      <data key="d9">student enrollment</data>
+      <data key="d10">9df847493a90dc0fe18019acd116c02e-chunk-000</data>
+      <data key="d11">20260607073005_a209a1ea.docx</data>
+      <data key="d12">1780817482</data>
+      <data key="d13" />
+    </edge>
+    <edge source="军旅生涯" target="臧伟仲">
+      <data key="d7">1.0</data>
+      <data key="d8">臧伟仲于1997年12月应征入伍，军旅生涯培养了他的毅力和积极态度。</data>
+      <data key="d9">experience,personal development</data>
+      <data key="d10">9df847493a90dc0fe18019acd116c02e-chunk-000</data>
+      <data key="d11">20260607073005_a209a1ea.docx</data>
+      <data key="d12">1780817482</data>
+      <data key="d13" />
+    </edge>
+    <edge source="2024年" target="臧伟仲">
+      <data key="d7">1.0</data>
+      <data key="d8">臧伟仲对2024年表达了深切希望与期待，并用三个词汇寄托情感。</data>
+      <data key="d9">expectation,hope</data>
+      <data key="d10">9df847493a90dc0fe18019acd116c02e-chunk-009</data>
+      <data key="d11">20260607073005_a209a1ea.docx</data>
+      <data key="d12">1780817482</data>
+      <data key="d13" />
+    </edge>
+    <edge source="臧伟仲" target="不确定性">
+      <data key="d7">1.0</data>
+      <data key="d8">臧伟仲用“不确定”一词来描述对2024年的深切希望与期待。</data>
+      <data key="d9">description,expectation</data>
+      <data key="d10">9df847493a90dc0fe18019acd116c02e-chunk-009</data>
+      <data key="d11">20260607073005_a209a1ea.docx</data>
+      <data key="d12">1780817482</data>
+      <data key="d13" />
+    </edge>
+    <edge source="臧伟仲" target="变化">
+      <data key="d7">1.0</data>
+      <data key="d8">臧伟仲用“变化”一词来描述对2024年的深切希望与期待。</data>
+      <data key="d9">description,expectation</data>
+      <data key="d10">9df847493a90dc0fe18019acd116c02e-chunk-009</data>
+      <data key="d11">20260607073005_a209a1ea.docx</data>
+      <data key="d12">1780817482</data>
+      <data key="d13" />
+    </edge>
+    <edge source="臧伟仲" target="希望">
+      <data key="d7">1.0</data>
+      <data key="d8">臧伟仲用“希望”一词来描述对2024年的深切希望与期待。</data>
+      <data key="d9">description,expectation</data>
+      <data key="d10">9df847493a90dc0fe18019acd116c02e-chunk-009</data>
+      <data key="d11">20260607073005_a209a1ea.docx</data>
+      <data key="d12">1780817482</data>
+      <data key="d13" />
+    </edge>
+  </graph>
+</graphml>

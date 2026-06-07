@@ -83,7 +83,20 @@ async def _load_workshop(workshop_id: int, db: AsyncSession) -> Workshop:
     return w
 
 
-def _build_host_view(w: Workshop) -> WorkshopHostView:
+async def _list_unified_knowledge_docs(db: AsyncSession) -> list[KnowledgeDocument]:
+    result = await db.execute(
+        select(KnowledgeDocument)
+        .where(KnowledgeDocument.is_deleted == False)
+        .order_by(KnowledgeDocument.uploaded_at.desc())
+    )
+    return list(result.scalars().all())
+
+
+async def _build_host_view_with_docs(w: Workshop, db: AsyncSession) -> WorkshopHostView:
+    return _build_host_view(w, await _list_unified_knowledge_docs(db))
+
+
+def _build_host_view(w: Workshop, knowledge_docs: Optional[list[KnowledgeDocument]] = None) -> WorkshopHostView:
     group_count = w.group_count or 4
     groups: dict[int, list] = {gid: [] for gid in range(1, group_count + 1)}
     for p in w.participants:
@@ -137,7 +150,11 @@ def _build_host_view(w: Workshop) -> WorkshopHostView:
         is_review_mode=bool(w.is_review_mode),
         status=w.status, created_at=w.created_at,
         groups=group_infos, rounds=round_infos,
-        knowledge_docs=[KnowledgeDocumentOut.model_validate(d) for d in w.knowledge_docs if not d.is_deleted],
+        knowledge_docs=[
+            KnowledgeDocumentOut.model_validate(d)
+            for d in (knowledge_docs if knowledge_docs is not None else w.knowledge_docs)
+            if not d.is_deleted
+        ],
     )
 
 
@@ -265,7 +282,7 @@ async def get_host_view(workshop_id: int, code: str = Query(...), db: AsyncSessi
     w = await _load_workshop(workshop_id, db)
     if w.host_code != code:
         raise HTTPException(status_code=403, detail="Invalid host code")
-    return _build_host_view(w)
+    return await _build_host_view_with_docs(w, db)
 
 
 @router.get("/{workshop_id}", response_model=WorkshopMemberView)
@@ -361,7 +378,7 @@ async def unlock_round(
         w = await _load_workshop(workshop_id, db)
         await ws_manager.broadcast_workshop_completed(workshop_id)
 
-    return _build_host_view(w)
+    return await _build_host_view_with_docs(w, db)
 
 
 @router.post("/{workshop_id}/previous-round", response_model=WorkshopHostView)
@@ -394,7 +411,7 @@ async def previous_round(
     review_round = next((r for r in w.rounds if r.round_number == w.current_round), None)
     if review_round:
         await ws_manager.broadcast_round_change(workshop_id, w.current_round, _round_to_dict(review_round))
-    return _build_host_view(w)
+    return await _build_host_view_with_docs(w, db)
 
 
 @router.post("/{workshop_id}/timer/start", response_model=WorkshopHostView)
@@ -430,7 +447,7 @@ async def start_round_timer(
             current.timer_phase or current.status.value,
         )
         await ws_manager.broadcast_round_change(workshop_id, w.current_round, _round_to_dict(current))
-    return _build_host_view(w)
+    return await _build_host_view_with_docs(w, db)
 
 
 @router.post("/{workshop_id}/round-settings", response_model=WorkshopHostView)
@@ -454,7 +471,7 @@ async def update_round_settings(
         current.discussion_time = unified_time
         current.input_time = unified_time
     await db.commit()
-    return _build_host_view(await _load_workshop(workshop_id, db))
+    return await _build_host_view_with_docs(await _load_workshop(workshop_id, db), db)
 
 
 @router.post("/{workshop_id}/host-input", response_model=HostInputOut)
@@ -592,7 +609,7 @@ async def set_group_leader_by_host(
         new_leader_name=new_leader.name,
         changed_by="host",
     )
-    return _build_host_view(w)
+    return await _build_host_view_with_docs(w, db)
 
 
 @router.get("/{workshop_id}/export", response_model=ExportResponse)

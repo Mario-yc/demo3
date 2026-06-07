@@ -5,7 +5,7 @@ import os
 import re
 import threading
 from datetime import datetime, timezone
-from typing import Optional
+from typing import Awaitable, Callable, Optional
 
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -16,13 +16,17 @@ from models import KnowledgeDocument
 logger = logging.getLogger(__name__)
 
 ALLOWED_TYPES = {
+    "doc": "application/msword",
     "docx": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    "xls": "application/vnd.ms-excel",
     "xlsx": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    "ppt": "application/vnd.ms-powerpoint",
     "pptx": "application/vnd.openxmlformats-officedocument.presentationml.presentation",
     "md": "text/markdown",
     "txt": "text/plain",
 }
-ALLOWED_EXTENSIONS = {"docx", "xlsx", "pptx", "md", "txt"}
+ALLOWED_EXTENSIONS = {"doc", "docx", "xls", "xlsx", "ppt", "pptx", "md", "txt"}
+UNIFIED_KB_DIR_NAME = "unified"
 
 _embed_model = None
 _embed_lock = threading.Lock()
@@ -44,21 +48,37 @@ def _get_embedding_model():
         return _embed_model
 
 
+ProgressCallback = Callable[[str, int, str], Awaitable[None] | None]
+
+
+async def _emit_progress(callback: ProgressCallback | None, stage: str, progress: int, message: str):
+    if not callback:
+        return
+    result = callback(stage, progress, message)
+    if hasattr(result, "__await__"):
+        await result
+
+
 class LightRAGAdapter:
     """LightRAG 适配器 — 封装 LightRAG 实例的创建与调用。"""
 
-    def __init__(self, working_dir: str):
+    def __init__(self, working_dir: str, progress_callback: ProgressCallback | None = None):
         self._working_dir = working_dir
+        self._progress_callback = progress_callback
         self._rag = None
         self._initialized = False
 
     async def _ensure_initialized(self):
         if self._initialized:
             return
-        from lightrag import LightRAG, QueryParam
-        from lightrag.utils import EmbeddingFunc
+        await _emit_progress(self._progress_callback, "model_loading", 20, "正在加载 embedding 模型")
+        try:
+            from lightrag import LightRAG, QueryParam
+            from lightrag.utils import EmbeddingFunc
 
-        os.makedirs(self._working_dir, exist_ok=True)
+            os.makedirs(self._working_dir, exist_ok=True)
+        except Exception as e:
+            raise RuntimeError(f"知识库索引初始化失败：{e}") from e
 
         llm_api_key = settings.DEEPSEEK_API_KEY
         llm_base_url = settings.DEEPSEEK_BASE_URL.rstrip("/")
@@ -98,7 +118,10 @@ class LightRAGAdapter:
                 return data["choices"][0]["message"]["content"]
 
         # Local embedding via sentence-transformers (DeepSeek has no embedding API)
-        embed_model = _get_embedding_model()
+        try:
+            embed_model = _get_embedding_model()
+        except Exception as e:
+            raise RuntimeError(f"embedding 模型加载失败：{e}") from e
         dim = embed_model.get_sentence_embedding_dimension() if hasattr(embed_model, "get_sentence_embedding_dimension") else embed_model.get_embedding_dimension()
 
         async def embed_func(texts):
@@ -111,14 +134,18 @@ class LightRAGAdapter:
             func=embed_func,
         )
 
-        self._rag = LightRAG(
-            working_dir=self._working_dir,
-            llm_model_func=llm_func,
-            embedding_func=embedding_func,
-            chunk_token_size=settings.KB_CHUNK_SIZE,
-            chunk_overlap_token_size=settings.KB_CHUNK_OVERLAP,
-        )
-        await self._rag.initialize_storages()
+        await _emit_progress(self._progress_callback, "index_initializing", 30, "正在初始化知识库索引")
+        try:
+            self._rag = LightRAG(
+                working_dir=self._working_dir,
+                llm_model_func=llm_func,
+                embedding_func=embedding_func,
+                chunk_token_size=settings.KB_CHUNK_SIZE,
+                chunk_overlap_token_size=settings.KB_CHUNK_OVERLAP,
+            )
+            await self._rag.initialize_storages()
+        except Exception as e:
+            raise RuntimeError(f"知识库索引初始化失败：{e}") from e
         self._initialized = True
         self.QueryParam = QueryParam
 
@@ -156,46 +183,79 @@ class KnowledgeBaseService:
         self._lightrag_base = settings.KB_LIGHTRAG_DIR
         os.makedirs(self._upload_dir, exist_ok=True)
 
-    def _get_rag_adapter(self, workshop_id: int) -> LightRAGAdapter:
-        ws_dir = os.path.join(self._lightrag_base, f"workshop_{workshop_id}")
-        return LightRAGAdapter(ws_dir)
+    def _get_rag_adapter(self, workshop_id: int, progress_callback: ProgressCallback | None = None) -> LightRAGAdapter:
+        return LightRAGAdapter(os.path.join(self._lightrag_base, UNIFIED_KB_DIR_NAME), progress_callback)
 
-    async def upload(self, filename: str, content: bytes, content_type: str, workshop_id: int) -> KnowledgeDocument:
+    async def upload(
+        self,
+        filename: str,
+        content: bytes,
+        content_type: str,
+        workshop_id: int,
+        progress_callback: ProgressCallback | None = None,
+    ) -> KnowledgeDocument:
         ext = filename.rsplit(".", 1)[-1].lower() if "." in filename else ""
         if ext not in ALLOWED_EXTENSIONS:
             raise ValueError(f"不支持的文件格式: .{ext}，仅支持 {', '.join(sorted(ALLOWED_EXTENSIONS))}")
 
         stored_name = f"{datetime.now(timezone.utc).strftime('%Y%m%d%H%M%S')}_{hashlib.md5(content).hexdigest()[:8]}.{ext}"
         file_path = os.path.join(self._upload_dir, stored_name)
-        with open(file_path, "wb") as f:
-            f.write(content)
+        try:
+            with open(file_path, "wb") as f:
+                f.write(content)
 
-        text = self._extract_text(file_path, ext)
-        if not text.strip():
-            raise ValueError(f"文件内容为空或无法解析: {filename}")
+            await _emit_progress(progress_callback, "uploaded", 10, "文件保存完成")
+            await _emit_progress(progress_callback, "parsing", 40, "正在解析文件内容")
+            text = self._extract_text(file_path, ext, filename)
+            if not text.strip():
+                raise ValueError(f"文件内容为空或无法解析: {filename}")
 
-        doc_id = hashlib.md5(f"{workshop_id}:{stored_name}".encode()).hexdigest()
-        chunk_count = self._count_chunks(text)
+            doc_id = hashlib.md5(f"unified:{stored_name}".encode()).hexdigest()
+            await _emit_progress(progress_callback, "chunking", 50, "正在切分文档内容")
+            chunk_count = self._count_chunks(text)
 
-        rag = self._get_rag_adapter(workshop_id)
-        await rag.insert(text, doc_id=doc_id, file_path=file_path)
+            rag = self._get_rag_adapter(workshop_id, progress_callback)
+            try:
+                await _emit_progress(progress_callback, "extracting", 65, "正在抽取实体与关系")
+                await rag.insert(text, doc_id=doc_id, file_path=file_path)
+                await _emit_progress(progress_callback, "merging", 78, "正在合并知识图谱")
+                await _emit_progress(progress_callback, "embedding", 90, "正在生成向量")
+            except ValueError:
+                raise
+            except RuntimeError as e:
+                raise RuntimeError(f"知识库索引写入失败：{e}") from e
+            except Exception as e:
+                message = str(e)
+                if "tiktoken" in message.lower() or "token" in message.lower():
+                    raise RuntimeError("网络超时或 tokenizer 资源缺失，请检查模型资源缓存后重试") from e
+                raise RuntimeError(f"知识库索引写入失败：{message or '未知错误'}") from e
 
-        doc = KnowledgeDocument(
-            workshop_id=workshop_id,
-            original_filename=filename,
-            stored_filename=stored_name,
-            file_size=len(content),
-            content_type=content_type or ALLOWED_TYPES.get(ext, "application/octet-stream"),
-            chunk_count=chunk_count,
-            embedding_model=settings.EMBEDDING_MODEL,
-            upload_params=json.dumps({
-                "storage": "lightrag",
-                "working_dir": os.path.join(self._lightrag_base, f"workshop_{workshop_id}"),
-            }),
-        )
-        self._db.add(doc)
-        await self._db.commit()
-        await self._db.refresh(doc)
+            doc = KnowledgeDocument(
+                workshop_id=workshop_id,
+                original_filename=filename,
+                stored_filename=stored_name,
+                file_size=len(content),
+                content_type=content_type or ALLOWED_TYPES.get(ext, "application/octet-stream"),
+                chunk_count=chunk_count,
+                embedding_model=settings.LOCAL_EMBEDDING_MODEL,
+                upload_params=json.dumps({
+                    "storage": "lightrag",
+                    "working_dir": os.path.join(self._lightrag_base, UNIFIED_KB_DIR_NAME),
+                    "scope": "unified",
+                }, ensure_ascii=False),
+            )
+            self._db.add(doc)
+            await _emit_progress(progress_callback, "writing", 96, "正在写入知识库")
+            await self._db.commit()
+            await self._db.refresh(doc)
+        except Exception:
+            await self._db.rollback()
+            if os.path.exists(file_path):
+                try:
+                    os.remove(file_path)
+                except OSError as cleanup_error:
+                    logger.warning(f"Failed to cleanup orphan upload {file_path}: {cleanup_error}")
+            raise
 
         logger.info(f"Uploaded {filename} via LightRAG: ~{chunk_count} chunks, {len(content)} bytes")
         return doc
@@ -213,9 +273,9 @@ class KnowledgeBaseService:
         if os.path.exists(file_path):
             os.remove(file_path)
 
-        lr_doc_id = hashlib.md5(f"{doc.workshop_id}:{doc.stored_filename}".encode()).hexdigest()
+        lr_doc_id = hashlib.md5(f"unified:{doc.stored_filename}".encode()).hexdigest()
         try:
-            rag = self._get_rag_adapter(doc.workshop_id)
+            rag = self._get_rag_adapter(doc.workshop_id or 0)
             await rag.delete_doc(lr_doc_id)
         except Exception as e:
             logger.warning(f"LightRAG delete error for doc {doc_id}: {e}")
@@ -224,7 +284,6 @@ class KnowledgeBaseService:
     async def list_docs(self, workshop_id: int) -> list[KnowledgeDocument]:
         result = await self._db.execute(
             select(KnowledgeDocument).where(
-                KnowledgeDocument.workshop_id == workshop_id,
                 KnowledgeDocument.is_deleted == False,
             ).order_by(KnowledgeDocument.uploaded_at.desc())
         )
@@ -258,22 +317,32 @@ class KnowledgeBaseService:
             count += 1
         return count
 
-    def _extract_text(self, file_path: str, ext: str) -> str:
+    def _extract_text(self, file_path: str, ext: str, filename: str | None = None) -> str:
+        display_name = filename or os.path.basename(file_path)
         if ext == "txt":
             with open(file_path, "r", encoding="utf-8", errors="replace") as f:
-                return f.read()
+                return self._with_source(display_name, f.read())
         if ext == "md":
             with open(file_path, "r", encoding="utf-8", errors="replace") as f:
-                return f.read()
+                return self._with_source(display_name, f.read())
+        if ext == "doc":
+            return self._read_legacy_office(file_path, display_name, "Word 文档")
         if ext == "docx":
-            return self._read_docx(file_path)
+            return self._read_docx(file_path, display_name)
+        if ext == "xls":
+            return self._read_xls(file_path, display_name)
         if ext == "xlsx":
-            return self._read_xlsx(file_path)
+            return self._read_xlsx(file_path, display_name)
+        if ext == "ppt":
+            return self._read_legacy_office(file_path, display_name, "PPT 演示文稿")
         if ext == "pptx":
-            return self._read_pptx(file_path)
+            return self._read_pptx(file_path, display_name)
         return ""
 
-    def _read_docx(self, path: str) -> str:
+    def _with_source(self, filename: str, text: str) -> str:
+        return f"文件：{filename}\n\n{text.strip()}" if text.strip() else ""
+
+    def _read_docx(self, path: str, filename: str) -> str:
         try:
             import zipfile
             from xml.etree import ElementTree
@@ -285,56 +354,165 @@ class KnowledgeBaseService:
                 texts = [t.text for t in p.iter('{http://schemas.openxmlformats.org/wordprocessingml/2006/main}t') if t.text]
                 if texts:
                     paragraphs.append(''.join(texts))
-            return '\n\n'.join(paragraphs)
+            return self._with_source(filename, '\n\n'.join(paragraphs))
         except Exception as e:
             logger.error(f"Failed to read docx: {e}")
             return ""
 
-    def _read_xlsx(self, path: str) -> str:
+    def _read_xlsx(self, path: str, filename: str) -> str:
         try:
             import zipfile
             from xml.etree import ElementTree
             with zipfile.ZipFile(path, 'r') as z:
+                namelist = set(z.namelist())
                 sst = ""
-                if 'xl/sharedStrings.xml' in z.namelist():
+                if 'xl/sharedStrings.xml' in namelist:
                     sst_tree = ElementTree.fromstring(z.read('xl/sharedStrings.xml'))
                     ns_s = 'http://schemas.openxmlformats.org/spreadsheetml/2006/main'
                     sst = [''.join(t.text or '' for t in si.iter(f'{{{ns_s}}}t')) for si in sst_tree.iter(f'{{{ns_s}}}si')]
-                sheet = z.read('xl/worksheets/sheet1.xml')
-            tree = ElementTree.fromstring(sheet)
-            ns = 'http://schemas.openxmlformats.org/spreadsheetml/2006/main'
-            rows = []
-            for row in tree.iter(f'{{{ns}}}row'):
-                cells = []
-                for c in row.iter(f'{{{ns}}}c'):
-                    v = c.find(f'{{{ns}}}v')
-                    if v is not None and v.text:
-                        t = c.get('t', '')
-                        cells.append(sst[int(v.text)] if t == 's' and sst else v.text)
-                    else:
-                        cells.append('')
-                if cells:
-                    rows.append('\t'.join(cells))
-            return '\n'.join(rows)
+                sheets = self._xlsx_sheets(z, namelist)
+                sections = []
+                for sheet_name, sheet_path in sheets:
+                    if sheet_path not in namelist:
+                        continue
+                    rows = self._xlsx_rows(ElementTree.fromstring(z.read(sheet_path)), sst)
+                    table = self._rows_to_markdown(rows)
+                    if table:
+                        sections.append(f"工作表：{sheet_name}\n\n{table}")
+            return self._with_source(filename, "\n\n".join(sections))
         except Exception as e:
             logger.error(f"Failed to read xlsx: {e}")
             return ""
 
-    def _read_pptx(self, path: str) -> str:
+    def _xlsx_sheets(self, archive, namelist: set[str]) -> list[tuple[str, str]]:
+        if "xl/workbook.xml" not in namelist:
+            return [("Sheet1", "xl/worksheets/sheet1.xml")]
+        from xml.etree import ElementTree
+
+        ns_main = "http://schemas.openxmlformats.org/spreadsheetml/2006/main"
+        ns_rel = "http://schemas.openxmlformats.org/officeDocument/2006/relationships"
+        rels = {}
+        if "xl/_rels/workbook.xml.rels" in namelist:
+            rel_tree = ElementTree.fromstring(archive.read("xl/_rels/workbook.xml.rels"))
+            for item in rel_tree:
+                rel_id = item.get("Id")
+                target = item.get("Target", "")
+                if rel_id and target:
+                    rels[rel_id] = "xl/" + target.lstrip("/")
+        tree = ElementTree.fromstring(archive.read("xl/workbook.xml"))
+        sheets = []
+        for index, sheet in enumerate(tree.iter(f"{{{ns_main}}}sheet"), start=1):
+            name = sheet.get("name") or f"Sheet{index}"
+            rel_id = sheet.get(f"{{{ns_rel}}}id")
+            sheets.append((name, rels.get(rel_id, f"xl/worksheets/sheet{index}.xml")))
+        return sheets or [("Sheet1", "xl/worksheets/sheet1.xml")]
+
+    def _xlsx_rows(self, tree, shared_strings: list[str]) -> list[list[str]]:
+        ns = 'http://schemas.openxmlformats.org/spreadsheetml/2006/main'
+        rows = []
+        for row in tree.iter(f'{{{ns}}}row'):
+            cells = []
+            for c in row.iter(f'{{{ns}}}c'):
+                inline = c.find(f'{{{ns}}}is')
+                if inline is not None:
+                    cells.append(''.join(t.text or '' for t in inline.iter(f'{{{ns}}}t')).strip())
+                    continue
+                v = c.find(f'{{{ns}}}v')
+                if v is not None and v.text:
+                    t = c.get('t', '')
+                    cells.append(shared_strings[int(v.text)] if t == 's' and shared_strings else v.text)
+                else:
+                    cells.append('')
+            while cells and not cells[-1]:
+                cells.pop()
+            if any(cell.strip() for cell in cells):
+                rows.append(cells)
+        return rows
+
+    def _rows_to_markdown(self, rows: list[list[str]], max_rows: int = 200) -> str:
+        if not rows:
+            return ""
+        width = max(len(row) for row in rows)
+        normalized = [(row + [""] * (width - len(row)))[:width] for row in rows[:max_rows]]
+        header = normalized[0]
+        lines = [
+            "| " + " | ".join(self._escape_table_cell(cell) for cell in header) + " |",
+            "| " + " | ".join("---" for _ in header) + " |",
+        ]
+        for row in normalized[1:]:
+            lines.append("| " + " | ".join(self._escape_table_cell(cell) for cell in row) + " |")
+        if len(rows) > max_rows:
+            lines.append(f"\n（已截断，仅保留前 {max_rows} 行，共 {len(rows)} 行）")
+        return "\n".join(lines)
+
+    def _escape_table_cell(self, value: str) -> str:
+        return str(value).replace("|", "\\|").replace("\n", " ").strip()
+
+    def _read_xls(self, path: str, filename: str) -> str:
+        try:
+            import xlrd
+        except Exception:
+            return self._read_legacy_office(path, filename, "Excel 工作簿")
+        try:
+            workbook = xlrd.open_workbook(path)
+            sections = []
+            for sheet in workbook.sheets():
+                rows = []
+                for row_index in range(min(sheet.nrows, 200)):
+                    rows.append([str(sheet.cell_value(row_index, col)).strip() for col in range(sheet.ncols)])
+                table = self._rows_to_markdown(rows)
+                if table:
+                    sections.append(f"工作表：{sheet.name}\n\n{table}")
+            return self._with_source(filename, "\n\n".join(sections))
+        except Exception as e:
+            logger.error(f"Failed to read xls: {e}")
+            return ""
+
+    def _read_pptx(self, path: str, filename: str) -> str:
         try:
             import zipfile
             from xml.etree import ElementTree
             with zipfile.ZipFile(path, 'r') as z:
                 slides = [n for n in z.namelist() if n.startswith('ppt/slides/slide') and n.endswith('.xml')]
-                texts = []
-                for slide in sorted(slides):
+                sections = []
+                for index, slide in enumerate(sorted(slides, key=self._slide_sort_key), start=1):
                     tree = ElementTree.fromstring(z.read(slide))
+                    texts = []
                     for t in tree.iter('{http://schemas.openxmlformats.org/drawingml/2006/main}t'):
                         if t.text:
                             texts.append(t.text)
-                return '\n\n'.join(texts)
+                    if texts:
+                        sections.append(f"幻灯片 {index}\n\n" + "\n".join(texts))
+                return self._with_source(filename, "\n\n".join(sections))
         except Exception as e:
             logger.error(f"Failed to read pptx: {e}")
+            return ""
+
+    def _slide_sort_key(self, name: str) -> int:
+        match = re.search(r"slide(\d+)\.xml$", name)
+        return int(match.group(1)) if match else 0
+
+    def _read_legacy_office(self, path: str, filename: str, label: str) -> str:
+        try:
+            with open(path, "rb") as f:
+                raw = f.read()
+            ascii_text = re.findall(rb"[\x20-\x7E]{4,}", raw)
+            utf16_text = re.findall(rb"(?:[\x20-\x7E]\x00){4,}", raw)
+            parts = [item.decode("latin-1", errors="ignore") for item in ascii_text]
+            parts.extend(item.decode("utf-16le", errors="ignore") for item in utf16_text)
+            cleaned = []
+            seen = set()
+            for part in parts:
+                text = re.sub(r"\s+", " ", part).strip()
+                if text and text not in seen:
+                    seen.add(text)
+                    cleaned.append(text)
+            body = "\n".join(cleaned[:500])
+            if not body:
+                return ""
+            return self._with_source(filename, f"{label}（兼容模式提取）\n\n{body}")
+        except Exception as e:
+            logger.error(f"Failed to read legacy office file: {e}")
             return ""
 
 
