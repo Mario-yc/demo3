@@ -120,8 +120,23 @@ class WebSocketManager:
         msg = {"type": "synthesis_ready", "data": {"round_number": round_number, **result_data}}
         await self.broadcast_to_all(workshop_id, msg)
 
-    async def broadcast_timer(self, workshop_id: int, seconds_remaining: int, phase: str):
-        msg = {"type": "timer", "data": {"seconds_remaining": seconds_remaining, "phase": phase}}
+    async def broadcast_timer(
+        self,
+        workshop_id: int,
+        seconds_remaining: int,
+        phase: str,
+        round_number: Optional[int] = None,
+        round_id: Optional[int] = None,
+    ):
+        msg = {
+            "type": "timer",
+            "data": {
+                "seconds_remaining": seconds_remaining,
+                "phase": phase,
+                "round_number": round_number,
+                "round_id": round_id,
+            },
+        }
         await self.broadcast_to_all(workshop_id, msg)
 
     async def broadcast_workshop_completed(self, workshop_id: int):

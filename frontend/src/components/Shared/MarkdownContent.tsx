@@ -12,7 +12,7 @@ export function MarkdownContent({ content, className, emptyText = "(空)" }: Mar
   const markdown = content?.trim() || emptyText;
 
   return (
-    <div className={cn("rounded-md bg-muted/30 p-4 text-sm leading-relaxed", className)}>
+    <div className={cn("min-w-0 max-w-full overflow-x-auto rounded-md bg-muted/30 p-4 text-sm leading-relaxed break-words", className)}>
       <ReactMarkdown
         remarkPlugins={[remarkGfm]}
         components={{

@@ -87,7 +87,8 @@ export function WorkshopPage() {
   );
   const {
     questions, answers, aiResult, loading: groupLoading, aiLoading,
-    submitAnswer, triggerAI, editAIResult, transferLeader, fetchAIResult, addAnswer, clearRoundState,
+    submitAnswer, triggerAI, editAIResult, transferLeader,
+    fetchQuestions, fetchAnswers, fetchAIResult, addAnswer, clearRoundState,
   } = useGroup(workshopId, groupId, currentRound?.id);
   const isCurrentActive = currentRound?.status === "active" || currentRound?.status === "input";
 
@@ -218,22 +219,42 @@ export function WorkshopPage() {
   }, []);
 
   const handleWSMessage = useCallback((msg: WSMessage) => {
+    const rawRoundId = msg.data.round_id;
+    const rawRoundNumber = msg.data.round_number;
+    const eventRoundId = rawRoundId === null || rawRoundId === undefined ? NaN : Number(rawRoundId);
+    const eventRoundNumber = rawRoundNumber === null || rawRoundNumber === undefined ? NaN : Number(rawRoundNumber);
+    const isCurrentRoundEvent =
+      (Number.isFinite(eventRoundId) && currentRound?.id === eventRoundId) ||
+      (Number.isFinite(eventRoundNumber) && currentRound?.round_number === eventRoundNumber) ||
+      (!Number.isFinite(eventRoundId) && !Number.isFinite(eventRoundNumber));
+
     switch (msg.type) {
       case "new_answer":
         addAnswer(msg.data as unknown as Answer);
         break;
       case "result_ready":
+        if (!isCurrentRoundEvent) break;
         fetchAIResult();
         break;
       case "ai_result_status":
+        if (!isCurrentRoundEvent) break;
         fetchAIResult();
         break;
-      case "round_changed":
-        clearRoundState();
-        clearHistory();
-        fetchWorkshop();
+      case "round_changed": {
+        const nextRoundNumber = Number(msg.data.round_number);
+        if (Number.isFinite(nextRoundNumber) && nextRoundNumber !== currentRound?.round_number) {
+          clearRoundState();
+          clearHistory();
+        } else {
+          fetchQuestions();
+          fetchAnswers();
+          fetchAIResult();
+        }
+        fetchWorkshop({ silent: true });
         break;
+      }
       case "timer": {
+        if (!isCurrentRoundEvent) break;
         const secondsRemaining = Number(msg.data.seconds_remaining ?? 0);
         setExpired(false);
         if (secondsRemaining > 0) {
@@ -266,7 +287,21 @@ export function WorkshopPage() {
         exitCompletedWorkshop();
         break;
     }
-  }, [addAnswer, clearHistory, clearRoundState, exitCompletedWorkshop, fetchAIResult, fetchWorkshop, participant, reset, start]);
+  }, [
+    addAnswer,
+    clearHistory,
+    clearRoundState,
+    currentRound?.id,
+    currentRound?.round_number,
+    exitCompletedWorkshop,
+    fetchAIResult,
+    fetchAnswers,
+    fetchQuestions,
+    fetchWorkshop,
+    participant,
+    reset,
+    start,
+  ]);
 
   useWebSocket({
     workshopId,

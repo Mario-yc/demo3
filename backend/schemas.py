@@ -140,11 +140,13 @@ class GroupResultMemberEdit(APIModel):
     participant_id: int
     session_token: str
     edited_content: str = Field(..., min_length=1)
+    round_id: Optional[int] = None
 
 
 class GroupAITrigger(APIModel):
     participant_id: int
     session_token: str
+    round_id: Optional[int] = None
 
 
 class GroupLeaderTransfer(APIModel):

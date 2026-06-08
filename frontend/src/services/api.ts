@@ -97,6 +97,11 @@ export const workshopApi = {
       method: "POST",
     }),
 
+  returnCurrentRound: (id: number, code: string) =>
+    request<WorkshopHostView>(`/workshops/${id}/return-current-round?code=${encodeURIComponent(code)}`, {
+      method: "POST",
+    }),
+
   updateRoundSettings: (id: number, code: string, discussion_time?: number, input_time?: number) =>
     request<WorkshopHostView>(`/workshops/${id}/round-settings?code=${encodeURIComponent(code)}`, {
       method: "POST",
@@ -139,8 +144,10 @@ export const workshopApi = {
 // ── Group ─────────────────────────────────────────────────────────────
 
 export const groupApi = {
-  getQuestions: (groupId: number, workshopId: number) =>
-    request<Question[]>(`/groups/${groupId}/questions?workshop_id=${workshopId}`),
+  getQuestions: (groupId: number, workshopId: number, roundId?: number | null) => {
+    const roundParam = roundId ? `&round_id=${roundId}` : "";
+    return request<Question[]>(`/groups/${groupId}/questions?workshop_id=${workshopId}${roundParam}`);
+  },
 
   submitAnswer: (groupId: number, data: { participant_id: number; session_token: string; question_id: number; content: string }) =>
     request<Answer>(`/groups/${groupId}/answers`, {
@@ -148,17 +155,21 @@ export const groupApi = {
       body: JSON.stringify(data),
     }),
 
-  getAnswers: (groupId: number, workshopId: number) =>
-    request<Answer[]>(`/groups/${groupId}/answers?workshop_id=${workshopId}`),
+  getAnswers: (groupId: number, workshopId: number, roundId?: number | null) => {
+    const roundParam = roundId ? `&round_id=${roundId}` : "";
+    return request<Answer[]>(`/groups/${groupId}/answers?workshop_id=${workshopId}${roundParam}`);
+  },
 
-  triggerAI: (groupId: number, workshopId: number, participant_id: number, session_token: string) =>
+  triggerAI: (groupId: number, workshopId: number, participant_id: number, session_token: string, round_id?: number | null) =>
     request<GroupRoundResult>(`/groups/${groupId}/ai-generate?workshop_id=${workshopId}`, {
       method: "POST",
-      body: JSON.stringify({ participant_id, session_token }),
+      body: JSON.stringify({ participant_id, session_token, round_id }),
     }),
 
-  getAIResult: (groupId: number, workshopId: number) =>
-    request<GroupRoundResult>(`/groups/${groupId}/ai-result?workshop_id=${workshopId}`),
+  getAIResult: (groupId: number, workshopId: number, roundId?: number | null) => {
+    const roundParam = roundId ? `&round_id=${roundId}` : "";
+    return request<GroupRoundResult>(`/groups/${groupId}/ai-result?workshop_id=${workshopId}${roundParam}`);
+  },
 
   editAIResult: (
     groupId: number,
@@ -166,10 +177,11 @@ export const groupApi = {
     participant_id: number,
     session_token: string,
     edited_content: string,
+    round_id?: number | null,
   ) =>
     request<GroupRoundResult>(`/groups/${groupId}/ai-result?workshop_id=${workshopId}`, {
       method: "PUT",
-      body: JSON.stringify({ participant_id, session_token, edited_content }),
+      body: JSON.stringify({ participant_id, session_token, edited_content, round_id }),
     }),
 
   transferLeader: (

@@ -57,6 +57,18 @@ export function useWorkshopHost(workshopId: number | null, hostCode: string | nu
     }
   }, [workshopId, hostCode]);
 
+  const returnCurrentRound = useCallback(async () => {
+    if (!workshopId || !hostCode) return null;
+    try {
+      const data = await workshopApi.returnCurrentRound(workshopId, hostCode);
+      setWorkshop(data);
+      return data;
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "返回当前轮次失败");
+      return null;
+    }
+  }, [workshopId, hostCode]);
+
   const startTimer = useCallback(async () => {
     if (!workshopId || !hostCode) return null;
     try {
@@ -158,7 +170,7 @@ export function useWorkshopHost(workshopId: number | null, hostCode: string | nu
 
   return {
     workshop, loading, error,
-    fetchHost, unlockRound, previousRound, updateRoundSettings,
+    fetchHost, unlockRound, previousRound, returnCurrentRound, updateRoundSettings,
     startTimer,
     submitHostInput, editGroupResult, editSynthesis, setGroupLeader,
     triggerSynthesis, exportMarkdown,

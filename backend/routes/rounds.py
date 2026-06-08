@@ -83,18 +83,26 @@ def _result_updated_at(gr: GroupRoundResult) -> Optional[str]:
 
 @router.get("/groups/{group_id}/questions", response_model=List[QuestionOut])
 async def get_group_questions(
-    group_id: int, workshop_id: int = Query(...), db: AsyncSession = Depends(get_db),
+    group_id: int,
+    workshop_id: int = Query(...),
+    round_id: Optional[int] = Query(None),
+    db: AsyncSession = Depends(get_db),
 ):
     w = await db.get(Workshop, workshop_id)
     if not w:
         raise HTTPException(status_code=404, detail="Workshop not found")
-    result = await db.execute(
-        select(Round).where(
-            Round.workshop_id == workshop_id,
-            Round.round_number == w.current_round,
+    if round_id is not None:
+        active_round = await db.get(Round, round_id)
+        if not active_round or active_round.workshop_id != workshop_id:
+            raise HTTPException(status_code=404, detail="Round not found")
+    else:
+        result = await db.execute(
+            select(Round).where(
+                Round.workshop_id == workshop_id,
+                Round.round_number == w.current_round,
+            )
         )
-    )
-    active_round = result.scalar_one_or_none()
+        active_round = result.scalar_one_or_none()
     if not active_round:
         raise HTTPException(status_code=404, detail="No active round")
     result = await db.execute(
@@ -152,18 +160,26 @@ async def submit_group_answer(
 
 @router.get("/groups/{group_id}/answers", response_model=List[AnswerOut])
 async def get_group_answers(
-    group_id: int, workshop_id: int = Query(...), db: AsyncSession = Depends(get_db),
+    group_id: int,
+    workshop_id: int = Query(...),
+    round_id: Optional[int] = Query(None),
+    db: AsyncSession = Depends(get_db),
 ):
     w = await db.get(Workshop, workshop_id)
     if not w:
         raise HTTPException(status_code=404, detail="Workshop not found")
-    result = await db.execute(
-        select(Round).where(
-            Round.workshop_id == workshop_id,
-            Round.round_number == w.current_round,
+    if round_id is not None:
+        active_round = await db.get(Round, round_id)
+        if not active_round or active_round.workshop_id != workshop_id:
+            raise HTTPException(status_code=404, detail="Round not found")
+    else:
+        result = await db.execute(
+            select(Round).where(
+                Round.workshop_id == workshop_id,
+                Round.round_number == w.current_round,
+            )
         )
-    )
-    active_round = result.scalar_one_or_none()
+        active_round = result.scalar_one_or_none()
     if not active_round:
         return []
 
@@ -272,13 +288,20 @@ async def trigger_group_ai(
     if not participant.is_group_leader:
         raise HTTPException(status_code=403, detail="Only group leader can trigger AI extraction")
 
-    result = await db.execute(
-        select(Round).where(
-            Round.workshop_id == workshop_id,
-            Round.round_number == w.current_round,
+    if data.round_id is not None:
+        active_round = await db.get(Round, data.round_id)
+        if not active_round or active_round.workshop_id != workshop_id:
+            raise HTTPException(status_code=404, detail="Round not found")
+        if active_round.round_number != w.current_round:
+            raise HTTPException(status_code=400, detail="AI extraction must be triggered for the current round")
+    else:
+        result = await db.execute(
+            select(Round).where(
+                Round.workshop_id == workshop_id,
+                Round.round_number == w.current_round,
+            )
         )
-    )
-    active_round = result.scalar_one_or_none()
+        active_round = result.scalar_one_or_none()
     if not active_round:
         raise HTTPException(status_code=404, detail="No active round")
 
@@ -416,12 +439,20 @@ async def _trigger_group_ai_locked(
 
 @router.get("/groups/{group_id}/ai-result", response_model=GroupRoundResultOut)
 async def get_group_ai_result(
-    group_id: int, workshop_id: int = Query(...), db: AsyncSession = Depends(get_db),
+    group_id: int,
+    workshop_id: int = Query(...),
+    round_id: Optional[int] = Query(None),
+    db: AsyncSession = Depends(get_db),
 ):
-    result = await db.execute(
-        select(Round).where(Round.workshop_id == workshop_id, Round.round_number == select(Workshop.current_round).where(Workshop.id == workshop_id).scalar_subquery())
-    )
-    active_round = result.scalar_one_or_none()
+    if round_id is not None:
+        active_round = await db.get(Round, round_id)
+        if not active_round or active_round.workshop_id != workshop_id:
+            raise HTTPException(status_code=404, detail="Round not found")
+    else:
+        result = await db.execute(
+            select(Round).where(Round.workshop_id == workshop_id, Round.round_number == select(Workshop.current_round).where(Workshop.id == workshop_id).scalar_subquery())
+        )
+        active_round = result.scalar_one_or_none()
     if not active_round:
         raise HTTPException(status_code=404, detail="No active round")
 
@@ -463,10 +494,15 @@ async def edit_group_ai_result(
     if not data.edited_content.strip():
         raise HTTPException(status_code=400, detail="编辑内容不能为空")
 
-    result = await db.execute(
-        select(Round).where(Round.workshop_id == workshop_id, Round.round_number == w.current_round)
-    )
-    active_round = result.scalar_one_or_none()
+    if data.round_id is not None:
+        active_round = await db.get(Round, data.round_id)
+        if not active_round or active_round.workshop_id != workshop_id:
+            raise HTTPException(status_code=404, detail="Round not found")
+    else:
+        result = await db.execute(
+            select(Round).where(Round.workshop_id == workshop_id, Round.round_number == w.current_round)
+        )
+        active_round = result.scalar_one_or_none()
     if not active_round:
         raise HTTPException(status_code=404, detail="No active round")
 

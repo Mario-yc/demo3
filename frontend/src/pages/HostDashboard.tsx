@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback, useRef } from "react";
 import { Link, useParams, useSearchParams } from "react-router-dom";
 import { useWorkshopHost } from "@/hooks/useWorkshopHost";
 import { useWebSocket } from "@/hooks/useWebSocket";
+import { useCountdown } from "@/hooks/useCountdown";
 import { groupApi, knowledgeApi } from "@/services/api";
 import { clearLastHostWorkshop, saveLastHostWorkshop } from "@/lib/hostSession";
 import {
@@ -107,6 +108,7 @@ export function HostDashboard() {
     fetchHost,
     unlockRound,
     previousRound,
+    returnCurrentRound,
     updateRoundSettings,
     startTimer,
     submitHostInput,
@@ -134,6 +136,7 @@ export function HostDashboard() {
   const [roundTime, setRoundTime] = useState("");
   const [unlocking, setUnlocking] = useState(false);
   const [revertingRound, setRevertingRound] = useState(false);
+  const [returningCurrentRound, setReturningCurrentRound] = useState(false);
   const [startingTimer, setStartingTimer] = useState(false);
 
   const [hostInputContent, setHostInputContent] = useState("");
@@ -162,6 +165,30 @@ export function HostDashboard() {
     workshop?.rounds.find((round) => round.round_number === parseInt(selectedSynthesisRound, 10)) ?? currentRound;
   const groupNumbers = Array.from({ length: workshop?.group_count ?? 0 }, (_, index) => index + 1);
   const isCompletedView = workshop?.status === "completed";
+  const {
+    minutes: hostTimerMinutes,
+    seconds: hostTimerSeconds,
+    start: startHostTimer,
+    reset: resetHostTimer,
+  } = useCountdown(currentRound?.timer_remaining_seconds ?? 0);
+
+  useEffect(() => {
+    if (!currentRound || currentRound.timer_remaining_seconds === null) {
+      resetHostTimer(0);
+      return;
+    }
+    if (currentRound.timer_remaining_seconds > 0) {
+      startHostTimer(currentRound.timer_remaining_seconds);
+    } else {
+      resetHostTimer(0);
+    }
+  }, [
+    currentRound?.id,
+    currentRound?.timer_started_at,
+    currentRound?.timer_remaining_seconds,
+    resetHostTimer,
+    startHostTimer,
+  ]);
 
   useEffect(() => {
     if (!workshop || !hostCode) return;
@@ -221,6 +248,15 @@ export function HostDashboard() {
   }, [activeTab]);
 
   const handleWSMessage = useCallback((msg: WSMessage) => {
+    const rawRoundId = msg.data.round_id;
+    const rawRoundNumber = msg.data.round_number;
+    const eventRoundId = rawRoundId === null || rawRoundId === undefined ? NaN : Number(rawRoundId);
+    const eventRoundNumber = rawRoundNumber === null || rawRoundNumber === undefined ? NaN : Number(rawRoundNumber);
+    const isCurrentRoundEvent =
+      (Number.isFinite(eventRoundId) && currentRound?.id === eventRoundId) ||
+      (Number.isFinite(eventRoundNumber) && currentRound?.round_number === eventRoundNumber) ||
+      (!Number.isFinite(eventRoundId) && !Number.isFinite(eventRoundNumber));
+
     if (msg.type === "ai_result_status") {
       const groupId = Number(msg.data.group_id);
       const roundNumber = Number(msg.data.round_number);
@@ -249,10 +285,20 @@ export function HostDashboard() {
       return;
     }
 
-    if (["result_ready", "synthesis_ready", "round_changed", "new_answer", "timer", "workshop_completed"].includes(msg.type)) {
+    if (msg.type === "timer") {
+      if (isCurrentRoundEvent) {
+        const secondsRemaining = Number(msg.data.seconds_remaining ?? 0);
+        if (secondsRemaining > 0) startHostTimer(secondsRemaining);
+        else resetHostTimer(0);
+      }
+      fetchHost();
+      return;
+    }
+
+    if (["result_ready", "synthesis_ready", "round_changed", "new_answer", "workshop_completed"].includes(msg.type)) {
       fetchHost();
     }
-  }, [activeTab, fetchHost]);
+  }, [activeTab, currentRound?.id, currentRound?.round_number, fetchHost, resetHostTimer, startHostTimer]);
 
   useWebSocket({
     workshopId,
@@ -346,6 +392,17 @@ export function HostDashboard() {
     }
   };
 
+  const handleReturnCurrentRound = async () => {
+    setReturningCurrentRound(true);
+    clearLocalError();
+    try {
+      const result = await runLocked("return-current-round", returnCurrentRound);
+      if (!result) setLocalError("返回当前轮次失败，请重试");
+    } finally {
+      setReturningCurrentRound(false);
+    }
+  };
+
   const handleUpdateSettings = async () => {
     clearLocalError();
     const minutes = roundTime ? parseInt(roundTime, 10) : undefined;
@@ -358,7 +415,14 @@ export function HostDashboard() {
     clearLocalError();
     try {
       const result = await runLocked("start-timer", startTimer);
-      if (!result) setLocalError("开始计时失败，请重试");
+      if (!result) {
+        setLocalError("开始计时失败，请重试");
+      } else {
+        const updatedRound = result.rounds.find((round) => round.round_number === result.current_round);
+        if (updatedRound?.timer_remaining_seconds !== null && updatedRound?.timer_remaining_seconds !== undefined) {
+          startHostTimer(updatedRound.timer_remaining_seconds);
+        }
+      }
     } finally {
       setStartingTimer(false);
     }
@@ -789,6 +853,17 @@ export function HostDashboard() {
                             {revertingRound ? <LoadingSpinner size="sm" /> : <RefreshCw className="h-4 w-4" />}
                             回到上一轮
                           </Button>
+                          {workshop.is_review_mode && (
+                            <Button
+                              variant="outline"
+                              onClick={handleReturnCurrentRound}
+                              disabled={returningCurrentRound}
+                              className="gap-2"
+                            >
+                              {returningCurrentRound ? <LoadingSpinner size="sm" /> : <RefreshCw className="h-4 w-4" />}
+                              返回当前轮次
+                            </Button>
+                          )}
                           <Button onClick={handleUnlockRound} disabled={isCompletedView || unlocking} className="gap-2">
                             {unlocking ? <LoadingSpinner size="sm" /> : <Unlock className="h-4 w-4" />}
                             {(workshop.flow_round_number ?? currentRound.round_number) < 4 ? "进入下一轮" : "结束研讨"}
@@ -797,7 +872,7 @@ export function HostDashboard() {
                       )}
                       {workshop.is_review_mode && (
                         <p className="text-sm text-primary">
-                          当前为历史轮次查看模式。点击主流程按钮将回到原主流程并继续推进。
+                          当前为历史轮次查看模式。可点击“返回当前轮次”回到主流程。
                         </p>
                       )}
                       {(currentRound.status === "active" || currentRound.status === "input") && (
@@ -806,10 +881,9 @@ export function HostDashboard() {
                             {startingTimer ? <LoadingSpinner size="sm" /> : <Play className="h-4 w-4" />}
                             {currentRound.timer_started_at ? "重新开始计时" : "开始计时"}
                           </Button>
-                          {currentRound.timer_remaining_seconds !== null && (
+                          {(currentRound.timer_remaining_seconds !== null || currentRound.timer_started_at) && (
                             <span className="text-sm text-muted-foreground">
-                              剩余 {Math.floor(currentRound.timer_remaining_seconds / 60)}:
-                              {String(currentRound.timer_remaining_seconds % 60).padStart(2, "0")}
+                              剩余 {hostTimerMinutes}:{String(hostTimerSeconds).padStart(2, "0")}
                             </span>
                           )}
                         </div>
@@ -1318,7 +1392,7 @@ export function HostDashboard() {
               </Card>
 
               <Dialog open={showExportDialog} onOpenChange={setShowExportDialog}>
-                <DialogContent className="max-w-4xl max-h-[80vh]">
+                <DialogContent className="max-h-[80vh] max-w-4xl min-w-0">
                   <DialogHeader>
                     <DialogTitle className="flex items-center gap-2">
                       <FileText className="h-5 w-5" />
@@ -1326,18 +1400,18 @@ export function HostDashboard() {
                     </DialogTitle>
                   </DialogHeader>
                   {exportData && (
-                    <div className="space-y-4">
-                      <div className="flex items-center justify-between gap-2">
-                        <p className="text-sm text-muted-foreground">文件名: {exportData.filename}</p>
+                    <div className="min-w-0 space-y-4">
+                      <div className="flex min-w-0 items-center justify-between gap-2">
+                        <p className="min-w-0 truncate text-sm text-muted-foreground">文件名: {exportData.filename}</p>
                         {copyButton(exportData.markdown, "export-markdown")}
                         <Button size="sm" onClick={handleDownloadExport} className="gap-1">
                           <Download className="h-4 w-4" />
                           下载
                         </Button>
                       </div>
-                      <ScrollArea className="h-[50vh] rounded-md border">
-                        <div className="p-4">
-                          <MarkdownContent content={exportData.markdown} className="bg-transparent p-0" />
+                      <ScrollArea className="h-[50vh] max-w-full rounded-md border">
+                        <div className="min-w-0 max-w-full overflow-x-auto p-4">
+                          <MarkdownContent content={exportData.markdown} className="max-w-full bg-transparent p-0" />
                         </div>
                       </ScrollArea>
                     </div>

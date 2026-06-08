@@ -414,6 +414,33 @@ async def previous_round(
     return await _build_host_view_with_docs(w, db)
 
 
+@router.post("/{workshop_id}/return-current-round", response_model=WorkshopHostView)
+async def return_current_round(
+    workshop_id: int, code: str = Query(...),
+    db: AsyncSession = Depends(get_db),
+    ws_manager: WebSocketManager = Depends(get_ws_manager),
+):
+    w = await _load_workshop(workshop_id, db)
+    if w.host_code != code:
+        raise HTTPException(status_code=403, detail="Invalid host code")
+    if w.status == WorkshopStatus.COMPLETED:
+        raise HTTPException(status_code=400, detail="研讨已结束，不能切换轮次")
+
+    flow_round = w.flow_round_number or w.current_round
+    active_round = next((r for r in w.rounds if r.round_number == flow_round), None)
+    if not active_round:
+        raise HTTPException(status_code=404, detail="当前轮次不存在")
+
+    w.current_round = flow_round
+    w.is_review_mode = False
+    await db.commit()
+    w = await _load_workshop(workshop_id, db)
+    active_round = next((r for r in w.rounds if r.round_number == w.current_round), None)
+    if active_round:
+        await ws_manager.broadcast_round_change(workshop_id, w.current_round, _round_to_dict(active_round))
+    return await _build_host_view_with_docs(w, db)
+
+
 @router.post("/{workshop_id}/timer/start", response_model=WorkshopHostView)
 async def start_round_timer(
     workshop_id: int, code: str = Query(...),
@@ -445,8 +472,9 @@ async def start_round_timer(
             workshop_id,
             _round_timer_remaining(current) or 0,
             current.timer_phase or current.status.value,
+            current.round_number,
+            current.id,
         )
-        await ws_manager.broadcast_round_change(workshop_id, w.current_round, _round_to_dict(current))
     return await _build_host_view_with_docs(w, db)
 
 

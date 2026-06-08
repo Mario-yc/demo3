@@ -15,28 +15,30 @@ export function useGroup(workshopId: number | null, groupId: number | null, roun
     if (!workshopId || !groupId) return;
     setLoading(true);
     try {
-      setQuestions(await groupApi.getQuestions(groupId, workshopId));
+      setQuestions(await groupApi.getQuestions(groupId, workshopId, roundId));
     } catch (err) {
       setError(err instanceof Error ? err.message : "获取问题失败");
     } finally {
       setLoading(false);
     }
-  }, [workshopId, groupId]);
+  }, [workshopId, groupId, roundId]);
 
   const fetchAnswers = useCallback(async () => {
     if (!workshopId || !groupId) return;
     try {
-      setAnswers(await groupApi.getAnswers(groupId, workshopId));
+      setAnswers(await groupApi.getAnswers(groupId, workshopId, roundId));
     } catch { /* ignore */ }
-  }, [workshopId, groupId]);
+  }, [workshopId, groupId, roundId]);
 
   const fetchAIResult = useCallback(async () => {
     if (!workshopId || !groupId) return;
     try {
-      const r = await groupApi.getAIResult(groupId, workshopId);
-      setAiResult(r);
-    } catch { /* not ready yet */ }
-  }, [workshopId, groupId]);
+      const r = await groupApi.getAIResult(groupId, workshopId, roundId);
+      if (!roundId || r.round_id === roundId) setAiResult(r);
+    } catch {
+      setAiResult(null);
+    }
+  }, [workshopId, groupId, roundId]);
 
   const clearRoundState = useCallback(() => {
     setQuestions([]);
@@ -92,8 +94,8 @@ export function useGroup(workshopId: number | null, groupId: number | null, roun
     requestLocksRef.current.add("trigger-ai");
     setAiLoading(true);
     try {
-      const r = await groupApi.triggerAI(groupId, workshopId, participant_id, session_token);
-      setAiResult(r);
+      const r = await groupApi.triggerAI(groupId, workshopId, participant_id, session_token, roundId);
+      if (!roundId || r.round_id === roundId) setAiResult(r);
       return r;
     } catch (err) {
       setError(err instanceof Error ? err.message : "AI生成失败");
@@ -102,7 +104,7 @@ export function useGroup(workshopId: number | null, groupId: number | null, roun
       setAiLoading(false);
       requestLocksRef.current.delete("trigger-ai");
     }
-  }, [workshopId, groupId]);
+  }, [workshopId, groupId, roundId]);
 
   const editAIResult = useCallback(async (
     participant_id: number,
@@ -119,8 +121,9 @@ export function useGroup(workshopId: number | null, groupId: number | null, roun
         participant_id,
         session_token,
         edited_content,
+        roundId,
       );
-      setAiResult(r);
+      if (!roundId || r.round_id === roundId) setAiResult(r);
       return r;
     } catch (err) {
       setError(err instanceof Error ? err.message : "保存 AI 结果失败");
@@ -128,7 +131,7 @@ export function useGroup(workshopId: number | null, groupId: number | null, roun
     } finally {
       requestLocksRef.current.delete("edit-ai-result");
     }
-  }, [workshopId, groupId]);
+  }, [workshopId, groupId, roundId]);
 
   const addAnswer = useCallback((answer: Answer) => {
     setAnswers((prev) => {
