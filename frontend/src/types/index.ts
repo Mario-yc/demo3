@@ -44,6 +44,7 @@ export interface Answer {
   created_at: string;
   participant_name?: string;
   group_id?: number;
+  round_id?: number;
 }
 
 export interface GroupRoundResult {

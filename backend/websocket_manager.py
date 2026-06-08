@@ -56,8 +56,7 @@ class WebSocketManager:
 
     async def broadcast_new_answer(self, workshop_id: int, group_id: int, answer_data: dict):
         msg = {"type": "new_answer", "data": answer_data}
-        await self.broadcast_to_group(workshop_id, group_id, msg)
-        await self.broadcast_to_host(workshop_id, msg)
+        await self.broadcast_to_all(workshop_id, msg)
 
     async def broadcast_round_change(self, workshop_id: int, round_number: int, round_data: dict):
         msg = {"type": "round_changed", "data": {"round_number": round_number, "round": round_data}}

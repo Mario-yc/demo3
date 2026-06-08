@@ -230,7 +230,12 @@ export function WorkshopPage() {
 
     switch (msg.type) {
       case "new_answer":
-        addAnswer(msg.data as unknown as Answer);
+        {
+          const answer = msg.data as unknown as Answer;
+          if (answer.group_id && participant?.group_id && answer.group_id !== participant.group_id) break;
+          if (answer.round_id && currentRound?.id && answer.round_id !== currentRound.id) break;
+          addAnswer(answer);
+        }
         break;
       case "result_ready":
         if (!isCurrentRoundEvent) break;
@@ -482,6 +487,9 @@ export function WorkshopPage() {
                 </>
               )}
               <span>第 {workshop.current_round} / 4 轮</span>
+              <Badge variant="secondary" className="font-mono tracking-wide">
+                邀请码 {workshop.invite_code}
+              </Badge>
             </div>
           </div>
 
@@ -801,19 +809,25 @@ export function WorkshopPage() {
                       {history.map((item) => (
                         <div key={item.id} className="space-y-2">
                           <div className="flex justify-end">
-                            <div className="bg-primary/10 rounded-md px-3 py-2 text-sm max-w-[85%] whitespace-pre-wrap break-words">
-                              {item.question}
-                            </div>
+                            <MarkdownContent
+                              content={item.question}
+                              className="max-w-[85%] bg-primary/10 px-3 py-2"
+                            />
                           </div>
                           <div className="flex justify-start">
-                            <div className="bg-muted rounded-md px-3 py-2 text-sm max-w-[85%] whitespace-pre-wrap break-words">
-                              {item.answer ?? (
+                            {item.answer ? (
+                              <MarkdownContent
+                                content={item.answer}
+                                className="max-w-[85%] bg-muted px-3 py-2"
+                              />
+                            ) : (
+                              <div className="bg-muted rounded-md px-3 py-2 text-sm max-w-[85%] whitespace-pre-wrap break-words">
                                 <span className="flex items-center gap-1 text-muted-foreground">
                                   <Loader2 className="h-3 w-3 animate-spin" />
                                   回答生成中...
                                 </span>
-                              )}
-                            </div>
+                              </div>
+                            )}
                           </div>
                         </div>
                       ))}

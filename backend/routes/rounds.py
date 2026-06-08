@@ -152,7 +152,7 @@ async def submit_group_answer(
     answer_out = AnswerOut(
         id=answer.id, question_id=answer.question_id, participant_id=answer.participant_id,
         content=answer.content, created_at=answer.created_at,
-        participant_name=participant.name, group_id=participant.group_id,
+        participant_name=participant.name, group_id=participant.group_id, round_id=rd.id,
     )
     await ws_manager.broadcast_new_answer(rd.workshop_id, group_id, answer_out.model_dump())
     return answer_out
@@ -196,11 +196,11 @@ async def get_group_answers(
         .order_by(Answer.created_at)
     )
     return [
-        AnswerOut(
-            id=a.id, question_id=a.question_id, participant_id=a.participant_id,
-            content=a.content, created_at=a.created_at,
-            participant_name=p.name, group_id=p.group_id,
-        )
+            AnswerOut(
+                id=a.id, question_id=a.question_id, participant_id=a.participant_id,
+                content=a.content, created_at=a.created_at,
+                participant_name=p.name, group_id=p.group_id, round_id=active_round.id,
+            )
         for a, p in result.all()
     ]
 
@@ -590,17 +590,22 @@ async def _trigger_synthesis_locked(
     await db.commit()
     await db.refresh(sr)
 
+    workshop = await db.get(Workshop, rd.workshop_id)
+    group_count = workshop.group_count if workshop else None
+    actual_group_count = group_count or max([g.group_id for g in ready_results], default=0)
+    submitted_group_ids = {g.group_id for g in ready_results}
+    missing_group_ids = [gid for gid in range(1, actual_group_count + 1) if gid not in submitted_group_ids]
     groups_data = [{"group_id": g.group_id, "content": g.edited_content or g.original_content} for g in ready_results]
 
     try:
         if rd.round_number == 1:
-            content, version, err = await ai_service.synthesize_dimensions(groups_data)
+            content, version, err = await ai_service.synthesize_dimensions(groups_data, actual_group_count, missing_group_ids)
         elif rd.round_number == 2:
-            content, version, err = await ai_service.synthesize_layer_table(groups_data)
+            content, version, err = await ai_service.synthesize_layer_table(groups_data, actual_group_count, missing_group_ids)
         elif rd.round_number == 3:
-            content, version, err = await ai_service.synthesize_behaviors(groups_data)
+            content, version, err = await ai_service.synthesize_behaviors(groups_data, actual_group_count, missing_group_ids)
         else:
-            content, version, err = await ai_service.synthesize_applications(groups_data)
+            content, version, err = await ai_service.synthesize_applications(groups_data, actual_group_count, missing_group_ids)
 
         sr.original_content = content
         sr.version = version

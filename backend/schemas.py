@@ -112,6 +112,7 @@ class AnswerOut(APIModel):
     created_at: datetime
     participant_name: Optional[str] = None
     group_id: Optional[int] = None
+    round_id: Optional[int] = None
 
     model_config = {"from_attributes": True}
 

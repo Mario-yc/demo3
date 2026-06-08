@@ -1308,9 +1308,11 @@ export function HostDashboard() {
                             <h4 className="text-sm font-medium">第 {round.round_number} 轮: {round.title}</h4>
                             {round.host_input && copyButton(round.host_input.content, `host-input-${round.id}`)}
                           </div>
-                          <div className="bg-muted/30 rounded-md p-3 text-sm whitespace-pre-wrap font-mono">
-                            {round.host_input?.content || "暂无输入"}
-                          </div>
+                          <MarkdownContent
+                            content={round.host_input?.content}
+                            emptyText="暂无输入"
+                            className="p-3"
+                          />
                         </div>
                       ))}
                     </CardContent>
@@ -1409,11 +1411,11 @@ export function HostDashboard() {
                           下载
                         </Button>
                       </div>
-                      <ScrollArea className="h-[50vh] max-w-full rounded-md border">
-                        <div className="min-w-0 max-w-full overflow-x-auto p-4">
-                          <MarkdownContent content={exportData.markdown} className="max-w-full bg-transparent p-0" />
+                      <div className="h-[50vh] max-w-full overflow-y-auto rounded-md border">
+                        <div className="min-w-0 p-4">
+                          <MarkdownContent content={exportData.markdown} className="bg-transparent p-0" />
                         </div>
-                      </ScrollArea>
+                      </div>
                     </div>
                   )}
                 </DialogContent>

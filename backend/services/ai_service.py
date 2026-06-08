@@ -54,13 +54,41 @@ class DeepSeekService:
         self._chat_model = settings.DEEPSEEK_CHAT_MODEL
         self._reasoner_model = settings.DEEPSEEK_REASONER_MODEL
 
-    async def _call_api(self, system_prompt: str, user_prompt: str, model: Optional[str] = None, json_mode: bool = False) -> str:
+    @staticmethod
+    def _log_prompt(prompt_source: str, system_prompt: str, user_prompt: str, model: str, json_mode: bool) -> None:
+        # 测试完成后关闭 AI prompt 来源标注与完整 prompt 打印。
+        # 如需排查 prompt，可临时恢复以下日志。
+        # logger.info(
+        #     "\n========== %s FINAL PROMPT BEGIN ==========\n"
+        #     "[model]=%s [json_mode]=%s\n"
+        #     "----- system -----\n%s\n"
+        #     "----- user -----\n%s\n"
+        #     "========== %s FINAL PROMPT END ==========",
+        #     prompt_source,
+        #     model,
+        #     json_mode,
+        #     system_prompt,
+        #     user_prompt,
+        #     prompt_source,
+        # )
+        return
+
+    async def _call_api(
+        self,
+        system_prompt: str,
+        user_prompt: str,
+        model: Optional[str] = None,
+        json_mode: bool = False,
+        prompt_source: str = "UNSPECIFIED_PROMPT",
+    ) -> str:
         if not self._api_key:
             raise ValueError("DEEPSEEK_API_KEY is not set")
 
+        model_name = model or self._chat_model
+        # self._log_prompt(prompt_source, system_prompt, user_prompt, model_name, json_mode)
         messages = [{"role": "system", "content": system_prompt}, {"role": "user", "content": user_prompt}]
         body: dict[str, Any] = {
-            "model": model or self._chat_model,
+            "model": model_name,
             "messages": messages,
             "max_tokens": 4096,
             "temperature": 0.7,
@@ -80,11 +108,20 @@ class DeepSeekService:
             data = resp.json()
             return data["choices"][0]["message"]["content"]
 
-    async def _generate_with_validation(self, system_prompt: str, user_prompt: str, validator, model: Optional[str] = None, json_mode: bool = False) -> tuple[str, int, Optional[str]]:
+    async def _generate_with_validation(
+        self,
+        system_prompt: str,
+        user_prompt: str,
+        validator,
+        model: Optional[str] = None,
+        json_mode: bool = False,
+        prompt_source: str = "UNSPECIFIED_PROMPT",
+    ) -> tuple[str, int, Optional[str]]:
         content = ""
         last_error = None
         for attempt in range(1, self.MAX_RETRIES + 1):
             try:
+                # source = prompt_source if attempt == 1 else f"VALIDATION_PROMPT:{prompt_source}:ATTEMPT_{attempt}"
                 content = await self._call_api(system_prompt, user_prompt, model=model, json_mode=json_mode)
                 is_valid, err_msg = validator(content)
                 if is_valid:
@@ -104,6 +141,7 @@ class DeepSeekService:
             self._answers_user_prompt("讨论一：关键领导力维度", group_answers),
             self.validate_dimensions,
             model=self._chat_model,
+            # prompt_source="GROUP_EXTRACTION_ROUND_1_PROMPT",
         )
 
     async def generate_group_layer_table(self, group_answers: str, framework: str, group_id: int) -> tuple[str, int, Optional[str]]:
@@ -113,6 +151,7 @@ class DeepSeekService:
             user,
             self.validate_layer_table,
             model=self._chat_model,
+            # prompt_source="GROUP_EXTRACTION_ROUND_2_PROMPT",
         )
 
     async def generate_group_behaviors(self, group_answers: str, consensus: str, group_id: int) -> tuple[str, int, Optional[str]]:
@@ -122,6 +161,7 @@ class DeepSeekService:
             user,
             self.validate_behaviors,
             model=self._chat_model,
+            # prompt_source="GROUP_EXTRACTION_ROUND_3_PROMPT",
         )
 
     async def generate_group_applications(self, group_answers: str, model_draft: str, group_id: int) -> tuple[str, int, Optional[str]]:
@@ -131,57 +171,87 @@ class DeepSeekService:
             user,
             self.validate_applications,
             model=self._chat_model,
+            # prompt_source="GROUP_EXTRACTION_ROUND_4_PROMPT",
         )
 
     # ── Cross-group synthesis ───────────────────────────────────────────
 
-    async def synthesize_dimensions(self, all_groups: list[dict]) -> tuple[str, int, Optional[str]]:
-        parts = [f"## 第{g['group_id']}组维度\n{g['content']}" for g in all_groups]
-        user = "以下是四个小组各自提炼的领导力维度。请综合归纳。\n\n" + "\n\n---\n\n".join(parts)
+    @staticmethod
+    def _synthesis_user_prompt(intro: str, all_groups: list[dict], total_group_count: Optional[int], missing_group_ids: Optional[list[int]], section_label: str) -> str:
+        submitted_ids = [g["group_id"] for g in all_groups]
+        group_count_text = f"当前研讨会实际组数：{total_group_count}组。" if total_group_count else "当前研讨会实际组数：以输入中的小组编号为准。"
+        submitted_text = "已收到小组：" + ("、".join(f"第{gid}组" for gid in submitted_ids) if submitted_ids else "无")
+        missing_text = ""
+        if missing_group_ids:
+            missing_text = "未收到小组：" + "、".join(f"第{gid}组" for gid in missing_group_ids) + "。不得提及实际组数之外的小组。"
+        else:
+            missing_text = "实际组数范围内的小组均已有可综合结果。"
+        parts = [f"## 第{g['group_id']}组{section_label}\n{g['content']}" for g in all_groups]
+        return (
+            f"{intro}\n\n"
+            f"## 输入说明\n{group_count_text}\n{submitted_text}\n{missing_text}\n"
+            "请只综合已收到小组的最终结果；不得假设固定四组，不得虚构未提交小组内容，不得输出与实际组数不符的输入说明。\n\n"
+            + "\n\n---\n\n".join(parts)
+        )
+
+    async def synthesize_dimensions(self, all_groups: list[dict], total_group_count: Optional[int] = None, missing_group_ids: Optional[list[int]] = None) -> tuple[str, int, Optional[str]]:
+        user = self._synthesis_user_prompt("以下是各小组各自提炼的领导力维度。请综合归纳。", all_groups, total_group_count, missing_group_ids, "维度")
         return await self._generate_with_validation(
             self._synthesis_d1_prompt(),
             user,
             self.validate_dimensions,
             model=self._reasoner_model,
+            # prompt_source="SYNTHESIS_ROUND_1_PROMPT",
         )
 
-    async def synthesize_layer_table(self, all_groups: list[dict]) -> tuple[str, int, Optional[str]]:
-        parts = [f"## 第{g['group_id']}组层级表\n{g['content']}" for g in all_groups]
-        user = "以下是四个小组各自的层级差异化定义。请综合归纳。\n\n" + "\n\n---\n\n".join(parts)
+    async def synthesize_layer_table(self, all_groups: list[dict], total_group_count: Optional[int] = None, missing_group_ids: Optional[list[int]] = None) -> tuple[str, int, Optional[str]]:
+        user = self._synthesis_user_prompt("以下是各小组各自的层级差异化定义。请综合归纳。", all_groups, total_group_count, missing_group_ids, "层级表")
         return await self._generate_with_validation(
             self._synthesis_d2_prompt(),
             user,
             self.validate_layer_table,
             model=self._reasoner_model,
+            # prompt_source="SYNTHESIS_ROUND_2_PROMPT",
         )
 
-    async def synthesize_behaviors(self, all_groups: list[dict]) -> tuple[str, int, Optional[str]]:
-        parts = [f"## 第{g['group_id']}组行为动作\n{g['content']}" for g in all_groups]
-        user = "以下是四个小组各自的行为动作描述。请综合归纳。\n\n" + "\n\n---\n\n".join(parts)
+    async def synthesize_behaviors(self, all_groups: list[dict], total_group_count: Optional[int] = None, missing_group_ids: Optional[list[int]] = None) -> tuple[str, int, Optional[str]]:
+        user = self._synthesis_user_prompt("以下是各小组各自的行为动作描述。请综合归纳。", all_groups, total_group_count, missing_group_ids, "行为动作")
         return await self._generate_with_validation(
             self._synthesis_d3_prompt(),
             user,
             self.validate_behaviors,
             model=self._reasoner_model,
+            # prompt_source="SYNTHESIS_ROUND_3_PROMPT",
         )
 
-    async def synthesize_applications(self, all_groups: list[dict]) -> tuple[str, int, Optional[str]]:
-        parts = [f"## 第{g['group_id']}组落地应用场景\n{g['content']}" for g in all_groups]
-        user = "以下是各小组最终提交的讨论四落地应用场景结果。请只基于这些最终结果进行跨组综合提炼。\n\n" + "\n\n---\n\n".join(parts)
+    async def synthesize_applications(self, all_groups: list[dict], total_group_count: Optional[int] = None, missing_group_ids: Optional[list[int]] = None) -> tuple[str, int, Optional[str]]:
+        user = self._synthesis_user_prompt("以下是各小组最终提交的讨论四落地应用场景结果。请只基于这些最终结果进行跨组综合提炼。", all_groups, total_group_count, missing_group_ids, "落地应用场景")
         return await self._generate_with_validation(
             self._synthesis_d4_prompt(),
             user,
             self.validate_applications,
             model=self._reasoner_model,
+            # prompt_source="SYNTHESIS_ROUND_4_PROMPT",
         )
 
     # ── AI QA ───────────────────────────────────────────────────────────
 
-    async def answer_member_question(self, question: str, group_context: str, kb_chunks: list[str]) -> str:
+    async def answer_member_question(
+        self,
+        question: str,
+        group_context: str,
+        kb_chunks: list[str],
+        current_round_name: Optional[str] = None,
+        group_id: Optional[int] = None,
+    ) -> str:
         kb_text = "\n\n---\n\n".join(kb_chunks) if kb_chunks else "（知识库暂无相关内容）"
         system = GLOBAL_SYSTEM_PROMPT + """
 # 身份
 你是驴迹科技领导力共创研讨会的实时问答助手，在研讨期间随时响应参与者追问。
+
+# 当前会话上下文（由系统变量动态注入）
+当前环节：{current_round_name}
+当前组别：第{group_id}组
 
 # 可回答范围
 ✅ 领导力相关概念、理论、方法论
@@ -205,8 +275,12 @@ class DeepSeekService:
 
 # 输出格式
 直接给出回答，不加标题和结构标签，保持对话感。
-"""
+""".format(
+            current_round_name=current_round_name or "暂无有效轮次",
+            group_id=group_id if group_id is not None else "未知",
+        )
         user = f"## 知识库参考\n{kb_text}\n\n## 当前小组当前轮上下文\n{group_context}\n\n## 成员问题\n{question}"
+        # prompt_source="AI_QA_PROMPT"
         return await self._call_api(system, user, model=self._chat_model)
 
     # ── Validation ──────────────────────────────────────────────────────
@@ -321,6 +395,7 @@ Step 4 · 对比底稿
 【做减法】每个维度每个层级只保留最核心 1-2 条要求，严格控制条目数量
 【差异化】三层级必须有实质差异，不能写成相同内容
 【不落细节】本轮输出定位与标准，暂不写具体可观测行为（留给讨论三）
+【保留编号】必须沿用主持人输入维度清单中的原始序号和顺序，不得重新编号、不得调整顺序；某个维度暂无有效输入时，也保留原编号并写明"暂无有效输入"。
 
 # 处理步骤
 Step 1 · 接收并拆分参与者关于三层级差异的所有发言
@@ -354,6 +429,7 @@ Step 5 · 剔除三层通用内容（留作下轮行为准则）
 - 三层描述必须有实质差异，完全相同的表述需合并或剔除
 - 参与者发言中"三层都需要XXX"的内容，记录为"通用要求"但不纳入分层标准
 - 不写具体可观测行为（留给讨论三）
+- 必须保留输入维度的原始编号和顺序，不得因内容多少重新排序
 """
 
     @staticmethod
@@ -367,6 +443,7 @@ Step 5 · 剔除三层通用内容（留作下轮行为准则）
 
 # 本轮目标
 将分层标准转化为可观测、可考核、可落地的具体行为准则。每个维度每个层级输出 3-5 条标准行为。
+必须沿用前置 [维度×层级] 矩阵中的维度原始编号和顺序，不得重新编号、不得调整顺序；某个维度暂无有效输入时，也保留原编号并写明"暂无有效输入"。
 
 # 行为质量标准
 ✅ 合格示例：每季度至少主持一次跨部门协调会，明确各方责任边界并跟踪闭环
@@ -417,6 +494,7 @@ Step 5 · 剔除三层通用内容（留作下轮行为准则）
 - 同一行为不可同时出现在两个层级（通用行为除外）
 - 发言不够具体时，AI 可根据语义补充优化，须用 [AI优化] 标注
 - 某层级行为不足 3 条时，须提示："该层级行为描述不足，建议补充讨论"
+- 必须保留输入维度的原始编号和顺序，不得因行为内容多少重新排序
 """
 
     @staticmethod
@@ -427,6 +505,7 @@ Step 5 · 剔除三层通用内容（留作下轮行为准则）
 
 # 前置输入
 主持人已提供完整的领导力模型草稿（维度×层级×行为准则）。
+必须沿用模型草稿中的维度原始编号和顺序，不得重新编号、不得调整顺序；某个维度暂无应用输入时，也保留原编号并写明"暂无有效输入"。
 
 # 本轮目标
 梳理驴迹科技领导力模型的全场景落地路径，输出可执行的应用清单。
@@ -534,6 +613,7 @@ Step 4 · 输出 5-8 个维度，不得引入各组最终结果中未出现且�
 【做减法】每个维度每个层级只保留最核心 1-2 条要求
 【差异化】三层级必须有实质差异，不能写成相同内容
 【不落细节】本轮输出定位与标准，暂不写具体可观测行为
+【保留编号】必须保留各组最终结果中已确认维度的原始编号和顺序，不得重新编号、不得调整顺序；某个维度暂无有效输入时，也保留原编号并写明"暂无有效输入"。
 
 # 严格输出格式
 ---
@@ -566,6 +646,7 @@ Step 4 · 输出 5-8 个维度，不得引入各组最终结果中未出现且�
 
 # 本轮目标
 将各组最终行为结果整合为统一、可观测、可考核、可落地的具体行为准则。每个维度每个层级输出 3-5 条标准行为。
+必须保留各组最终结果中已确认维度的原始编号和顺序，不得重新编号、不得调整顺序；某个维度暂无有效输入时，也保留原编号并写明"暂无有效输入"。
 
 # 行为描述格式规范
 - 主动动词开头：主导 / 推动 / 建立 / 落实 / 组织 / 制定 / 识别 / 跟踪
@@ -616,6 +697,7 @@ Step 4 · 输出 5-8 个维度，不得引入各组最终结果中未出现且�
 
 # 本轮目标
 综合各组落地应用观点，输出驴迹科技领导力模型全场景落地路径。
+必须保留各组最终结果中已确认维度的原始编号和顺序，不得重新编号、不得调整顺序；某个维度暂无有效输入时，也保留原编号并写明"暂无有效输入"。
 
 # 严格输出格式
 ---

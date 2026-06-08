@@ -193,7 +193,13 @@ async def ask_ai(
     kb_chunks = [_clip(chunk, MAX_KB_CHUNK_CHARS) for chunk in kb_chunks[:3]]
 
     try:
-        answer = await ai_service.answer_member_question(data.question, group_context, kb_chunks)
+        answer = await ai_service.answer_member_question(
+            data.question,
+            group_context,
+            kb_chunks,
+            current_round.title if current_round else None,
+            participant.group_id,
+        )
     except Exception as exc:
         elapsed_ms = int((time.perf_counter() - started) * 1000)
         logger.exception(
