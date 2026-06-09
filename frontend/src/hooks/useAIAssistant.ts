@@ -43,7 +43,7 @@ export function useAIAssistant(workshopId: number | null, participantId: number 
   const fetchHistory = useCallback(async () => {
     if (!workshopId || !participantId) return;
     try {
-      setHistory(sortHistory(await aiApi.getHistory(workshopId, participantId)));
+      setHistory(sortHistory(await aiApi.getHistory(workshopId, participantId, roundId)));
     } catch { /* ignore */ }
   }, [workshopId, participantId, roundId, sortHistory]);
 

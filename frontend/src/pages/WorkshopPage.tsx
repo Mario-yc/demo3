@@ -49,6 +49,7 @@ import type { WSMessage, Answer, Participant, Round } from "@/types";
 const PANEL_RATIO_KEY = "workshop-member-panel-ratio";
 const AI_RESULT_COLLAPSED_KEY = "workshop-member-ai-result-collapsed";
 const AI_QA_HEIGHT_KEY = "workshop-member-ai-qa-height";
+const WORKSHOP_SYNC_INTERVAL_MS = 30_000;
 const ROUND_LABELS = ["关键领导力维度", "领导力维度分层", "领导力行为描述", "领导力应用场景"];
 
 const STATUS_CONFIG: Record<string, { label: string; icon: ReactNode }> = {
@@ -82,15 +83,20 @@ export function WorkshopPage() {
 
   const { workshop, participant, loading, error, fetchWorkshop } = useWorkshop(workshopId);
   const groupId = participant?.group_id ?? null;
+  const [viewRoundId, setViewRoundId] = useState<number | null>(null);
   const currentRound: Round | undefined = workshop?.rounds.find(
     (r) => r.round_number === workshop.current_round,
   );
+  const viewRound: Round | undefined = viewRoundId
+    ? workshop?.rounds.find((r) => r.id === viewRoundId) ?? currentRound
+    : currentRound;
+  const isViewingHistory = Boolean(viewRoundId && currentRound && viewRound?.id !== currentRound.id);
   const {
     questions, answers, aiResult, loading: groupLoading, aiLoading,
     submitAnswer, triggerAI, editAIResult, transferLeader,
     fetchQuestions, fetchAnswers, fetchAIResult, addAnswer, clearRoundState,
-  } = useGroup(workshopId, groupId, currentRound?.id);
-  const isCurrentActive = currentRound?.status === "active" || currentRound?.status === "input";
+  } = useGroup(workshopId, groupId, viewRound?.id);
+  const isCurrentActive = !isViewingHistory && (currentRound?.status === "active" || currentRound?.status === "input");
 
   const [panelRatio, setPanelRatio] = useState(() => {
     const saved = Number(sessionStorage.getItem(PANEL_RATIO_KEY));
@@ -113,7 +119,7 @@ export function WorkshopPage() {
   });
 
   const handleExpire = useCallback(() => setExpired(true), []);
-  const { remaining, minutes, seconds, isRunning, start, reset } = useCountdown(
+  const { remaining, minutes, seconds, isRunning, start, pause, reset } = useCountdown(
     currentRound?.timer_remaining_seconds ?? 0,
     handleExpire,
   );
@@ -121,8 +127,19 @@ export function WorkshopPage() {
   const { history, asking, error: aiAskError, ask, fetchHistory, clearHistory } = useAIAssistant(
     workshopId,
     participant?.id ?? null,
-    currentRound?.id,
+    viewRound?.id,
   );
+
+  const handleReturnCurrentRound = useCallback(() => {
+    setViewRoundId(null);
+    setMemberNotice(null);
+    setEditingAIResult(false);
+    setAiQuestion("");
+  }, []);
+
+  const handleWebSocketOpen = useCallback(() => {
+    fetchWorkshop({ silent: true });
+  }, [fetchWorkshop]);
 
   const exitCompletedWorkshop = useCallback(() => {
     sessionStorage.removeItem("participant");
@@ -146,6 +163,32 @@ export function WorkshopPage() {
   }, [workshop?.status, exitCompletedWorkshop]);
 
   useEffect(() => {
+    if (viewRoundId && workshop && !workshop.rounds.some((round) => round.id === viewRoundId)) {
+      setViewRoundId(null);
+    }
+  }, [viewRoundId, workshop]);
+
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === "visible") {
+        fetchWorkshop({ silent: true });
+      }
+    };
+
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+    return () => document.removeEventListener("visibilitychange", handleVisibilityChange);
+  }, [fetchWorkshop]);
+
+  useEffect(() => {
+    if (!workshopId || !participant) return;
+    const timer = window.setInterval(() => {
+      fetchWorkshop({ silent: true });
+    }, WORKSHOP_SYNC_INTERVAL_MS);
+
+    return () => window.clearInterval(timer);
+  }, [workshopId, participant?.id, fetchWorkshop]);
+
+  useEffect(() => {
     if (!memberNotice) return;
     const timer = window.setTimeout(() => setMemberNotice(null), 5000);
     return () => window.clearTimeout(timer);
@@ -165,17 +208,27 @@ export function WorkshopPage() {
 
   useEffect(() => {
     clearHistory();
-    if (participant && currentRound) fetchHistory();
-  }, [participant?.id, currentRound?.id, fetchHistory, clearHistory]);
+    if (participant && viewRound) fetchHistory();
+  }, [participant?.id, viewRound?.id, fetchHistory, clearHistory]);
+
+  useEffect(() => {
+    setEditingAIResult(false);
+    setAIResultDraft("");
+    setAiQuestion("");
+  }, [viewRound?.id]);
 
   useEffect(() => {
     aiQaEndRef.current?.scrollIntoView({ block: "end" });
-  }, [history.length, currentRound?.id]);
+  }, [history.length, viewRound?.id]);
 
   useEffect(() => {
     setExpired(false);
     if (!currentRound || !isCurrentActive || currentRound.timer_remaining_seconds === null) {
       reset(0);
+      return;
+    }
+    if (currentRound.timer_phase === "paused") {
+      reset(currentRound.timer_remaining_seconds);
       return;
     }
     if (currentRound.timer_remaining_seconds > 0) {
@@ -189,6 +242,7 @@ export function WorkshopPage() {
   }, [
     currentRound?.id,
     currentRound?.status,
+    currentRound?.timer_phase,
     currentRound?.timer_started_at,
     currentRound?.timer_remaining_seconds,
     isCurrentActive,
@@ -223,31 +277,53 @@ export function WorkshopPage() {
     const rawRoundNumber = msg.data.round_number;
     const eventRoundId = rawRoundId === null || rawRoundId === undefined ? NaN : Number(rawRoundId);
     const eventRoundNumber = rawRoundNumber === null || rawRoundNumber === undefined ? NaN : Number(rawRoundNumber);
-    const isCurrentRoundEvent =
-      (Number.isFinite(eventRoundId) && currentRound?.id === eventRoundId) ||
-      (Number.isFinite(eventRoundNumber) && currentRound?.round_number === eventRoundNumber) ||
-      (!Number.isFinite(eventRoundId) && !Number.isFinite(eventRoundNumber));
+    const isUnscopedRoundEvent = !Number.isFinite(eventRoundId) && !Number.isFinite(eventRoundNumber);
+    const matchesRound = (round?: Round) =>
+      (Number.isFinite(eventRoundId) && round?.id === eventRoundId) ||
+      (Number.isFinite(eventRoundNumber) && round?.round_number === eventRoundNumber);
+    const isViewedRoundEvent = isUnscopedRoundEvent ? !isViewingHistory : matchesRound(viewRound);
+    const isCurrentRoundEvent = isUnscopedRoundEvent ? true : matchesRound(currentRound);
+    const notifyCurrentRoundActivity = () => {
+      if (isViewingHistory && isCurrentRoundEvent) {
+        setMemberNotice("当前轮有新动态");
+      }
+    };
 
     switch (msg.type) {
       case "new_answer":
         {
           const answer = msg.data as unknown as Answer;
           if (answer.group_id && participant?.group_id && answer.group_id !== participant.group_id) break;
-          if (answer.round_id && currentRound?.id && answer.round_id !== currentRound.id) break;
-          addAnswer(answer);
+          if (isViewedRoundEvent) {
+            addAnswer(answer);
+          } else {
+            notifyCurrentRoundActivity();
+          }
         }
         break;
       case "result_ready":
-        if (!isCurrentRoundEvent) break;
-        fetchAIResult();
+        if (isViewedRoundEvent) {
+          fetchAIResult();
+        } else {
+          notifyCurrentRoundActivity();
+        }
         break;
       case "ai_result_status":
-        if (!isCurrentRoundEvent) break;
-        fetchAIResult();
+        if (isViewedRoundEvent) {
+          fetchAIResult();
+        } else {
+          notifyCurrentRoundActivity();
+        }
         break;
       case "round_changed": {
+        if (isViewingHistory) {
+          setMemberNotice("当前轮有新动态");
+          fetchWorkshop({ silent: true });
+          break;
+        }
         const nextRoundNumber = Number(msg.data.round_number);
         if (Number.isFinite(nextRoundNumber) && nextRoundNumber !== currentRound?.round_number) {
+          setViewRoundId(null);
           clearRoundState();
           clearHistory();
         } else {
@@ -260,9 +336,17 @@ export function WorkshopPage() {
       }
       case "timer": {
         if (!isCurrentRoundEvent) break;
+        if (isViewingHistory) {
+          setMemberNotice("当前轮有新动态");
+          fetchWorkshop({ silent: true });
+          break;
+        }
         const secondsRemaining = Number(msg.data.seconds_remaining ?? 0);
         setExpired(false);
-        if (secondsRemaining > 0) {
+        if (msg.data.timer_status === "paused" || msg.data.phase === "paused") {
+          reset(secondsRemaining);
+          pause();
+        } else if (secondsRemaining > 0) {
           start(secondsRemaining);
         } else {
           reset(0);
@@ -303,19 +387,24 @@ export function WorkshopPage() {
     fetchAnswers,
     fetchQuestions,
     fetchWorkshop,
+    isViewingHistory,
     participant,
+    pause,
     reset,
     start,
+    viewRound,
   ]);
 
   useWebSocket({
     workshopId,
     channel: groupId?.toString() ?? "all",
     onMessage: handleWSMessage,
+    onOpen: handleWebSocketOpen,
   });
 
   const handleTriggerAI = useCallback(async () => {
     if (workshop?.is_review_mode) return;
+    if (isViewingHistory) return;
     if (!participant?.is_group_leader) return;
     if (actionLocksRef.current.has("trigger-ai")) return;
     actionLocksRef.current.add("trigger-ai");
@@ -324,12 +413,13 @@ export function WorkshopPage() {
     } finally {
       actionLocksRef.current.delete("trigger-ai");
     }
-  }, [participant, triggerAI, workshop?.is_review_mode]);
+  }, [isViewingHistory, participant, triggerAI, workshop?.is_review_mode]);
 
   const handleSubmitAnswer = useCallback(
     async (questionId: number, _participantId: number, content: string) => {
       if (!participant) throw new Error("请先加入研讨会");
       if (workshop?.is_review_mode) throw new Error("当前为历史轮次查看模式，不能提交回答");
+      if (isViewingHistory) throw new Error("历史轮次查看，仅支持查看本组内容");
       if (expired) throw new Error("时间已到，无法继续提交");
       const key = `answer:${questionId}`;
       if (actionLocksRef.current.has(key)) return null;
@@ -340,10 +430,11 @@ export function WorkshopPage() {
         actionLocksRef.current.delete(key);
       }
     },
-    [expired, participant, submitAnswer, workshop?.is_review_mode],
+    [expired, isViewingHistory, participant, submitAnswer, workshop?.is_review_mode],
   );
 
   const handleMemberClick = (member: Participant) => {
+    if (isViewingHistory) return;
     if (!participant?.is_group_leader) return;
     if (member.id === participant.id) return;
     setLeaderTransferTarget(member);
@@ -351,6 +442,7 @@ export function WorkshopPage() {
 
   const handleConfirmLeaderTransfer = async () => {
     if (!participant || !leaderTransferTarget) return;
+    if (isViewingHistory) return;
     if (actionLocksRef.current.has("transfer-leader")) return;
     actionLocksRef.current.add("transfer-leader");
     setTransferringLeader(true);
@@ -372,6 +464,7 @@ export function WorkshopPage() {
 
   const handleAsk = useCallback(async () => {
     const q = aiQuestion.trim();
+    if (isViewingHistory) return;
     if (!q || asking) return;
     if (actionLocksRef.current.has("ai-ask")) return;
     actionLocksRef.current.add("ai-ask");
@@ -384,7 +477,7 @@ export function WorkshopPage() {
     } finally {
       actionLocksRef.current.delete("ai-ask");
     }
-  }, [aiQuestion, asking, ask, fetchHistory]);
+  }, [aiQuestion, asking, ask, fetchHistory, isViewingHistory]);
 
   const commitAiQaHeight = useCallback(() => {
     if (!qaResizeRef.current) return;
@@ -392,12 +485,14 @@ export function WorkshopPage() {
   }, []);
 
   const handleStartEditAIResult = () => {
+    if (isViewingHistory) return;
     setAIResultDraft(aiResult?.edited_content ?? aiResult?.original_content ?? "");
     setEditingAIResult(true);
   };
 
   const handleSaveAIResult = async () => {
     if (!participant) return;
+    if (isViewingHistory) return;
     const content = aiResultDraft.trim();
     if (!content) return;
     if (actionLocksRef.current.has("save-ai-result")) return;
@@ -460,13 +555,17 @@ export function WorkshopPage() {
       number: idx,
       title: ROUND_LABELS[i] ?? `第 ${idx} 轮`,
       status: found?.status ?? "locked",
+      round: found,
     };
   });
   const isReviewMode = Boolean(workshop.is_review_mode);
-  const answerInputDisabled = !isCurrentActive || expired || isReviewMode;
-  const answerSubmitDisabled = !participant?.is_group_leader;
-  const answerSubmitHint = answerSubmitDisabled ? "仅队长可提交" : undefined;
-  const canEditAIResult = Boolean(participant?.is_group_leader && aiResult && !isReviewMode);
+  const isReadonlyMode = isReviewMode || isViewingHistory;
+  const answerInputDisabled = !isCurrentActive || expired || isReadonlyMode;
+  const answerSubmitDisabled = !participant?.is_group_leader || isReadonlyMode;
+  const answerSubmitHint = isReadonlyMode
+    ? "历史轮次仅支持查看"
+    : answerSubmitDisabled ? "仅队长可提交" : undefined;
+  const canEditAIResult = Boolean(participant?.is_group_leader && aiResult && !isReadonlyMode);
 
   return (
     <div className="h-[calc(100vh-3.5rem)] flex flex-col bg-background">
@@ -498,15 +597,24 @@ export function WorkshopPage() {
               const cfg = STATUS_CONFIG[rs.status] ?? STATUS_CONFIG.locked;
               const isCompleted = rs.status === "completed";
               const isCurrent = rs.number === workshop.current_round;
+              const isViewed = viewRound?.round_number === rs.number;
+              const canViewHistory = Boolean(rs.round && isCompleted);
               return (
                 <div key={rs.number} className="flex items-center gap-2 shrink-0">
-                  <div
+                  <button
+                    type="button"
+                    disabled={!canViewHistory}
+                    onClick={() => rs.round && setViewRoundId(rs.round.id)}
                     className={cn(
-                      "flex items-center gap-2 rounded-md border px-3 py-2 text-sm min-w-32",
+                      "flex items-center gap-2 rounded-md border px-3 py-2 text-left text-sm min-w-32 transition-colors",
                       isCurrent && "border-primary bg-primary/10 text-primary",
+                      isViewed && !isCurrent && "border-primary bg-primary/5 text-primary",
                       isCompleted && "border-primary/40 bg-primary/5",
                       !isCurrent && !isCompleted && "text-muted-foreground",
+                      canViewHistory && "cursor-pointer hover:border-primary hover:bg-primary/10",
+                      !canViewHistory && "cursor-default",
                     )}
+                    title={canViewHistory ? `查看第 ${rs.number} 轮本组历史` : undefined}
                   >
                     <div
                       className={cn(
@@ -524,7 +632,7 @@ export function WorkshopPage() {
                         {cfg.label}
                       </div>
                     </div>
-                  </div>
+                  </button>
                   {index < roundStatuses.length - 1 && <div className="h-px w-8 bg-border" />}
                 </div>
               );
@@ -546,6 +654,18 @@ export function WorkshopPage() {
               </div>
             )}
 
+            {isViewingHistory && (
+              <div className="flex flex-wrap items-center justify-center gap-3 rounded-lg border border-primary/20 bg-primary/5 px-4 py-2 text-sm text-primary">
+                <div className="flex items-center gap-2">
+                  <AlertCircle className="h-4 w-4" />
+                  <span>历史轮次查看，仅支持查看本组内容</span>
+                </div>
+                <Button size="sm" variant="outline" onClick={handleReturnCurrentRound}>
+                  返回当前轮
+                </Button>
+              </div>
+            )}
+
             {isCurrentActive && isRunning && !expired && (
               <div
                 className={cn(
@@ -563,7 +683,17 @@ export function WorkshopPage() {
               </div>
             )}
 
-            {isCurrentActive && !isRunning && !expired && !currentRound?.timer_started_at && (
+            {isCurrentActive && !isRunning && !expired && currentRound?.timer_phase === "paused" && (
+              <div className="flex items-center justify-center gap-2 rounded-lg border border-muted-foreground/20 bg-muted/30 px-4 py-2 text-sm text-muted-foreground">
+                <Clock className="h-4 w-4" />
+                <span className="font-mono font-bold tabular-nums">
+                  {String(minutes).padStart(2, "0")}:{String(seconds).padStart(2, "0")}
+                </span>
+                <span className="text-xs">本轮已暂停</span>
+              </div>
+            )}
+
+            {isCurrentActive && !isRunning && !expired && !currentRound?.timer_started_at && currentRound?.timer_phase !== "paused" && (
               <div className="flex items-center justify-center gap-2 rounded-lg border border-muted-foreground/20 bg-muted/30 px-4 py-2 text-sm text-muted-foreground">
                 <Clock className="h-4 w-4" />
                 <span>等待主持人开始计时</span>
@@ -577,19 +707,34 @@ export function WorkshopPage() {
               </div>
             )}
 
-            {currentRound && (
+            {viewRound && (
               <div>
                 <div className="flex items-center gap-2 mb-1">
-                  <Badge variant="secondary">第 {currentRound.round_number} 轮</Badge>
+                  <Badge variant="secondary">第 {viewRound.round_number} 轮</Badge>
                   <Badge variant="outline">
-                    {STATUS_CONFIG[currentRound.status]?.label ?? currentRound.status}
+                    {STATUS_CONFIG[viewRound.status]?.label ?? viewRound.status}
                   </Badge>
                 </div>
-                <h2 className="text-2xl font-bold">{currentRound.title}</h2>
-                {currentRound.objective && (
-                  <p className="text-sm text-muted-foreground mt-1">{currentRound.objective}</p>
+                <h2 className="text-2xl font-bold">{viewRound.title}</h2>
+                {viewRound.objective && (
+                  <p className="text-sm text-muted-foreground mt-1">{viewRound.objective}</p>
                 )}
               </div>
+            )}
+
+            {(isViewingHistory || viewRound?.host_input) && (
+              <Card>
+                <CardHeader className="pb-3">
+                  <CardTitle className="text-base">主持人输入</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <MarkdownContent
+                    content={viewRound?.host_input?.content}
+                    emptyText="本轮暂无主持人输入"
+                    className="p-3"
+                  />
+                </CardContent>
+              </Card>
             )}
 
             <Separator />
@@ -619,7 +764,7 @@ export function WorkshopPage() {
                           disabled={answerInputDisabled}
                           submitDisabled={answerSubmitDisabled}
                           submitHint={answerSubmitHint}
-                          draftKey={`answer-draft:${workshop.id}:${currentRound?.id ?? "no-round"}:${question.id}:${participant.id}`}
+                          draftKey={`answer-draft:${workshop.id}:${viewRound?.id ?? "no-round"}:${question.id}:${participant.id}`}
                         />
                       ) : (
                         <p className="text-xs text-muted-foreground">请先加入研讨会后再回答</p>
@@ -655,7 +800,7 @@ export function WorkshopPage() {
                   <div className="flex gap-3 overflow-x-auto pb-1">
                     {workshop.group_members.map((member) => {
                       const isSelf = member.id === participant?.id;
-                      const canTransfer = Boolean(participant?.is_group_leader && !isSelf);
+                      const canTransfer = Boolean(participant?.is_group_leader && !isSelf && !isReadonlyMode);
                       return (
                         <button
                           key={member.id}
@@ -770,7 +915,7 @@ export function WorkshopPage() {
                   size="sm"
                   className="w-full gap-1.5"
                   onClick={handleTriggerAI}
-                  disabled={aiLoading || !isCurrentActive || isReviewMode || !participant?.is_group_leader}
+                  disabled={aiLoading || !isCurrentActive || isReadonlyMode || !participant?.is_group_leader}
                 >
                   {aiLoading ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Sparkles className="h-3.5 w-3.5" />}
                   {aiLoading ? "生成中..." : "AI 提炼"}
@@ -838,7 +983,7 @@ export function WorkshopPage() {
 
                 <div className="flex gap-2">
                   <Input
-                    placeholder="输入你的问题..."
+                    placeholder={isReadonlyMode ? "历史轮次仅支持查看问答记录" : "输入你的问题..."}
                     value={aiQuestion}
                     onChange={(event) => setAiQuestion(event.target.value)}
                     onKeyDown={(event) => {
@@ -847,9 +992,9 @@ export function WorkshopPage() {
                         handleAsk();
                       }
                     }}
-                    disabled={asking || !participant}
+                    disabled={asking || !participant || isReadonlyMode}
                   />
-                  <Button size="icon" onClick={handleAsk} disabled={asking || !aiQuestion.trim() || !participant}>
+                  <Button size="icon" onClick={handleAsk} disabled={asking || !aiQuestion.trim() || !participant || isReadonlyMode}>
                     {asking ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
                   </Button>
                 </div>
